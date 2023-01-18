@@ -1,6 +1,8 @@
 #include "datos.h"
 #include "ui_datos.h"
 #include <QSqlError>
+#include <comboboxdelegate.h>
+#include <spinboxdelegate.h>
 
 Datos::Datos(QWidget *parent) :
     QWidget(parent),
@@ -26,6 +28,11 @@ Datos::Datos(QWidget *parent) :
     ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
     ui->tableView->horizontalHeader()->setMinimumHeight(35);
 
+    SpinBoxDelegate *spinBoxDelegate = new SpinBoxDelegate(this);
+    ui->tableView->setItemDelegateForColumn(0, spinBoxDelegate);
+
+    ComboBoxDelegate *comboBoxDelegate = new ComboBoxDelegate(this);
+    ui->tableView->setItemDelegateForColumn(6, comboBoxDelegate);
 }
 
 Datos::~Datos()
@@ -45,7 +52,9 @@ void Datos::on_guardarButton_clicked()
         qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
         qDebug() << model->lastError();
         model->revertAll();
+        return;
     }
+    emit dbActualizada();
 }
 
 void Datos::on_revertirButton_clicked()
@@ -64,6 +73,11 @@ void Datos::actualizarSeleccion(const QModelIndex &index)
     int id = model->index(filaActual, 0).data().toInt();
     emit registroSeleccionado(id);
     emit filaSeleccionada(filaActual);
+}
+
+QString Datos::nombreCompletoSeleccion()
+{
+    return "???";
 }
 
 void Datos::on_agregarButton_clicked()

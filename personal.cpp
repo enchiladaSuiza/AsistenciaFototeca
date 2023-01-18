@@ -12,6 +12,7 @@ Personal::Personal(QWidget *parent) :
     ui->tabWidget->addTab(&datos, "Datos");
     connect(&datos, &Datos::registroSeleccionado, this, &Personal::setRegistro);
     connect(&datos, &Datos::filaSeleccionada, &horario, &Horario::setFila);
+    connect(&datos, &Datos::dbActualizada, &horario, &Horario::actualizarRegistros);
 }
 
 Personal::~Personal()
@@ -38,6 +39,7 @@ void Personal::setRegistro(int id)
         ui->tabWidget->removeTab(1);
         registro = -1;
     }
+    // qDebug() << "En registro " << registro;
 }
 
 void Personal::on_tabWidget_currentChanged(int index)

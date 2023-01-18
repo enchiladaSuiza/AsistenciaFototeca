@@ -10,19 +10,25 @@ CONFIG += c++17
 
 SOURCES += \
     checar.cpp \
+    comboboxdelegate.cpp \
     datos.cpp \
     dbmanager.cpp \
     horario.cpp \
     main.cpp \
     personal.cpp \
+    spinboxdelegate.cpp \
+    timeeditdelegate.cpp \
     ventanaprincipal.cpp
 
 HEADERS += \
     checar.h \
+    comboboxdelegate.h \
     datos.h \
     dbmanager.h \
     horario.h \
     personal.h \
+    spinboxdelegate.h \
+    timeeditdelegate.h \
     ventanaprincipal.h
 
 FORMS += \

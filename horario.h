@@ -20,6 +20,10 @@ public:
 
     void seleccionarRegistro(int id);
     void setFila(int fila);
+
+public slots:
+    void actualizarRegistros();
+
 private slots:
     void on_lunesCBox_stateChanged(int arg1);
 

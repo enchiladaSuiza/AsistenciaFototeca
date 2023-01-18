@@ -19,6 +19,7 @@ public:
     ~Datos();
 
     QItemSelectionModel *getSelectionModel() const;
+    QString nombreCompletoSeleccion();
 private slots:
     void on_guardarButton_clicked();
 
@@ -33,6 +34,7 @@ private slots:
     void on_tableView_clicked(const QModelIndex &index);
 
 signals:
+    void dbActualizada();
     void registroSeleccionado(int id);
     void filaSeleccionada(int fila);
 

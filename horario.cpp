@@ -2,6 +2,7 @@
 #include "ui_horario.h"
 
 #include <QSqlError>
+#include <timeeditdelegate.h>
 
 Horario::Horario(QWidget *parent) :
     QWidget(parent),
@@ -16,6 +17,7 @@ Horario::Horario(QWidget *parent) :
 
     mapper = new QDataWidgetMapper;
     mapper->setModel(model);
+    mapper->setItemDelegate(new TimeEditDelegate(this));
     mapper->addMapping(ui->lunesEntrada, model->fieldIndex("lunes_e"));
     mapper->addMapping(ui->lunesSalida, model->fieldIndex("lunes_s"));
     mapper->addMapping(ui->martesEntrada, model->fieldIndex("martes_e"));
@@ -42,9 +44,15 @@ QDataWidgetMapper* Horario::getMapper() const
     return mapper;
 }
 
+void Horario::actualizarRegistros()
+{
+    model->select();
+}
+
 void Horario::setFila(int fila)
 {
     mapper->setCurrentIndex(fila);
+    // qDebug() << "En fila " << fila;
 }
 
 void toggleTimeEdits(QTimeEdit *entrada, QTimeEdit *salida, int habilitados)
