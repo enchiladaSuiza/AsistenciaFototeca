@@ -10,19 +10,25 @@ CONFIG += c++17
 
 SOURCES += \
     checar.cpp \
+    datos.cpp \
     dbmanager.cpp \
+    horario.cpp \
     main.cpp \
     personal.cpp \
     ventanaprincipal.cpp
 
 HEADERS += \
     checar.h \
+    datos.h \
     dbmanager.h \
+    horario.h \
     personal.h \
     ventanaprincipal.h
 
 FORMS += \
     checar.ui \
+    datos.ui \
+    horario.ui \
     personal.ui \
     ventanaprincipal.ui
 

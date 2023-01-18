@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Horario</class>
+ <widget class="QWidget" name="Horario">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>499</width>
+    <height>368</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="8" column="1">
+    <widget class="QTimeEdit" name="domingoEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QTimeEdit" name="juevesEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QTimeEdit" name="miercolesSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="lunesCBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Lunes</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QTimeEdit" name="martesEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="martesCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Martes</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTimeEdit" name="miercolesEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QCheckBox" name="miercolesCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Miércoles</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="labelEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Entrada</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QCheckBox" name="juevesCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Jueves</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="labelSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Salida</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QTimeEdit" name="sabadoEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QCheckBox" name="viernesCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Viernes</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QTimeEdit" name="viernesSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QTimeEdit" name="martesSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QCheckBox" name="sabadoCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Sábado</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="domingoCBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Domingo</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QTimeEdit" name="lunesSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QTimeEdit" name="juevesSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QTimeEdit" name="domingoSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QTimeEdit" name="sabadoSalida">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>16</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QTimeEdit" name="lunesEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QTimeEdit" name="viernesEntrada">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>h:mm</string>
+     </property>
+     <property name="time">
+      <time>
+       <hour>8</hour>
+       <minute>0</minute>
+       <second>0</second>
+      </time>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="cambiosLabel">
+     <property name="text">
+      <string>No hay cambios nuevos</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QPushButton" name="descartarButton">
+     <property name="text">
+      <string>Descartar cambios</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2">
+    <widget class="QPushButton" name="guardarButton">
+     <property name="text">
+      <string>Guardar cambios</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>lunesCBox</tabstop>
+  <tabstop>lunesEntrada</tabstop>
+  <tabstop>lunesSalida</tabstop>
+  <tabstop>martesCBox</tabstop>
+  <tabstop>martesEntrada</tabstop>
+  <tabstop>martesSalida</tabstop>
+  <tabstop>miercolesCBox</tabstop>
+  <tabstop>miercolesEntrada</tabstop>
+  <tabstop>miercolesSalida</tabstop>
+  <tabstop>juevesCBox</tabstop>
+  <tabstop>juevesEntrada</tabstop>
+  <tabstop>juevesSalida</tabstop>
+  <tabstop>viernesCBox</tabstop>
+  <tabstop>viernesEntrada</tabstop>
+  <tabstop>viernesSalida</tabstop>
+  <tabstop>sabadoCBox</tabstop>
+  <tabstop>sabadoEntrada</tabstop>
+  <tabstop>sabadoSalida</tabstop>
+  <tabstop>domingoCBox</tabstop>
+  <tabstop>domingoEntrada</tabstop>
+  <tabstop>domingoSalida</tabstop>
+  <tabstop>descartarButton</tabstop>
+  <tabstop>guardarButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

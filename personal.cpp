@@ -1,6 +1,7 @@
 #include "personal.h"
 #include "ui_personal.h"
 #include <QSqlError>
+#include <QSqlQuery>
 
 Personal::Personal(QWidget *parent) :
     QWidget(parent),
@@ -8,28 +9,9 @@ Personal::Personal(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    model = new QSqlTableModel;
-    model->setTable("empleado");
-    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model->select();
-
-    model->setHeaderData(0, Qt::Horizontal, tr("No. de Empleado"));
-    model->setHeaderData(1, Qt::Horizontal, tr("Nombre(s)"));
-    model->setHeaderData(2, Qt::Horizontal, tr("Apellido Paterno"));
-    model->setHeaderData(3, Qt::Horizontal, tr("Apellido Materno"));
-    model->setHeaderData(4, Qt::Horizontal, tr("CURP"));
-    model->setHeaderData(5, Qt::Horizontal, tr("RFC"));
-    model->setHeaderData(6, Qt::Horizontal, tr("Tipo de Contratación"));
-
-    ui->tableView->setModel(model);
-    ui->tableView->hideColumn(7);
-    // ui->tableView->resizeColumnsToContents();
-    ui->tableView->setWordWrap(true);
-    // ui->tableView->verticalHeader()->hide();
-    ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
-    ui->tableView->horizontalHeader()->setMinimumHeight(35);
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tabWidget->addTab(&datos, "Datos");
+    connect(&datos, &Datos::registroSeleccionado, this, &Personal::setRegistro);
+    connect(&datos, &Datos::filaSeleccionada, &horario, &Horario::setFila);
 }
 
 Personal::~Personal()
@@ -37,55 +19,32 @@ Personal::~Personal()
     delete ui;
 }
 
-void Personal::on_revertirButton_clicked()
+void Personal::setRegistro(int id)
 {
-    for (int fila : filasEliminadas)
+    QSqlQuery query;
+    query.prepare("SELECT nombre, apellido_paterno, apellido_materno FROM empleado WHERE id = :id");
+    query.bindValue(":id", id);
+    query.exec();
+    if (query.next())
     {
-        ui->tableView->showRow(fila);
+        QString nombre = query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString();
+        ui->seleccionLabel->setText(nombre);
+        ui->tabWidget->addTab(&horario, "Horario");
+        registro = id;
     }
-    filasEliminadas.clear();
-    model->revertAll();
-}
-
-void Personal::on_guardarButton_clicked()
-{
-    if (!model->submitAll())
+    else
     {
-        qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
-        qDebug() << model->lastError();
-        model->revertAll();
+        ui->seleccionLabel->setText("Registro inválido");
+        ui->tabWidget->removeTab(1);
+        registro = -1;
     }
 }
 
-void Personal::on_agregarButton_clicked()
+void Personal::on_tabWidget_currentChanged(int index)
 {
-    model->insertRow(model->rowCount());
-}
+    if (index == 1)
+    {
 
-void Personal::on_eliminarButton_clicked()
-{
-    ui->tableView->hideRow(filaSeleccionada);
-    filasEliminadas.append(filaSeleccionada);
-    model->removeRow(filaSeleccionada);
-}
-
-void Personal::actualizarSeleccion(const QModelIndex &index)
-{
-    filaSeleccionada = index.row();
-    // qDebug() << filaSeleccionada;
-    QString nombre = model->index(filaSeleccionada, 1).data().toString();
-    nombre.append(" " + model->index(filaSeleccionada, 2).data().toString());
-    nombre.append(" " + model->index(filaSeleccionada, 3).data().toString());
-    ui->seleccionLabel->setText(nombre);
-}
-
-void Personal::on_tableView_activated(const QModelIndex &index)
-{
-    actualizarSeleccion(index);
-}
-
-void Personal::on_tableView_clicked(const QModelIndex &index)
-{
-    actualizarSeleccion(index);
+    }
 }
 
