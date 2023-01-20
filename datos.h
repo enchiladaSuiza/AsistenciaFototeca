@@ -19,7 +19,6 @@ public:
     ~Datos();
 
     QItemSelectionModel *getSelectionModel() const;
-    QString nombreCompletoSeleccion();
 private slots:
     void on_guardarButton_clicked();
 
@@ -33,17 +32,21 @@ private slots:
 
     void on_tableView_clicked(const QModelIndex &index);
 
+    void cambiosDetectados();
 signals:
     void dbActualizada();
-    void registroSeleccionado(int id);
     void filaSeleccionada(int fila);
+    void nombreCompletoSeleccion(QString* nombre);
 
 private:
     Ui::Datos *ui;
     QSqlTableModel *model;
+    QString emptyString = "";
+    QVector<int> filasAgregadas;
     int filaActual;
 
     void actualizarSeleccion(const QModelIndex &index);
+    void activarBotonesDeCambios(bool activos);
 };
 
 #endif // DATOS_H

@@ -10,9 +10,9 @@ Personal::Personal(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tabWidget->addTab(&datos, "Datos");
-    connect(&datos, &Datos::registroSeleccionado, this, &Personal::setRegistro);
     connect(&datos, &Datos::filaSeleccionada, &horario, &Horario::setFila);
     connect(&datos, &Datos::dbActualizada, &horario, &Horario::actualizarRegistros);
+    connect(&datos, &Datos::nombreCompletoSeleccion, this, &Personal::actualizarRegistroSeleccionado);
 }
 
 Personal::~Personal()
@@ -20,33 +20,25 @@ Personal::~Personal()
     delete ui;
 }
 
-void Personal::setRegistro(int id)
+void Personal::actualizarRegistroSeleccionado(QString* nombre)
 {
-    QSqlQuery query;
-    query.prepare("SELECT nombre, apellido_paterno, apellido_materno FROM empleado WHERE id = :id");
-    query.bindValue(":id", id);
-    query.exec();
-    if (query.next())
+    if (nombre == nullptr)
     {
-        QString nombre = query.value(0).toString() + " " + query.value(1).toString() + " " + query.value(2).toString();
-        ui->seleccionLabel->setText(nombre);
-        ui->tabWidget->addTab(&horario, "Horario");
-        registro = id;
-    }
-    else
-    {
-        ui->seleccionLabel->setText("Registro inválido");
+        ui->seleccionLabel->setStyleSheet("font-style: italic;");
+        ui->seleccionLabel->setText("Registro válido después de guardar los cambios.");
         ui->tabWidget->removeTab(1);
-        registro = -1;
+        return;
     }
-    // qDebug() << "En registro " << registro;
-}
 
-void Personal::on_tabWidget_currentChanged(int index)
-{
-    if (index == 1)
+    if (nombre->isEmpty())
     {
-
+        ui->seleccionLabel->setStyleSheet("font-style: normal");
+        ui->seleccionLabel->setText("Seleccione un registro...");
+        ui->tabWidget->removeTab(1);
+        return;
     }
-}
 
+    ui->seleccionLabel->setStyleSheet("font-weight: bold");
+    ui->seleccionLabel->setText(*nombre);
+    ui->tabWidget->addTab(&horario, "Horario");
+}

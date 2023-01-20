@@ -20,15 +20,11 @@ public:
     ~Personal();
 
 private slots:
-    void setRegistro(int id);
-
-    void on_tabWidget_currentChanged(int index);
-
+    void actualizarRegistroSeleccionado(QString *nombre);
 private:
     Ui::Personal *ui;
     Datos datos;
     Horario horario;
-    int registro = -1;
 };
 
 #endif // PERSONAL_H

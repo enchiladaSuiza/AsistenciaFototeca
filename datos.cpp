@@ -23,16 +23,18 @@ Datos::Datos(QWidget *parent) :
     model->setHeaderData(5, Qt::Horizontal, tr("RFC"));
     model->setHeaderData(6, Qt::Horizontal, tr("Tipo de Contratación"));
 
+    connect(model, &QSqlTableModel::dataChanged, this, &Datos::cambiosDetectados);
+
     ui->tableView->setModel(model);
     ui->tableView->hideColumn(7);
     ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
-    ui->tableView->horizontalHeader()->setMinimumHeight(35);
+    ui->tableView->horizontalHeader()->setMinimumHeight(36);
+    ui->tableView->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
+    ui->tableView->verticalHeader()->setMinimumWidth(15);
 
-    SpinBoxDelegate *spinBoxDelegate = new SpinBoxDelegate(this);
-    ui->tableView->setItemDelegateForColumn(0, spinBoxDelegate);
-
-    ComboBoxDelegate *comboBoxDelegate = new ComboBoxDelegate(this);
-    ui->tableView->setItemDelegateForColumn(6, comboBoxDelegate);
+    ui->tableView->setItemDelegateForColumn(0, new SpinBoxDelegate(this));
+    ui->tableView->setItemDelegateForColumn(6, new ComboBoxDelegate(this));
+    ui->tableView->resizeColumnToContents(6);
 }
 
 Datos::~Datos()
@@ -54,35 +56,61 @@ void Datos::on_guardarButton_clicked()
         model->revertAll();
         return;
     }
+    ui->tableView->clearSelection();
+    activarBotonesDeCambios(false);
+    filasAgregadas.clear();
+    emit nombreCompletoSeleccion(&emptyString);
     emit dbActualizada();
 }
 
 void Datos::on_revertirButton_clicked()
 {
     model->revertAll();
+    ui->tableView->clearSelection();
+    activarBotonesDeCambios(false);
+    filasAgregadas.clear();
+    emit nombreCompletoSeleccion(&emptyString);
 }
 
 void Datos::on_eliminarButton_clicked()
 {
     model->removeRow(filaActual);
+    activarBotonesDeCambios(true);
 }
 
 void Datos::actualizarSeleccion(const QModelIndex &index)
 {
     filaActual = index.row();
-    int id = model->index(filaActual, 0).data().toInt();
-    emit registroSeleccionado(id);
+    QString *nombre = nullptr;
+
+    if (!filasAgregadas.contains(filaActual))
+    {
+        nombre = new QString(model->index(filaActual, 1).data().toString()
+                + " " + model->index(filaActual, 2).data().toString()
+                + " " + model->index(filaActual, 3).data().toString());
+    }
+
     emit filaSeleccionada(filaActual);
+    emit nombreCompletoSeleccion(nombre);
 }
 
-QString Datos::nombreCompletoSeleccion()
+void Datos::cambiosDetectados()
 {
-    return "???";
+    activarBotonesDeCambios(true);
+}
+
+void Datos::activarBotonesDeCambios(bool activos)
+{
+    ui->revertirButton->setEnabled(activos);
+    ui->guardarButton->setEnabled(activos);
 }
 
 void Datos::on_agregarButton_clicked()
 {
-    model->insertRow(model->rowCount());
+    int filaAgregada = model->rowCount();
+    model->insertRow(filaAgregada);
+    filasAgregadas.append(filaAgregada);
+    activarBotonesDeCambios(true);
 }
 
 void Datos::on_tableView_activated(const QModelIndex &index)

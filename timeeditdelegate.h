@@ -2,6 +2,7 @@
 #define TIMEEDITDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTimeEdit>
 
 class TimeEditDelegate : public QStyledItemDelegate
 {

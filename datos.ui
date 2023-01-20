@@ -14,54 +14,80 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="5">
-    <widget class="QTableView" name="tableView">
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="cambiosLabel">
-     <property name="text">
-      <string>No hay cambios nuevos</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
     <widget class="QPushButton" name="guardarButton">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Guardar cambios</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="1">
     <widget class="QPushButton" name="revertirButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Revertir cambios</string>
+      <string>Descartar cambios</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
+   <item row="1" column="2">
     <widget class="QPushButton" name="eliminarButton">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Eliminar registro</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
+   <item row="1" column="3">
     <widget class="QPushButton" name="agregarButton">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Nuevo registro</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QTableView" name="tableView">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
      </property>
     </widget>
    </item>

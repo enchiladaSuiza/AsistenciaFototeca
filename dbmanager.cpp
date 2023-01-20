@@ -1,5 +1,6 @@
 #include "dbmanager.h"
 #include "qdebug.h"
+#include <QSqlError>
 
 bool DbManager::abrirConexion(const QString& nombre)
 {
@@ -7,9 +8,9 @@ bool DbManager::abrirConexion(const QString& nombre)
     db.setDatabaseName(nombre);
     if (db.open())
     {
-        qDebug() << "Conexión con la base de datos exitosa.";
         return true;
     }
     qDebug() << "Conexión con la base de datos fallida.";
+    qDebug() << db.lastError();
     return false;
 }

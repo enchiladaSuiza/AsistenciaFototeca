@@ -25,20 +25,36 @@ QWidget *TimeEditDelegate::createEditor(QWidget *parent,
 void TimeEditDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    QString value = index.model()->data(index, Qt::EditRole).toString();
     QTimeEdit *timeEdit = static_cast<QTimeEdit*>(editor);
-    QTime time = QTime::fromString(value, "h:mm");
-    qDebug() << time;
-    timeEdit->setTime(time);
+    QString value = index.data(Qt::EditRole).toString();
+    // qDebug() << value;
+    if (value.isEmpty())
+    {
+        timeEdit->setEnabled(false);
+    }
+    else
+    {
+        QTime time = QTime::fromString(value, "h:mm");
+        // qDebug() << time;
+        timeEdit->setEnabled(true);
+        timeEdit->setTime(time);
+    }
 }
 
 void TimeEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
     QTimeEdit *timeEdit = static_cast<QTimeEdit*>(editor);
-    QString value = timeEdit->time().toString("h:mm");
-    qDebug() << value;
-    model->setData(index, value, Qt::EditRole);
+    if (timeEdit->isEnabled())
+    {
+        QString value = timeEdit->time().toString("h:mm");
+        // qDebug() << value;
+        model->setData(index, value, Qt::EditRole);
+    }
+    else
+    {
+        model->setData(index, "", Qt::EditRole);
+    }
 }
 
 void TimeEditDelegate::updateEditorGeometry(QWidget *editor,

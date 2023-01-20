@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::Checar *ui;
+    void mostrarInformacion(bool mostrar);
 };
 
 #endif // CHECAR_H

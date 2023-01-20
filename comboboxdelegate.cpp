@@ -22,7 +22,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
 void ComboBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    QString value = index.model()->data(index, Qt::EditRole).toString();
+    QString value = index.data(Qt::EditRole).toString();
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
     comboBox->setCurrentText(value);
 }

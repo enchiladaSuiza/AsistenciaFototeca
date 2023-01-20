@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <qdatawidgetmapper.h>
+#include <QTimeEdit>
+#include <QCheckBox>
 
 namespace Ui {
 class Horario;
@@ -47,6 +49,9 @@ private:
     Ui::Horario *ui;
     QSqlTableModel *model;
     QDataWidgetMapper *mapper;
+    QMap<QCheckBox*, QPair<QTimeEdit*, QTimeEdit*>> camposDias;
+    void toggleTimeEdits(QCheckBox *dia);
+    void actualizarCheckBoxes();
 };
 
 #endif // HORARIO_H

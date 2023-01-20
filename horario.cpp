@@ -18,6 +18,15 @@ Horario::Horario(QWidget *parent) :
     mapper = new QDataWidgetMapper;
     mapper->setModel(model);
     mapper->setItemDelegate(new TimeEditDelegate(this));
+
+    camposDias.insert(ui->lunesCBox, qMakePair(ui->lunesEntrada, ui->lunesSalida));
+    camposDias.insert(ui->martesCBox, qMakePair(ui->martesEntrada, ui->martesSalida));
+    camposDias.insert(ui->miercolesCBox, qMakePair(ui->miercolesEntrada, ui->miercolesSalida));
+    camposDias.insert(ui->juevesCBox, qMakePair(ui->juevesEntrada, ui->juevesSalida));
+    camposDias.insert(ui->viernesCBox, qMakePair(ui->viernesEntrada, ui->viernesSalida));
+    camposDias.insert(ui->sabadoCBox, qMakePair(ui->sabadoEntrada, ui->sabadoSalida));
+    camposDias.insert(ui->domingoCBox, qMakePair(ui->domingoEntrada, ui->domingoSalida));
+
     mapper->addMapping(ui->lunesEntrada, model->fieldIndex("lunes_e"));
     mapper->addMapping(ui->lunesSalida, model->fieldIndex("lunes_s"));
     mapper->addMapping(ui->martesEntrada, model->fieldIndex("martes_e"));
@@ -53,68 +62,96 @@ void Horario::setFila(int fila)
 {
     mapper->setCurrentIndex(fila);
     // qDebug() << "En fila " << fila;
+    actualizarCheckBoxes();
 }
 
-void toggleTimeEdits(QTimeEdit *entrada, QTimeEdit *salida, int habilitados)
+void Horario::toggleTimeEdits(QCheckBox* dia)
 {
-    if (habilitados == Qt::Checked)
+    QTimeEdit *entrada = camposDias.value(dia).first;
+    QTimeEdit *salida = camposDias.value(dia).second;
+    if (dia->isChecked())
     {
         entrada->setEnabled(true);
         salida->setEnabled(true);
+
     }
     else
     {
         entrada->setEnabled(false);
         salida->setEnabled(false);
     }
+    emit mapper->itemDelegate()->commitData(entrada);
+    emit mapper->itemDelegate()->commitData(salida);
+}
+
+void Horario::actualizarCheckBoxes()
+{
+    QMapIterator<QCheckBox*, QPair<QTimeEdit*, QTimeEdit*>> i(camposDias);
+    while (i.hasNext())
+    {
+        i.next();
+        i.key()->setChecked(i.value().first->isEnabled());
+    }
+
 }
 
 void Horario::on_lunesCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->lunesEntrada, ui->lunesSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->lunesCBox);
 }
 
 void Horario::on_martesCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->martesEntrada, ui->martesSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->martesCBox);
 }
 
 void Horario::on_miercolesCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->miercolesEntrada, ui->miercolesSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->miercolesCBox);
 }
 
 void Horario::on_juevesCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->juevesEntrada, ui->juevesSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->juevesCBox);
 }
 
 void Horario::on_viernesCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->viernesEntrada, ui->viernesSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->viernesCBox);
 }
 
 void Horario::on_sabadoCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->sabadoEntrada, ui->sabadoSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->sabadoCBox);
 }
 
 void Horario::on_domingoCBox_stateChanged(int arg1)
 {
-    toggleTimeEdits(ui->domingoEntrada, ui->domingoSalida, arg1);
+    (void)arg1;
+    toggleTimeEdits(ui->domingoCBox);
 }
 
 void Horario::on_guardarButton_clicked()
 {
+    int indice = mapper->currentIndex();
     if (!model->submitAll())
     {
         qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
         qDebug() << model->lastError();
         model->revertAll();
     }
+    mapper->setCurrentIndex(indice);
 }
 
 void Horario::on_descartarButton_clicked()
 {
     model->revertAll();
+    mapper->revert();
+    actualizarCheckBoxes();
 }
