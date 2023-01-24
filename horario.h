@@ -45,6 +45,8 @@ private slots:
 
     void on_descartarButton_clicked();
 
+    void cambiosDetectados();
+
 private:
     Ui::Horario *ui;
     QSqlTableModel *model;
@@ -52,6 +54,7 @@ private:
     QMap<QCheckBox*, QPair<QTimeEdit*, QTimeEdit*>> camposDias;
     void toggleTimeEdits(QCheckBox *dia);
     void actualizarCheckBoxes();
+    void activarBotonesDeCambios(bool activos);
 };
 
 #endif // HORARIO_H

@@ -41,6 +41,8 @@ Horario::Horario(QWidget *parent) :
     mapper->addMapping(ui->sabadoSalida, model->fieldIndex("sabado_s"));
     mapper->addMapping(ui->domingoEntrada, model->fieldIndex("domingo_e"));
     mapper->addMapping(ui->domingoSalida, model->fieldIndex("domingo_s"));
+
+    connect(model, &QSqlTableModel::dataChanged, this, &Horario::cambiosDetectados);
 }
 
 Horario::~Horario()
@@ -92,7 +94,17 @@ void Horario::actualizarCheckBoxes()
         i.next();
         i.key()->setChecked(i.value().first->isEnabled());
     }
+}
 
+void Horario::cambiosDetectados()
+{
+    activarBotonesDeCambios(true);
+}
+
+void Horario::activarBotonesDeCambios(bool activos)
+{
+    ui->descartarButton->setEnabled(activos);
+    ui->guardarButton->setEnabled(activos);
 }
 
 void Horario::on_lunesCBox_stateChanged(int arg1)
@@ -147,6 +159,7 @@ void Horario::on_guardarButton_clicked()
         model->revertAll();
     }
     mapper->setCurrentIndex(indice);
+    activarBotonesDeCambios(false);
 }
 
 void Horario::on_descartarButton_clicked()
@@ -154,4 +167,5 @@ void Horario::on_descartarButton_clicked()
     model->revertAll();
     mapper->revert();
     actualizarCheckBoxes();
+    activarBotonesDeCambios(false);
 }
