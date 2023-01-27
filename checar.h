@@ -1,6 +1,7 @@
 #ifndef CHECAR_H
 #define CHECAR_H
 
+#include <QCamera>
 #include <QWidget>
 
 namespace Ui {
@@ -15,8 +16,13 @@ public:
     explicit Checar(QWidget *parent = nullptr);
     ~Checar();
 
+private slots:
+    void on_toggleCamera_clicked();
+
 private:
     Ui::Checar *ui;
+    QCamera *camera;
+
     void mostrarInformacion(bool mostrar);
 };
 
