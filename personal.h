@@ -6,6 +6,7 @@
 #include <QVector>
 #include <datos.h>
 #include <horario.h>
+#include <escaner.h>
 
 namespace Ui {
 class Personal;
@@ -21,10 +22,14 @@ public:
 
 private slots:
     void actualizarRegistroSeleccionado(QString *nombre);
+
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::Personal *ui;
     Datos datos;
     Horario horario;
+    Escaner escaner;
 };
 
 #endif // PERSONAL_H

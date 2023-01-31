@@ -2,7 +2,13 @@
 #define CHECAR_H
 
 #include <QCamera>
+#include <QMediaCaptureSession>
 #include <QWidget>
+#include <QImageCapture>
+#include <QImage>
+#include <QVideoSink>
+#include <QTimer>
+#include <QZXing.h>
 
 namespace Ui {
 class Checar;
@@ -16,12 +22,22 @@ public:
     explicit Checar(QWidget *parent = nullptr);
     ~Checar();
 
+    static int getFrameCounter();
+    void activarCamara();
+    void desactivarCamara();
+
 private slots:
-    void on_toggleCamera_clicked();
+    void procesarFrame(const QVideoFrame &frame);
 
 private:
     Ui::Checar *ui;
-    QCamera *camera;
+
+    QCamera *camara;
+    QMediaCaptureSession sesion;
+    QZXing *decoder;
+
+    bool capturando = false;
+    int frameCounter = 0;
 
     void mostrarInformacion(bool mostrar);
 };

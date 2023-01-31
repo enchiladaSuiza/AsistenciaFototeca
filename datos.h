@@ -36,6 +36,7 @@ private slots:
 signals:
     void dbActualizada();
     void filaSeleccionada(int fila);
+    void registroSeleccionado(int id);
     void nombreCompletoSeleccion(QString* nombre);
 
 private:

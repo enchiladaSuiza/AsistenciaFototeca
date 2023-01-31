@@ -46,3 +46,16 @@ void VentanaPrincipal::on_personalButton_clicked()
     ui->stackedWidget->setCurrentWidget(&personal);
 }
 
+
+void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
+{
+    if (actual == 1)
+    {
+        checar.desactivarCamara();
+    }
+    else
+    {
+        checar.activarCamara();
+    }
+}
+

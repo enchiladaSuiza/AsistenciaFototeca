@@ -1,6 +1,7 @@
 QT       += core gui uitools sql multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+include(QZXing/src/QZXing.pri)
 
 CONFIG += c++17
 
@@ -14,6 +15,7 @@ SOURCES += \
     comboboxdelegate.cpp \
     datos.cpp \
     dbmanager.cpp \
+    escaner.cpp \
     horario.cpp \
     main.cpp \
     personal.cpp \
@@ -27,6 +29,7 @@ HEADERS += \
     comboboxdelegate.h \
     datos.h \
     dbmanager.h \
+    escaner.h \
     horario.h \
     personal.h \
     spinboxdelegate.h \
@@ -36,6 +39,7 @@ HEADERS += \
 FORMS += \
     checar.ui \
     datos.ui \
+    escaner.ui \
     horario.ui \
     personal.ui \
     ventanaprincipal.ui
@@ -44,4 +48,3 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-

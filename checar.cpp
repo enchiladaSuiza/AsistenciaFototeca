@@ -1,12 +1,13 @@
 #include "checar.h"
 #include "qcamera.h"
 #include "ui_checar.h"
+#include "QZXing.h"
 
 #include <QDate>
-#include <QMediaCaptureSession>
 #include <QVideoWidget>
 #include <QMediaDevices>
-#include <QGraphicsVideoItem>
+#include <QDir>
+#include <QRandomGenerator>
 
 Checar::Checar(QWidget *parent) :
     QWidget(parent),
@@ -15,15 +16,20 @@ Checar::Checar(QWidget *parent) :
     ui->setupUi(this);
     mostrarInformacion(false);
 
-    QVideoWidget* viewFinder = new QVideoWidget;
+    decoder = new QZXing;
+    decoder->setDecoder( QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13 );
+    decoder->setSourceFilterType(QZXing::SourceFilter_ImageNormal);
+    decoder->setTryHarderBehaviour(QZXing::TryHarderBehaviour_ThoroughScanning | QZXing::TryHarderBehaviour_Rotate);
 
-    camera = new QCamera;
+    activarCamara();
+    sesion.setVideoOutput(ui->viewfinder);
 
-    QMediaCaptureSession session;
-    session.setCamera(camera);
-    session.setVideoOutput(viewFinder);
-    camera->start();
-    viewFinder->show();
+    connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Checar::procesarFrame);
+}
+
+Checar::~Checar()
+{
+    delete ui;
 }
 
 void Checar::mostrarInformacion(bool mostrar)
@@ -34,13 +40,37 @@ void Checar::mostrarInformacion(bool mostrar)
     ui->salidaCapturaLabel->setVisible(mostrar);
 }
 
-Checar::~Checar()
+void Checar::procesarFrame(const QVideoFrame &frame)
 {
-    delete ui;
+    // qDebug() << "Procesando " << ++frameCounter;
+    QImage imagen = frame.toImage();
+    QString resultado = decoder->decodeImage(imagen);
+    if (!resultado.isEmpty())
+    {
+        qDebug() << resultado;
+    }
 }
 
-void Checar::on_toggleCamera_clicked()
+void Checar::activarCamara()
 {
-    camera->setActive(!camera->isActive());
+    if (capturando)
+    {
+        return;
+    }
+    camara = new QCamera(QMediaDevices::defaultVideoInput());
+    sesion.setCamera(camara);
+    camara->start();
+    capturando = true;
+}
+
+void Checar::desactivarCamara()
+{
+    if (capturando)
+    {
+        sesion.setCamera(nullptr);
+        camara->stop();
+        delete camara;
+        capturando = false;
+    }
 }
 

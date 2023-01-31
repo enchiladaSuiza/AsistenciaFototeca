@@ -27,5 +27,6 @@ private:
 private slots:
     void on_checarButton_clicked();
     void on_personalButton_clicked();
+    void on_stackedWidget_currentChanged(int arg1);
 };
 #endif // VENTANAPRINCIPAL_H
