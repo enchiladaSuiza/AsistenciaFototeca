@@ -26,9 +26,9 @@ public slots:
 
 private slots:
     void procesarFrame(const QVideoFrame &frame);
+    void activarProcesamiento();
 
     void on_guardarButton_clicked();
-
     void on_codigoEdit_textChanged(const QString &arg1);
 
 private:
@@ -37,9 +37,11 @@ private:
     QCamera *camara = nullptr;
     QMediaCaptureSession sesion;
     QZXing *decoder;
+    QTimer *timer;
 
+    const int cooldownProcesamiento = 1000;
     int idRegistro = -1;
-    bool capturando = true;
+    void habilitarProcesamiento(bool habilitar);
 };
 
 #endif // ESCANER_H

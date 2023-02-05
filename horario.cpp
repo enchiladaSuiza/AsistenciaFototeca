@@ -107,6 +107,28 @@ void Horario::activarBotonesDeCambios(bool activos)
     ui->guardarButton->setEnabled(activos);
 }
 
+void Horario::on_guardarButton_clicked()
+{
+    int indice = mapper->currentIndex();
+    if (!model->submitAll())
+    {
+        qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
+        qDebug() << model->lastError();
+        model->revertAll();
+    }
+    mapper->setCurrentIndex(indice);
+    activarBotonesDeCambios(false);
+}
+
+void Horario::on_descartarButton_clicked()
+{
+    model->revertAll();
+    mapper->revert();
+    actualizarCheckBoxes();
+    activarBotonesDeCambios(false);
+}
+
+
 void Horario::on_lunesCBox_stateChanged(int arg1)
 {
     (void)arg1;
@@ -147,25 +169,4 @@ void Horario::on_domingoCBox_stateChanged(int arg1)
 {
     (void)arg1;
     toggleTimeEdits(ui->domingoCBox);
-}
-
-void Horario::on_guardarButton_clicked()
-{
-    int indice = mapper->currentIndex();
-    if (!model->submitAll())
-    {
-        qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
-        qDebug() << model->lastError();
-        model->revertAll();
-    }
-    mapper->setCurrentIndex(indice);
-    activarBotonesDeCambios(false);
-}
-
-void Horario::on_descartarButton_clicked()
-{
-    model->revertAll();
-    mapper->revert();
-    actualizarCheckBoxes();
-    activarBotonesDeCambios(false);
 }

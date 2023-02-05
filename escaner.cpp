@@ -1,8 +1,10 @@
+#include "dbmanager.h"
 #include "escaner.h"
 #include "ui_escaner.h"
 
 #include <QMediaDevices>
 #include <QSqlQuery>
+#include <QTimer>
 #include <QVideoSink>
 
 Escaner::Escaner(QWidget *parent) :
@@ -11,6 +13,9 @@ Escaner::Escaner(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    timer = new QTimer(this);
+    // connect(timer, &QTimer::timeout, this, &Escaner::activarProcesamiento);
+
     decoder = new QZXing;
     decoder->setDecoder( QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13 );
     decoder->setSourceFilterType(QZXing::SourceFilter_ImageNormal);
@@ -18,7 +23,7 @@ Escaner::Escaner(QWidget *parent) :
 
     sesion.setVideoOutput(ui->viewfinder);
 
-    connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
+    habilitarProcesamiento(true);
 }
 
 Escaner::~Escaner()
@@ -28,13 +33,28 @@ Escaner::~Escaner()
 
 void Escaner::procesarFrame(const QVideoFrame &frame)
 {
-    // qDebug() << "Procesando " << ++frameCounter;
-    QImage imagen = frame.toImage();
-    QString resultado = decoder->decodeImage(imagen);
+    QString resultado = decoder->decodeImage(frame.toImage());
     if (!resultado.isEmpty())
     {
+        // habilitarProcesamiento(false);
+        // timer->start(cooldownProcesamiento);
         ui->codigoEdit->setText(resultado);
     }
+}
+
+void Escaner::habilitarProcesamiento(bool habilitar)
+{
+    if (habilitar)
+    {
+        connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
+        return;
+    }
+    disconnect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
+}
+
+void Escaner::activarProcesamiento()
+{
+    habilitarProcesamiento(true);
 }
 
 void Escaner::activarCamara()
@@ -62,31 +82,19 @@ void Escaner::desactivarCamara()
 void Escaner::on_guardarButton_clicked()
 {
     QString qr = ui->codigoEdit->text();
-    QSqlQuery query;
-    query.prepare("UPDATE empleado SET qr = ? WHERE id = ?");
-    query.addBindValue(qr);
-    query.addBindValue(idRegistro);
-    if (!query.exec())
-    {
-        qDebug() << "Query fallida";
-        return;
-    }
     ui->guardarButton->setEnabled(false);
+//    habilitarProcesamiento(false);
+//    timer->start(cooldownProcesamiento);
+
+    DbManager::actualizarQREmpleado(idRegistro, qr);   
 }
 
 void Escaner::setId(int id)
 {
     idRegistro = id;
-    QSqlQuery query;
-    query.prepare("SELECT qr FROM empleado WHERE id = ?");
-    query.addBindValue(id);
-    query.exec();
-    while (query.next())
-    {
-        QString codigo = query.value(0).toString();
-        ui->codigoEdit->setText(codigo);
-        ui->guardarButton->setEnabled(false);
-    }
+
+    QString codigo = DbManager::qrPorId(id);
+    ui->codigoEdit->setText(codigo);
 }
 
 void Escaner::on_codigoEdit_textChanged(const QString &texto)
@@ -94,4 +102,6 @@ void Escaner::on_codigoEdit_textChanged(const QString &texto)
     Q_UNUSED(texto);
     ui->guardarButton->setEnabled(true);
 }
+
+
 
