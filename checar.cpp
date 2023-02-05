@@ -57,10 +57,10 @@ void Checar::llenarInformacion(QString info, QString nombre,
     mostrarInformacion(true);
     ui->label->setText(info);
     ui->nombreLabel->setText(nombre);
-    ui->entradaNormalLabel->setText("Entrada\n" + entradaNormal);
-    ui->entradaCapturaLabel->setText("Captura\n" + entradaCaptura);
-    ui->salidaNormalLabel->setText("Salida\n" + salidaNormal);
-    ui->salidaCapturaLabel->setText("Captura\n" + salidaCaptura);
+    ui->entradaNormalLabel->setText("Entrada: " + entradaNormal);
+    ui->entradaCapturaLabel->setText("Captura: " + entradaCaptura);
+    ui->salidaNormalLabel->setText("Salida: " + salidaNormal);
+    ui->salidaCapturaLabel->setText("Captura: " + salidaCaptura);
 }
 
 void Checar::procesarFrame(const QVideoFrame &frame)
@@ -94,6 +94,13 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     QPair<QString, QString> tiempos = diasSemanaColumnas.at(diaSemana);
     QString entradaNormal = horarios.value(tiempos.first).toString();
     QString salidaNormal = horarios.value(tiempos.second).toString();
+
+    if (entradaNormal.isEmpty() || salidaNormal.isEmpty()) // ¿Hoy trabaja?
+    {
+        ui->label->setText("Usted no trabaja el día de hoy.");
+        timerInfo->start(tiempoInformacion);
+        return;
+    }
 
     QSqlQuery capturas = DbManager::capturasPorEmpleadoFecha(idEmpleado);
     if (capturas.isValid()) // ¿Ya escaneó hoy?
@@ -165,7 +172,6 @@ void Checar::restablecerPantalla()
 
 void Checar::resumirProcesamiento()
 {
-    qDebug() << "Eh hello izza me";
     connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Checar::procesarFrame);
     activarCamara();
 }

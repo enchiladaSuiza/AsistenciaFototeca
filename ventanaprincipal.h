@@ -21,6 +21,7 @@ private:
     Ui::VentanaPrincipal *ui;
     Checar checar;
     Personal personal;
+
     void actualizarTiempo();
     void timerEvent(QTimerEvent *event);
 

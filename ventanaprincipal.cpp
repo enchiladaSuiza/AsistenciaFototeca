@@ -10,10 +10,12 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
 {
     ui->setupUi(this);
 
+    new QShortcut(Qt::CTRL | Qt::Key_Q, this, SLOT(close()));
+
+    QLocale::setDefault(QLocale(QLocale::Spanish, QLocale::Mexico));
+
     startTimer(1000);
     actualizarTiempo();
-
-    new QShortcut(Qt::CTRL | Qt::Key_Q, this, SLOT(close()));
 
     ui->stackedWidget->addWidget(&checar);
     ui->stackedWidget->addWidget(&personal);
@@ -26,8 +28,10 @@ VentanaPrincipal::~VentanaPrincipal()
 
 void VentanaPrincipal::actualizarTiempo()
 {
-    ui->fechaLabel->setText(QDate::currentDate().toString("d/MMM/yyyy (ddd)"));
-    ui->horaLabel->setText(QTime::currentTime().toString("hh:mm:ss"));
+//    ui->fechaLabel->setText(QDate::currentDate().toString("d/MMM/yyyy (ddd)"));
+//    ui->horaLabel->setText(QTime::currentTime().toString("hh:mm:ss"));
+    ui->fechaLabel->setText(QLocale().toString(QDate::currentDate(), "d/MMM/yyyy (ddd)"));
+    ui->horaLabel->setText(QLocale().toString(QTime::currentTime(), "hh::mm::ss"));
 }
 
 void VentanaPrincipal::timerEvent(QTimerEvent *event)

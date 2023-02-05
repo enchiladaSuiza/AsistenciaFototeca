@@ -20,6 +20,7 @@
       <font>
        <family>Montserrat</family>
        <pointsize>10</pointsize>
+       <bold>true</bold>
       </font>
      </property>
     </widget>
@@ -36,6 +37,7 @@
       <font>
        <family>Montserrat</family>
        <pointsize>10</pointsize>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -55,6 +57,7 @@
       <font>
        <family>Montserrat</family>
        <pointsize>10</pointsize>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -63,7 +66,15 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLineEdit" name="codigoEdit"/>
+    <widget class="QLineEdit" name="codigoEdit">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

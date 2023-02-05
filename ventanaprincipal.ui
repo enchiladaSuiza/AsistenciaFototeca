@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>750</width>
     <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Asistencia</string>
+   <string>Sistema de Control de Asistencia de la Fototeca Nacional</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -41,6 +41,7 @@
          <font>
           <family>Montserrat</family>
           <pointsize>10</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -54,6 +55,7 @@
          <font>
           <family>Montserrat</family>
           <pointsize>10</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -72,6 +74,7 @@
        <font>
         <family>Montserrat</family>
         <pointsize>10</pointsize>
+        <bold>true</bold>
        </font>
       </property>
       <property name="currentIndex">
@@ -90,6 +93,7 @@
          <font>
           <family>Montserrat</family>
           <pointsize>10</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -103,6 +107,7 @@
          <font>
           <family>Montserrat</family>
           <pointsize>10</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -119,7 +124,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>750</width>
      <height>19</height>
     </rect>
    </property>
