@@ -19,6 +19,7 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
 
     ui->stackedWidget->addWidget(&checar);
     ui->stackedWidget->addWidget(&personal);
+    ui->stackedWidget->addWidget(&historial);
 }
 
 VentanaPrincipal::~VentanaPrincipal()
@@ -28,8 +29,6 @@ VentanaPrincipal::~VentanaPrincipal()
 
 void VentanaPrincipal::actualizarTiempo()
 {
-//    ui->fechaLabel->setText(QDate::currentDate().toString("d/MMM/yyyy (ddd)"));
-//    ui->horaLabel->setText(QTime::currentTime().toString("hh:mm:ss"));
     ui->fechaLabel->setText(QLocale().toString(QDate::currentDate(), "d/MMM/yyyy (ddd)"));
     ui->horaLabel->setText(QLocale().toString(QTime::currentTime(), "hh::mm::ss"));
 }
@@ -50,10 +49,14 @@ void VentanaPrincipal::on_personalButton_clicked()
     ui->stackedWidget->setCurrentWidget(&personal);
 }
 
+void VentanaPrincipal::on_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(&historial);
+}
 
 void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
 {
-    if (actual == 1)
+    if (actual >= 1)
     {
         checar.desactivarCamara();
     }
@@ -62,4 +65,3 @@ void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
         checar.activarCamara();
     }
 }
-

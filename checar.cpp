@@ -77,10 +77,6 @@ void Checar::procesarFrame(const QVideoFrame &frame)
         return;
     }
 
-    //desactivarCamara();
-    //timerCamara->start(1000);
-    //disconnect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Checar::procesarFrame);
-
     QString ahora = QTime::currentTime().toString("h:mm");
     int diaSemana = QDate::currentDate().dayOfWeek();
 
@@ -91,7 +87,7 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     QString nombreCompleto = nombre + " " + apPaterno + " " + apMaterno;
 
     QSqlQuery horarios = DbManager::horariosPorEmpleado(idEmpleado);
-    QPair<QString, QString> tiempos = diasSemanaColumnas.at(diaSemana);
+    QPair<QString, QString> tiempos = DbManager::diasSemanaColumnas.at(diaSemana);
     QString entradaNormal = horarios.value(tiempos.first).toString();
     QString salidaNormal = horarios.value(tiempos.second).toString();
 
@@ -131,13 +127,6 @@ void Checar::procesarFrame(const QVideoFrame &frame)
 
     if (DbManager::insertarRegistro(idEmpleado, ahora))
     {
-        QSqlQuery horarios = DbManager::horariosPorEmpleado(idEmpleado);
-
-        int diaSemana = QDate::currentDate().dayOfWeek();
-        QPair<QString, QString> tiempos = diasSemanaColumnas.at(diaSemana);
-        QString entradaNormal = horarios.value(tiempos.first).toString();
-        QString salidaNormal = horarios.value(tiempos.second).toString();
-
         llenarInformacion("Entrada caputrada.", nombreCompleto, entradaNormal, salidaNormal, ahora, "-");
         timerInfo->start(tiempoInformacion);
     }

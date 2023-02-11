@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>750</width>
-    <height>400</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,6 +87,20 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="font">
+         <font>
+          <family>Montserrat</family>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Historial</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QPushButton" name="checarButton">
         <property name="font">

@@ -15,13 +15,13 @@ Datos::Datos(QWidget *parent) :
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     model->select();
 
-    model->setHeaderData(0, Qt::Horizontal, tr("No. de Empleado"));
+    model->setHeaderData(0, Qt::Horizontal, tr("No. de\nEmpleado"));
     model->setHeaderData(1, Qt::Horizontal, tr("Nombre(s)"));
-    model->setHeaderData(2, Qt::Horizontal, tr("Apellido Paterno"));
-    model->setHeaderData(3, Qt::Horizontal, tr("Apellido Materno"));
+    model->setHeaderData(2, Qt::Horizontal, tr("Apellido\nPaterno"));
+    model->setHeaderData(3, Qt::Horizontal, tr("Apellido\nMaterno"));
     model->setHeaderData(4, Qt::Horizontal, tr("CURP"));
     model->setHeaderData(5, Qt::Horizontal, tr("RFC"));
-    model->setHeaderData(6, Qt::Horizontal, tr("Tipo de Contratación"));
+    model->setHeaderData(6, Qt::Horizontal, tr("Tipo de\nContratación"));
 
     connect(model, &QSqlTableModel::dataChanged, this, &Datos::cambiosDetectados);
 
@@ -29,7 +29,7 @@ Datos::Datos(QWidget *parent) :
     ui->tableView->hideColumn(7);
     ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
     ui->tableView->horizontalHeader()->setMinimumHeight(36);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+//    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
     ui->tableView->verticalHeader()->setMinimumWidth(15);
 

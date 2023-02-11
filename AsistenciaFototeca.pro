@@ -16,6 +16,7 @@ SOURCES += \
     datos.cpp \
     dbmanager.cpp \
     escaner.cpp \
+    historial.cpp \
     horario.cpp \
     main.cpp \
     personal.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     datos.h \
     dbmanager.h \
     escaner.h \
+    historial.h \
     horario.h \
     personal.h \
     spinboxdelegate.h \
@@ -40,6 +42,7 @@ FORMS += \
     checar.ui \
     datos.ui \
     escaner.ui \
+    historial.ui \
     horario.ui \
     personal.ui \
     ventanaprincipal.ui

@@ -42,7 +42,7 @@ QSqlQuery DbManager::capturasPorEmpleadoFecha(int idEmpleado, QString fecha)
     QSqlQuery query;
     if (fecha.isEmpty())
     {
-        fecha = QDate::currentDate().toString();
+        fecha = QDate::currentDate().toString(Qt::ISODate);
     }
     query.prepare("SELECT id, hora_entrada, hora_salida FROM registro WHERE empleado = ? AND fecha = ?");
     query.addBindValue(idEmpleado);
@@ -80,7 +80,7 @@ bool DbManager::insertarRegistro(int idEmpleado, QString entrada, QString salida
     QSqlQuery query;
     if (fecha.isEmpty())
     {
-        fecha = QDate::currentDate().toString();
+        fecha = QDate::currentDate().toString(Qt::ISODate);
     }
     if (salida.isEmpty())
     {
@@ -108,4 +108,18 @@ QString DbManager::qrPorId(int idEmpleado)
     query.exec();
     query.next();
     return query.value(0).toString();
+}
+
+QSqlQuery DbManager::capturasDeUnDia(QDate dia)
+{
+    int diaSemana = dia.dayOfWeek();
+    QPair<QString, QString> tiempos = diasSemanaColumnas.at(diaSemana);
+
+    QSqlQuery query;
+    query.prepare("SELECT empleado.id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre, " +
+                tiempos.first + ", hora_entrada, " + tiempos.second + ", hora_salida FROM registro, empleado, horario "
+                "WHERE registro.empleado = empleado.id AND horario.id = empleado.id AND fecha = date(?)");
+    query.addBindValue(dia.toString(Qt::ISODate));
+    query.exec();
+    return query;
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <checar.h>
+#include <historial.h>
 #include <personal.h>
 
 QT_BEGIN_NAMESPACE
@@ -21,6 +22,7 @@ private:
     Ui::VentanaPrincipal *ui;
     Checar checar;
     Personal personal;
+    Historial historial;
 
     void actualizarTiempo();
     void timerEvent(QTimerEvent *event);
@@ -29,5 +31,6 @@ private slots:
     void on_checarButton_clicked();
     void on_personalButton_clicked();
     void on_stackedWidget_currentChanged(int arg1);
+    void on_pushButton_clicked();
 };
 #endif // VENTANAPRINCIPAL_H
