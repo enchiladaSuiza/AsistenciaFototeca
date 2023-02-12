@@ -58,10 +58,12 @@ void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
 {
     if (actual >= 1)
     {
+        if (actual == 2)
+        {
+            historial.actualizarConsulta();
+        }
         checar.desactivarCamara();
+        return;
     }
-    else
-    {
-        checar.activarCamara();
-    }
+    checar.activarCamara();
 }

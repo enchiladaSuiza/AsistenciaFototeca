@@ -34,7 +34,7 @@ void TimeEditDelegate::setEditorData(QWidget *editor,
     }
     else
     {
-        QTime time = QTime::fromString(value, "h:mm");
+        QTime time = QTime::fromString(value, "hh:mm");
         // qDebug() << time;
         timeEdit->setEnabled(true);
         timeEdit->setTime(time);
@@ -47,7 +47,7 @@ void TimeEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     QTimeEdit *timeEdit = static_cast<QTimeEdit*>(editor);
     if (timeEdit->isEnabled())
     {
-        QString value = timeEdit->time().toString("h:mm");
+        QString value = timeEdit->time().toString("hh:mm");
         // qDebug() << value;
         model->setData(index, value, Qt::EditRole);
     }

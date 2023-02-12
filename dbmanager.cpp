@@ -57,7 +57,7 @@ bool DbManager::updateCapturaHoraSalida(int idRegistro, QString horaSalida)
     QSqlQuery query;
     if (horaSalida.isEmpty())
     {
-        horaSalida = QTime::currentTime().toString("h:mm");
+        horaSalida = QTime::currentTime().toString("hh:mm");
     }
     query.prepare("UPDATE registro SET hora_salida = ? WHERE id = ?");
     query.addBindValue(horaSalida);
@@ -117,7 +117,13 @@ QSqlQuery DbManager::capturasDeUnDia(QDate dia)
 
     QSqlQuery query;
     query.prepare("SELECT empleado.id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre, " +
-                tiempos.first + ", hora_entrada, " + tiempos.second + ", hora_salida FROM registro, empleado, horario "
+                tiempos.first + ", hora_entrada, "
+                "((strftime('%H', hora_entrada) - strftime('%H', " + tiempos.first + ")) * 60) +"
+                "(strftime('%M', hora_entrada) - strftime('%M', " + tiempos.first + ")) AS diferencia_entrada, "
+                + tiempos.second + ", hora_salida, "
+                "((strftime('%H', " + tiempos.second + ") - strftime('%H', hora_salida)) * 60) +"
+                "(strftime('%M', " + tiempos.second + ") - strftime('%M', hora_salida)) AS diferencia_salida "
+                "FROM registro, empleado, horario "
                 "WHERE registro.empleado = empleado.id AND horario.id = empleado.id AND fecha = date(?)");
     query.addBindValue(dia.toString(Qt::ISODate));
     query.exec();

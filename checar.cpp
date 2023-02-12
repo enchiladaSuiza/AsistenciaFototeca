@@ -77,7 +77,7 @@ void Checar::procesarFrame(const QVideoFrame &frame)
         return;
     }
 
-    QString ahora = QTime::currentTime().toString("h:mm");
+    QString ahora = QTime::currentTime().toString("hh:mm");
     int diaSemana = QDate::currentDate().dayOfWeek();
 
     int idEmpleado = empleado.value("id").toInt();
