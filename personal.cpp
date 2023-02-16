@@ -16,10 +16,7 @@ Personal::Personal(QWidget *parent) :
     connect(&datos, &Datos::nombreCompletoSeleccion, this, &Personal::actualizarRegistroSeleccionado);
 }
 
-Personal::~Personal()
-{
-    delete ui;
-}
+Personal::~Personal() { delete ui; }
 
 void Personal::actualizarRegistroSeleccionado(QString* nombre)
 {
@@ -35,7 +32,7 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
     if (nombre->isEmpty())
     {
         ui->seleccionLabel->setStyleSheet("font-style: normal");
-        ui->seleccionLabel->setText("Seleccione un registro...");
+        ui->seleccionLabel->setText("Seleccione un registro.");
         ui->tabWidget->removeTab(2);
         ui->tabWidget->removeTab(1);
         return;
@@ -49,13 +46,7 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
 
 void Personal::on_tabWidget_currentChanged(int index)
 {
-    if (index == 2)
-    {
-        escaner.activarCamara();
-    }
-    else
-    {
-        escaner.desactivarCamara();
-    }
+    if (index == 2) escaner.activarCamara();
+    else escaner.desactivarCamara();
 }
 

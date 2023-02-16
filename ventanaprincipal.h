@@ -20,9 +20,9 @@ public:
 
 private:
     Ui::VentanaPrincipal *ui;
-    Checar checar;
-    Personal personal;
-    Historial historial;
+    Checar* checar;
+    Personal* personal;
+    Historial* historial;
 
     void actualizarTiempo();
     void timerEvent(QTimerEvent *event);

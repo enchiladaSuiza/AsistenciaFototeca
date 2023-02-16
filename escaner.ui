@@ -14,8 +14,8 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="2">
-    <widget class="QVideoWidget" name="viewfinder" native="true">
+   <item row="1" column="0">
+    <widget class="QLineEdit" name="codigoEdit">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -23,32 +23,15 @@
        <bold>true</bold>
       </font>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="topLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="inputMask">
+      <string/>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Escaneando...</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="placeholderText">
+      <string>Aquí aparecerá el texto contenido en el ćodigo QR</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="1" column="1">
     <widget class="QPushButton" name="guardarButton">
      <property name="enabled">
       <bool>false</bool>
@@ -65,8 +48,8 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLineEdit" name="codigoEdit">
+   <item row="0" column="0" colspan="2">
+    <widget class="QVideoWidget" name="viewfinder" native="true">
      <property name="font">
       <font>
        <family>Montserrat</family>

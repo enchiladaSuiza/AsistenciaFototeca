@@ -9,10 +9,7 @@ bool DbManager::abrirConexion(const QString& nombre)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(nombre);
-    if (db.open())
-    {
-        return true;
-    }
+    if (db.open()) return true;
     qDebug() << "Conexión con la base de datos fallida.";
     qDebug() << db.lastError();
     return false;
@@ -30,7 +27,8 @@ bool DbManager::actualizarQREmpleado(int idEmpleado, QString qr)
 QSqlQuery DbManager::nombreCompletoPorQR(QString qr)
 {
     QSqlQuery query;
-    query.prepare("SELECT id, nombre, apellido_paterno, apellido_materno FROM empleado WHERE qr = ?");
+    query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre "
+                  "FROM empleado WHERE qr = ?");
     query.addBindValue(qr);
     query.exec();
     query.next();
@@ -40,10 +38,7 @@ QSqlQuery DbManager::nombreCompletoPorQR(QString qr)
 QSqlQuery DbManager::capturasPorEmpleadoFecha(int idEmpleado, QString fecha)
 {
     QSqlQuery query;
-    if (fecha.isEmpty())
-    {
-        fecha = QDate::currentDate().toString(Qt::ISODate);
-    }
+    if (fecha.isEmpty()) fecha = QDate::currentDate().toString(Qt::ISODate);
     query.prepare("SELECT id, hora_entrada, hora_salida FROM registro WHERE empleado = ? AND fecha = ?");
     query.addBindValue(idEmpleado);
     query.addBindValue(fecha);
@@ -78,10 +73,7 @@ QSqlQuery DbManager::horariosPorEmpleado(int idEmpleado)
 bool DbManager::insertarRegistro(int idEmpleado, QString entrada, QString salida, QString fecha)
 {
     QSqlQuery query;
-    if (fecha.isEmpty())
-    {
-        fecha = QDate::currentDate().toString(Qt::ISODate);
-    }
+    if (fecha.isEmpty()) fecha = QDate::currentDate().toString(Qt::ISODate);
     if (salida.isEmpty())
     {
         query.prepare("INSERT INTO registro VALUES (NULL, ?, ?, ?, NULL)");

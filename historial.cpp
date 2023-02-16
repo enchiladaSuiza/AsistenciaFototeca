@@ -3,6 +3,8 @@
 
 #include <dbmanager.h>
 #include <QSqlQuery>
+#include <QFileDialog>
+#include <QMimeData>
 
 Historial::Historial(QWidget *parent) :
     QWidget(parent),
@@ -12,8 +14,8 @@ Historial::Historial(QWidget *parent) :
 
     ui->tableWidget->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
     ui->tableWidget->horizontalHeader()->setMinimumHeight(36);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    ui->tableWidget->verticalHeader()->setMinimumWidth(15);
 
     QDate hoy = QDate::currentDate();
     ui->yearPicker->setValue(hoy.year());
@@ -38,7 +40,6 @@ Historial::~Historial()
 void Historial::on_yearSelect_clicked()
 {
     ui->yearPicker->setVisible(true);
-
     ui->monthPicker->setVisible(false);
     ui->weekPicker->setVisible(false);
     ui->rangoInicio->setVisible(false);
@@ -60,7 +61,6 @@ void Historial::on_weekSelect_clicked()
 void Historial::on_daySelect_clicked()
 {
     ui->rangoFin->setVisible(true);
-
     ui->yearPicker->setVisible(false);
     ui->monthPicker->setVisible(false);
     ui->weekPicker->setVisible(false);
@@ -76,10 +76,7 @@ void Historial::on_rangeSelect_clicked()
 void Historial::consultarDia(QDate dia)
 {
     QSqlQuery capturas = DbManager::capturasDeUnDia(dia);
-    if (!capturas.next())
-    {
-        return;
-    }
+    if (!capturas.next()) return;
 
     int fila = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(fila);
@@ -90,44 +87,33 @@ void Historial::consultarDia(QDate dia)
     ui->tableWidget->setSpan(fila, 0, 1, 8);
 
     do
-    {
-        QTableWidgetItem *id = new QTableWidgetItem(capturas.value(0).toString());
-        id->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem *nombre = new QTableWidgetItem(capturas.value(1).toString());
-        QTableWidgetItem *entradaNormal = new QTableWidgetItem(capturas.value(2).toTime().toString("h:mm"));
-        QTableWidgetItem *entradaCaptura = new QTableWidgetItem(capturas.value(3).toTime().toString("h:mm"));
-        QTableWidgetItem *diferenciaEntrada;
-        int desfaseEntrada = capturas.value(4).toInt();
-        if (desfaseEntrada < 1)
-        {
-            diferenciaEntrada = new QTableWidgetItem("✔️");
-        }
-        else
-        {
-            diferenciaEntrada = new QTableWidgetItem(QString::number(desfaseEntrada));
-        }
+    {  
+        QTableWidgetItem *id = crearItemTabla(capturas.value(0).toString());
+        QTableWidgetItem *nombre = crearItemTabla(capturas.value(1).toString());
+        QTableWidgetItem *entradaNormal = crearItemTabla(capturas.value(2).toTime().toString("h:mm"));
+        QTableWidgetItem *entradaCaptura = crearItemTabla(capturas.value(3).toTime().toString("h:mm"));
 
-        QTableWidgetItem *salidaNormal = new QTableWidgetItem(capturas.value(5).toTime().toString("h:mm"));
+        int desfaseEntrada = capturas.value(4).toInt();
+        QTableWidgetItem *diferenciaEntrada;
+        if (desfaseEntrada < 1) diferenciaEntrada = crearItemTabla("✔️");
+        else diferenciaEntrada = crearItemTabla(QString::number(desfaseEntrada));
+
+        QTableWidgetItem *salidaNormal = crearItemTabla(capturas.value(5).toTime().toString("h:mm"));
         QTableWidgetItem *salidaCaptura = nullptr;
         QTableWidgetItem *diferenciaSalida = nullptr;
+
         QString tiempoCapturaSalida = capturas.value(6).toTime().toString("h:mm");
         int desfaseSalida = capturas.value(7).toInt();
         if (tiempoCapturaSalida.isEmpty())
         {
-            salidaCaptura = new QTableWidgetItem("-");
-            diferenciaSalida = new QTableWidgetItem("-");
+            salidaCaptura = crearItemTabla("-");
+            diferenciaSalida = crearItemTabla("-");
         }
         else
         {
-            salidaCaptura = new QTableWidgetItem(tiempoCapturaSalida);
-            if (desfaseSalida < 1)
-            {
-                diferenciaSalida = new QTableWidgetItem("✔️");
-            }
-            else
-            {
-                diferenciaSalida = new QTableWidgetItem(QString::number(desfaseSalida));
-            }
+            salidaCaptura = crearItemTabla(tiempoCapturaSalida);
+            if (desfaseSalida < 1) diferenciaSalida = crearItemTabla("✔️");
+            else diferenciaSalida = crearItemTabla(QString::number(desfaseSalida));
         }
 
         fila++;
@@ -144,73 +130,63 @@ void Historial::consultarDia(QDate dia)
     } while (capturas.next());
 }
 
+void Historial::consultarRango(QDate inicio, QDate fin)
+{
+    rangoInicio = inicio.toString(Qt::ISODate);
+    rangoFin = fin.toString(Qt::ISODate);
+    while (inicio <= fin)
+    {
+        consultarDia(inicio);
+        inicio = inicio.addDays(1);
+    }
+}
+
 void Historial::actualizarConsulta(QAbstractButton* seleccionado)
 {
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
-    if (seleccionado == nullptr)
-    {
-        seleccionado = ui->buttonGroup->checkedButton();
-    }
+    if (seleccionado == nullptr) seleccionado = ui->buttonGroup->checkedButton();
 
     if (seleccionado == ui->yearSelect)
     {
         int year = ui->yearPicker->value();
-        QDate dia(year, 1, 1);
-        QDate fin(year, 12, 31);
-        while (dia <= fin)
-        {
-            consultarDia(dia);
-            dia = dia.addDays(1);
-        }
+        consultarRango(QDate(year, 1, 1), QDate(year, 12, 31));
     }
     else if (seleccionado == ui->monthSelect)
     {
         int year = ui->yearPicker->value();
         int month = ui->monthPicker->currentIndex() + 1;
-        QDate dia(year, month, 1);
-        QDate fin = dia.addMonths(1);
-        while (dia < fin)
-        {
-            consultarDia(dia);
-            dia = dia.addDays(1);
-        }
+        QDate inicio(year, month, 1);
+        consultarRango(inicio, inicio.addMonths(1));
     }
     else if (seleccionado == ui->weekSelect)
     {
         int year = ui->yearPicker->value();
         int semana = ui->weekPicker->value() - 1;
-        QDate dia(year, 1, 1);
-        while (dia.dayOfWeek() != 1) // ¿Primer lunes del año?
+        QDate inicio(year, 1, 1);
+        while (inicio.dayOfWeek() != 1) // ¿Primer lunes del año?
         {
-            dia = dia.addDays(1);
+            inicio = inicio.addDays(1);
         }
-        dia = dia.addDays(7 * semana);
-        for (int i = 0; i < 7; i++)
-        {
-            consultarDia(dia);
-            dia = dia.addDays(1);
-        }
+        consultarRango(inicio, inicio.addDays(7 * semana));
     }
     else if (seleccionado == ui->daySelect)
     {
-        consultarDia(ui->rangoFin->date());
+        consultarRango(ui->rangoFin->date(), ui->rangoFin->date());
     }
     else
     {
-        QDate dia = ui->rangoInicio->date();
-        QDate fin = ui->rangoFin->date();
-        while (dia <= fin)
-        {
-            consultarDia(dia);
-            dia = dia.addDays(1);
-        }
+        consultarRango(ui->rangoInicio->date(), ui->rangoFin->date());
     }
 }
 
-void Historial::seleccionCambiada(QAbstractButton *boton)
+void Historial::seleccionCambiada(QAbstractButton *boton) { actualizarConsulta(boton); }
+
+QTableWidgetItem* Historial::crearItemTabla(QString texto)
 {
-    actualizarConsulta(boton);
+    QTableWidgetItem* item = new QTableWidgetItem(texto);
+    item->setTextAlignment(Qt::AlignCenter);
+    return item;
 }
 
 void Historial::on_rangoFin_dateChanged(const QDate &date)
@@ -241,5 +217,31 @@ void Historial::on_weekPicker_valueChanged(int week)
 {
     Q_UNUSED(week);
     actualizarConsulta();
+}
+
+void Historial::on_exportarButton_clicked()
+{
+    QFileDialog dialogo;
+    QString nombreArchivo = "Reporte" + rangoInicio + "---" + rangoFin + ".csv";
+    QString directorio = dialogo.getSaveFileName(this, "Elija un directorio.", "./" + nombreArchivo);
+    QFile archivo(directorio);
+    if (archivo.open(QFile::WriteOnly | QIODevice::Append))
+    {
+        QTextStream salida(&archivo);
+        salida << "No. Empleado,Nombre,Entrada,Captura de Entrada,Diferencia de Entrada,"
+               << "Salida,Captura de Salida, Diferencia de Salida\n";
+        int filas = ui->tableWidget->rowCount();
+        for (int i = 0; i < filas; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                QTableWidgetItem *item = ui->tableWidget->item(i, j);
+                if (item == nullptr) continue;
+                salida << item->text() << ",";
+            }
+            salida << '\n';
+        }
+        archivo.close();
+    }
 }
 

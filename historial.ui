@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>479</width>
-    <height>275</height>
+    <width>531</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -164,23 +164,6 @@ de salidas</string>
      </attribute>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QRadioButton" name="monthSelect">
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Mes</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
    <item row="0" column="2">
     <widget class="QRadioButton" name="weekSelect">
      <property name="font">
@@ -198,7 +181,58 @@ de salidas</string>
      </attribute>
     </widget>
    </item>
-   <item row="1" column="0" colspan="5">
+   <item row="0" column="4">
+    <widget class="QRadioButton" name="rangeSelect">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Rango</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QRadioButton" name="monthSelect">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Mes</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QRadioButton" name="yearSelect">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Año</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
       <number>0</number>
@@ -407,8 +441,8 @@ de salidas</string>
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <widget class="QRadioButton" name="yearSelect">
+   <item row="1" column="4">
+    <widget class="QPushButton" name="exportarButton">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -417,28 +451,8 @@ de salidas</string>
       </font>
      </property>
      <property name="text">
-      <string>Año</string>
+      <string>Exportar</string>
      </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QRadioButton" name="rangeSelect">
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Rango</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
     </widget>
    </item>
   </layout>

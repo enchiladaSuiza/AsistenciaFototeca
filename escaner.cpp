@@ -14,7 +14,6 @@ Escaner::Escaner(QWidget *parent) :
     ui->setupUi(this);
 
     timer = new QTimer(this);
-    // connect(timer, &QTimer::timeout, this, &Escaner::activarProcesamiento);
 
     decoder = new QZXing;
     decoder->setDecoder( QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13 );
@@ -22,8 +21,9 @@ Escaner::Escaner(QWidget *parent) :
     decoder->setTryHarderBehaviour(QZXing::TryHarderBehaviour_ThoroughScanning | QZXing::TryHarderBehaviour_Rotate);
 
     sesion.setVideoOutput(ui->viewfinder);
+    ui->viewfinder->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
-    habilitarProcesamiento(true);
+    connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
 }
 
 Escaner::~Escaner()
@@ -34,27 +34,7 @@ Escaner::~Escaner()
 void Escaner::procesarFrame(const QVideoFrame &frame)
 {
     QString resultado = decoder->decodeImage(frame.toImage());
-    if (!resultado.isEmpty())
-    {
-        // habilitarProcesamiento(false);
-        // timer->start(cooldownProcesamiento);
-        ui->codigoEdit->setText(resultado);
-    }
-}
-
-void Escaner::habilitarProcesamiento(bool habilitar)
-{
-    if (habilitar)
-    {
-        connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
-        return;
-    }
-    disconnect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Escaner::procesarFrame);
-}
-
-void Escaner::activarProcesamiento()
-{
-    habilitarProcesamiento(true);
+    if (!resultado.isEmpty()) ui->codigoEdit->setText(resultado);
 }
 
 void Escaner::activarCamara()
@@ -83,16 +63,12 @@ void Escaner::on_guardarButton_clicked()
 {
     QString qr = ui->codigoEdit->text();
     ui->guardarButton->setEnabled(false);
-//    habilitarProcesamiento(false);
-//    timer->start(cooldownProcesamiento);
-
     DbManager::actualizarQREmpleado(idRegistro, qr);   
 }
 
 void Escaner::setId(int id)
 {
     idRegistro = id;
-
     QString codigo = DbManager::qrPorId(id);
     ui->codigoEdit->setText(codigo);
 }

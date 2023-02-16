@@ -9,6 +9,8 @@
 #include <QVideoSink>
 #include <QTimer>
 #include <QZXing.h>
+#include <QTableWidgetItem>
+#include <QStatusBar>
 
 namespace Ui {
 class Checar;
@@ -25,13 +27,14 @@ public:
     void activarCamara();
     void desactivarCamara();
 
-    void mostrarInformacion(bool mostrar);
-    void llenarInformacion(QString info = "", QString nombre = "", QString entradaNormal = "", QString salidaNormal = "", QString entradaCaptura = "", QString salidaCaptura = "");
+    void limpiarInformacion();
+    void llenarInformacion(QString info = "", QString nombre = "",
+                           QString entradaNormal = "", QString salidaNormal = "",
+                           QString entradaCaptura = "", QString salidaCaptura = "");
 
 private slots:
     void procesarFrame(const QVideoFrame &frame);
     void restablecerPantalla();
-    void resumirProcesamiento();
 
 private:
     Ui::Checar *ui;
@@ -40,7 +43,10 @@ private:
     QMediaCaptureSession sesion;
     QZXing *decoder;
     QTimer *timerInfo;
-    QTimer *timerCamara;
+    QTableWidgetItem* entradaEstablecida;
+    QTableWidgetItem* entradaCapturada;
+    QTableWidgetItem* salidaEstablecida;
+    QTableWidgetItem* salidaCapturada;
 
     const int tiempoInformacion = 5000;
 };

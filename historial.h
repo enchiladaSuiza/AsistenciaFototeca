@@ -2,6 +2,7 @@
 #define HISTORIAL_H
 
 #include <QAbstractButton>
+#include <QTableWidgetItem>
 #include <QWidget>
 
 namespace Ui {
@@ -40,9 +41,14 @@ private slots:
 
     void on_weekPicker_valueChanged(int arg1);
 
+    void on_exportarButton_clicked();
+
 private:
     Ui::Historial *ui;
+    QTableWidgetItem *crearItemTabla(QString texto);
+    QString rangoInicio = "", rangoFin = "";
     void consultarDia(QDate dia);
+    void consultarRango(QDate inicio, QDate fin);
 };
 
 #endif // HISTORIAL_H

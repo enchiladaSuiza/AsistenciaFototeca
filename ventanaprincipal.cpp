@@ -17,15 +17,16 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     startTimer(1000);
     actualizarTiempo();
 
-    ui->stackedWidget->addWidget(&checar);
-    ui->stackedWidget->addWidget(&personal);
-    ui->stackedWidget->addWidget(&historial);
+    checar = new Checar(this);
+    personal = new Personal(this);
+    historial = new Historial(this);
+
+    ui->stackedWidget->addWidget(checar);
+    ui->stackedWidget->addWidget(personal);
+    ui->stackedWidget->addWidget(historial);
 }
 
-VentanaPrincipal::~VentanaPrincipal()
-{
-    delete ui;
-}
+VentanaPrincipal::~VentanaPrincipal() { delete ui; }
 
 void VentanaPrincipal::actualizarTiempo()
 {
@@ -35,35 +36,32 @@ void VentanaPrincipal::actualizarTiempo()
 
 void VentanaPrincipal::timerEvent(QTimerEvent *event)
 {
-    (void)event;
+    Q_UNUSED(event);
     ui->horaLabel->setText(QTime::currentTime().toString("hh:mm:ss"));
 }
 
 void VentanaPrincipal::on_checarButton_clicked()
 {
-    ui->stackedWidget->setCurrentWidget(&checar);
+    ui->stackedWidget->setCurrentWidget(checar);
 }
 
 void VentanaPrincipal::on_personalButton_clicked()
 {
-    ui->stackedWidget->setCurrentWidget(&personal);
+    ui->stackedWidget->setCurrentWidget(personal);
 }
 
 void VentanaPrincipal::on_pushButton_clicked()
 {
-    ui->stackedWidget->setCurrentWidget(&historial);
+    ui->stackedWidget->setCurrentWidget(historial);
 }
 
 void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
 {
     if (actual >= 1)
     {
-        if (actual == 2)
-        {
-            historial.actualizarConsulta();
-        }
-        checar.desactivarCamara();
+        if (actual == 2) historial->actualizarConsulta();
+        checar->desactivarCamara();
         return;
     }
-    checar.activarCamara();
+    checar->activarCamara();
 }

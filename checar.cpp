@@ -1,66 +1,80 @@
 #include "checar.h"
-#include "qcamera.h"
 #include "ui_checar.h"
+#include "dbmanager.h"
+#include "qcamera.h"
 #include "QZXing.h"
 
 #include <QDate>
 #include <QVideoWidget>
+#include <QCamera>
 #include <QMediaDevices>
-#include <QDir>
-#include <QRandomGenerator>
 #include <QSqlQuery>
-#include <QSqlQuery>
-#include <dbmanager.h>
 
 Checar::Checar(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Checar)
 {
     ui->setupUi(this);
-    mostrarInformacion(false);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
+    ui->tableWidget->verticalHeader()->setMinimumWidth(70);
 
-    timerInfo = new QTimer(this);
+    entradaEstablecida = new QTableWidgetItem;
+    entradaCapturada = new QTableWidgetItem;
+    salidaEstablecida = new QTableWidgetItem;
+    salidaCapturada = new QTableWidgetItem;
+    entradaEstablecida->setTextAlignment(Qt::AlignCenter);
+    entradaCapturada->setTextAlignment(Qt::AlignCenter);
+    salidaEstablecida->setTextAlignment(Qt::AlignCenter);
+    salidaCapturada->setTextAlignment(Qt::AlignCenter);
+    ui->tableWidget->setItem(0, 0, entradaEstablecida);
+    ui->tableWidget->setItem(0, 1, entradaCapturada);
+    ui->tableWidget->setItem(1, 0, salidaEstablecida);
+    ui->tableWidget->setItem(1, 1, salidaCapturada);
+
+    timerInfo = new QTimer;
     connect(timerInfo, &QTimer::timeout, this, &Checar::restablecerPantalla);
 
-    timerCamara = new QTimer(this);
-    connect(timerCamara, &QTimer::timeout, this, &Checar::resumirProcesamiento);
-
     decoder = new QZXing;
-    decoder->setDecoder( QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13 );
+    decoder->setDecoder(QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13);
     decoder->setSourceFilterType(QZXing::SourceFilter_ImageNormal);
     decoder->setTryHarderBehaviour(QZXing::TryHarderBehaviour_ThoroughScanning | QZXing::TryHarderBehaviour_Rotate);
 
+    camara = new QCamera(QMediaDevices::defaultVideoInput(), this);
     activarCamara();
+    sesion.setCamera(camara);
     sesion.setVideoOutput(ui->viewfinder);
+    ui->viewfinder->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
     connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Checar::procesarFrame);
 }
 
 Checar::~Checar()
 {
+    desactivarCamara();
     delete ui;
 }
 
-void Checar::mostrarInformacion(bool mostrar)
+void Checar::limpiarInformacion()
 {
-    ui->nombreLabel->setVisible(mostrar);
-    ui->entradaNormalLabel->setVisible(mostrar);
-    ui->entradaCapturaLabel->setVisible(mostrar);
-    ui->salidaNormalLabel->setVisible(mostrar);
-    ui->salidaCapturaLabel->setVisible(mostrar);
+    ui->labelEmpleado->setText("");
+    entradaEstablecida->setText("");
+    entradaCapturada->setText("");
+    salidaEstablecida->setText("");
+    salidaCapturada->setText("");
 }
 
 void Checar::llenarInformacion(QString info, QString nombre,
                                QString entradaNormal, QString salidaNormal,
                                QString entradaCaptura, QString salidaCaptura)
 {
-    mostrarInformacion(true);
-    ui->label->setText(info);
-    ui->nombreLabel->setText(nombre);
-    ui->entradaNormalLabel->setText("Entrada: " + entradaNormal);
-    ui->entradaCapturaLabel->setText("Captura: " + entradaCaptura);
-    ui->salidaNormalLabel->setText("Salida: " + salidaNormal);
-    ui->salidaCapturaLabel->setText("Captura: " + salidaCaptura);
+    ui->labelEstado->setText(info);
+    ui->labelEmpleado->setText(nombre);
+    entradaEstablecida->setText(entradaNormal);
+    entradaCapturada->setText(entradaCaptura);
+    salidaEstablecida->setText(salidaNormal);
+    salidaCapturada->setText(salidaCaptura);
 }
 
 void Checar::procesarFrame(const QVideoFrame &frame)
@@ -72,19 +86,18 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     QSqlQuery empleado = DbManager::nombreCompletoPorQR(codigo);
     if (!empleado.isValid())
     {
-        ui->label->setText("Código desconocido.");
+        ui->labelEstado->setText("- Código desconocido -");
         timerInfo->start(tiempoInformacion);
         return;
     }
 
+    QDate hoy = QDate::currentDate();
+    QString hoyISO = hoy.toString(Qt::ISODate);
     QString ahora = QTime::currentTime().toString("hh:mm");
-    int diaSemana = QDate::currentDate().dayOfWeek();
+    int diaSemana = hoy.dayOfWeek();
 
     int idEmpleado = empleado.value("id").toInt();
     QString nombre = empleado.value("nombre").toString();
-    QString apPaterno = empleado.value("apellido_paterno").toString();
-    QString apMaterno = empleado.value("apellido_materno").toString();
-    QString nombreCompleto = nombre + " " + apPaterno + " " + apMaterno;
 
     QSqlQuery horarios = DbManager::horariosPorEmpleado(idEmpleado);
     QPair<QString, QString> tiempos = DbManager::diasSemanaColumnas.at(diaSemana);
@@ -93,74 +106,56 @@ void Checar::procesarFrame(const QVideoFrame &frame)
 
     if (entradaNormal.isEmpty() || salidaNormal.isEmpty()) // ¿Hoy trabaja?
     {
-        ui->label->setText("Usted no trabaja el día de hoy.");
+        llenarInformacion("- Usted no trabaja el día de hoy -", nombre);
         timerInfo->start(tiempoInformacion);
         return;
     }
 
-    QSqlQuery capturas = DbManager::capturasPorEmpleadoFecha(idEmpleado);
+    QSqlQuery capturas = DbManager::capturasPorEmpleadoFecha(idEmpleado, hoyISO);
     if (capturas.isValid()) // ¿Ya escaneó hoy?
     {
         QString entrada = capturas.value("hora_entrada").toString();
-
         if (entrada == ahora) return; // ¿Apenas escaneó su entrada?
 
         QString salida = capturas.value("hora_salida").toString();
-
         if (salida.isEmpty())
         {
             int idRegistro = capturas.value("id").toInt();
-            if (DbManager::updateCapturaHoraSalida(idRegistro))
+            if (DbManager::updateCapturaHoraSalida(idRegistro, ahora))
             {
-                llenarInformacion("Salida caputrada.", nombreCompleto, entradaNormal, salidaNormal, entrada, ahora);
+                llenarInformacion("- Salida caputrada -", nombre, entradaNormal, salidaNormal, entrada, ahora);
                 timerInfo->start(tiempoInformacion);
             }
             return;
         }
         if (salida != ahora)
         {
-            ui->label->setText("Su salida ya fue capturada.");
+            llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
             timerInfo->start(tiempoInformacion);
         }
         return;
     }
 
-    if (DbManager::insertarRegistro(idEmpleado, ahora))
+    if (DbManager::insertarRegistro(idEmpleado, ahora, "", hoyISO))
     {
-        llenarInformacion("Entrada caputrada.", nombreCompleto, entradaNormal, salidaNormal, ahora, "-");
+        llenarInformacion("- Entrada caputrada -", nombre, entradaNormal, salidaNormal, ahora);
         timerInfo->start(tiempoInformacion);
     }
 }
 
 void Checar::activarCamara()
 {
-    if (camara == nullptr)
-    {
-        camara = new QCamera(QMediaDevices::defaultVideoInput());
-        sesion.setCamera(camara);
-        camara->start();
-    }
+    camara->start();
 }
 
 void Checar::desactivarCamara()
 {
-    if (camara == nullptr)
-    {
-        return;
-    }
-    sesion.setCamera(nullptr);
     camara->stop();
-    camara = nullptr;
 }
 
 void Checar::restablecerPantalla()
 {
-    ui->label->setText("Buscando código QR...");
-    mostrarInformacion(false);
-}
-
-void Checar::resumirProcesamiento()
-{
-    connect(ui->viewfinder->videoSink(), &QVideoSink::videoFrameChanged, this, &Checar::procesarFrame);
-    activarCamara();
+    ui->labelEstado->setText("- Buscando código QR -");
+    ui->labelEmpleado->setText("");
+    limpiarInformacion();
 }
