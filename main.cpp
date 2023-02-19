@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    DbManager::abrirConexion("/home/santiago/Databases/fototeca.db");
+    DbManager::abrirConexion("C:/Users/carme/Databases/fototeca.db");
     CameraManager::verificarCamaras();
     VentanaPrincipal w;
     w.show();

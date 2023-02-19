@@ -18,7 +18,7 @@ Checar::Checar(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    ui->tableWidget->verticalHeader()->setMinimumWidth(70);
+//    ui->tableWidget->verticalHeader()->setMinimumWidth(70);
 
     entradaEstablecida = new QTableWidgetItem;
     entradaCapturada = new QTableWidgetItem;

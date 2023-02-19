@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/imagenes">
+        <file>SINAFO.png</file>
+        <file>INAH.png</file>
+        <file>Calendario.ico</file>
+    </qresource>
+</RCC>

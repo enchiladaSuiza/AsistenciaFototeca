@@ -31,6 +31,6 @@ private slots:
     void on_checarButton_clicked();
     void on_personalButton_clicked();
     void on_stackedWidget_currentChanged(int arg1);
-    void on_pushButton_clicked();
+    void on_historialButton_clicked();
 };
 #endif // VENTANAPRINCIPAL_H

@@ -95,7 +95,7 @@ void Historial::consultarDia(QDate dia)
 
         int desfaseEntrada = capturas.value(4).toInt();
         QTableWidgetItem *diferenciaEntrada;
-        if (desfaseEntrada < 1) diferenciaEntrada = crearItemTabla("✔️");
+        if (desfaseEntrada < 1) diferenciaEntrada = crearItemTabla("✓");
         else diferenciaEntrada = crearItemTabla(QString::number(desfaseEntrada));
 
         QTableWidgetItem *salidaNormal = crearItemTabla(capturas.value(5).toTime().toString("h:mm"));
@@ -112,7 +112,7 @@ void Historial::consultarDia(QDate dia)
         else
         {
             salidaCaptura = crearItemTabla(tiempoCapturaSalida);
-            if (desfaseSalida < 1) diferenciaSalida = crearItemTabla("✔️");
+            if (desfaseSalida < 1) diferenciaSalida = crearItemTabla("✓");
             else diferenciaSalida = crearItemTabla(QString::number(desfaseSalida));
         }
 
@@ -225,6 +225,7 @@ void Historial::on_exportarButton_clicked()
     QString nombreArchivo = "Reporte" + rangoInicio + "---" + rangoFin + ".csv";
     QString directorio = dialogo.getSaveFileName(this, "Elija un directorio.", "./" + nombreArchivo);
     QFile archivo(directorio);
+
     if (archivo.open(QFile::WriteOnly | QIODevice::Append))
     {
         QTextStream salida(&archivo);
