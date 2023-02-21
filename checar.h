@@ -8,9 +8,10 @@
 #include <QImage>
 #include <QVideoSink>
 #include <QTimer>
-#include <QZXing.h>
 #include <QTableWidgetItem>
 #include <QStatusBar>
+
+#include "QZXing.h"
 
 namespace Ui {
 class Checar;
