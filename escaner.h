@@ -38,7 +38,6 @@ private:
     QZXing *decoder;
     QTimer *timer;
 
-    const int cooldownProcesamiento = 1000;
     int idRegistro = -1;
 };
 

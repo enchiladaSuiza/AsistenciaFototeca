@@ -8,7 +8,7 @@
 class DbManager
 {
 public:
-    static bool abrirConexion(const QString& nombre);
+    static bool abrirConexion();
     static bool actualizarQREmpleado(int idEmpleado, QString qr);
     static QSqlQuery nombreCompletoPorQR(QString qr);
     static QSqlQuery capturasPorEmpleadoFecha(int idEmpleado, QString fecha = "");
@@ -27,6 +27,7 @@ public:
         qMakePair("sabado_e", "sabado_s"),
         qMakePair("domingo_e", "domingo_s"),
     };
+    static QString conseguirArchivo();
 };
 
 #endif // DBMANAGER_H

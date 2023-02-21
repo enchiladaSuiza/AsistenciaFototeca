@@ -6,6 +6,7 @@
 #include <QSqlQuery>
 #include <QTimer>
 #include <QVideoSink>
+#include <cameramanager.h>
 
 Escaner::Escaner(QWidget *parent) :
     QWidget(parent),
@@ -41,7 +42,7 @@ void Escaner::activarCamara()
 {
     if (camara == nullptr)
     {
-        camara = new QCamera(QMediaDevices::defaultVideoInput());
+        camara = CameraManager::getCamara();
         sesion.setCamera(camara);
         camara->start();
     }
@@ -49,15 +50,13 @@ void Escaner::activarCamara()
 
 void Escaner::desactivarCamara()
 {
-    if (camara == nullptr)
+    if (camara != nullptr)
     {
-        return;
+        camara->stop();
+        sesion.setCamera(nullptr);
+        camara = nullptr;
     }
-    sesion.setCamera(nullptr);
-    camara->stop();
-    camara = nullptr;
 }
-
 
 void Escaner::on_guardarButton_clicked()
 {

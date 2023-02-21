@@ -9,6 +9,7 @@
 #include <QCamera>
 #include <QMediaDevices>
 #include <QSqlQuery>
+#include <cameramanager.h>
 
 Checar::Checar(QWidget *parent) :
     QWidget(parent),
@@ -18,7 +19,6 @@ Checar::Checar(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
-//    ui->tableWidget->verticalHeader()->setMinimumWidth(70);
 
     entradaEstablecida = new QTableWidgetItem;
     entradaCapturada = new QTableWidgetItem;
@@ -41,9 +41,7 @@ Checar::Checar(QWidget *parent) :
     decoder->setSourceFilterType(QZXing::SourceFilter_ImageNormal);
     decoder->setTryHarderBehaviour(QZXing::TryHarderBehaviour_ThoroughScanning | QZXing::TryHarderBehaviour_Rotate);
 
-    camara = new QCamera(QMediaDevices::defaultVideoInput(), this);
     activarCamara();
-    sesion.setCamera(camara);
     sesion.setVideoOutput(ui->viewfinder);
     ui->viewfinder->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
@@ -145,12 +143,22 @@ void Checar::procesarFrame(const QVideoFrame &frame)
 
 void Checar::activarCamara()
 {
-    camara->start();
+    if (camara == nullptr)
+    {
+        camara = CameraManager::getCamara();
+        sesion.setCamera(camara);
+        camara->start();
+    }
 }
 
 void Checar::desactivarCamara()
 {
-    camara->stop();
+    if (camara != nullptr)
+    {
+        camara->stop();
+        sesion.setCamera(nullptr);
+        camara = nullptr;
+    }
 }
 
 void Checar::restablecerPantalla()

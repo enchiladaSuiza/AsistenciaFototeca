@@ -43,6 +43,7 @@ private:
     QMediaCaptureSession sesion;
     QZXing *decoder;
     QTimer *timerInfo;
+
     QTableWidgetItem* entradaEstablecida;
     QTableWidgetItem* entradaCapturada;
     QTableWidgetItem* salidaEstablecida;

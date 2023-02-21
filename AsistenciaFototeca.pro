@@ -1,4 +1,4 @@
-QT       += core gui uitools sql multimedia multimediawidgets
+QT       += core gui uitools widgets sql multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 include(QZXing/src/QZXing.pri)
@@ -19,6 +19,7 @@ SOURCES += \
     historial.cpp \
     horario.cpp \
     main.cpp \
+    opciones.cpp \
     personal.cpp \
     spinboxdelegate.cpp \
     timeeditdelegate.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     escaner.h \
     historial.h \
     horario.h \
+    opciones.h \
     personal.h \
     spinboxdelegate.h \
     timeeditdelegate.h \
@@ -44,6 +46,7 @@ FORMS += \
     escaner.ui \
     historial.ui \
     horario.ui \
+    opciones.ui \
     personal.ui \
     ventanaprincipal.ui
 

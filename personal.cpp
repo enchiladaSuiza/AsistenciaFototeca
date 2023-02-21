@@ -2,6 +2,7 @@
 #include "ui_personal.h"
 #include <QSqlError>
 #include <QSqlQuery>
+#include <cameramanager.h>
 
 Personal::Personal(QWidget *parent) :
     QWidget(parent),

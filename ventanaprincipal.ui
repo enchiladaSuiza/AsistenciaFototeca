@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>450</height>
+    <width>641</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -122,20 +122,6 @@
        <enum>QLayout::SetFixedSize</enum>
       </property>
       <item>
-       <widget class="QPushButton" name="historialButton">
-        <property name="font">
-         <font>
-          <family>Montserrat</family>
-          <pointsize>10</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Historial</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="checarButton">
         <property name="font">
          <font>
@@ -163,6 +149,34 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="historialButton">
+        <property name="font">
+         <font>
+          <family>Montserrat</family>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Historial</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="opcionesButton">
+        <property name="font">
+         <font>
+          <family>Montserrat</family>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Opciones</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -172,8 +186,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>750</width>
-     <height>25</height>
+     <width>641</width>
+     <height>19</height>
     </rect>
    </property>
   </widget>

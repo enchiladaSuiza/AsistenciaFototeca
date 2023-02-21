@@ -4,6 +4,7 @@
 #include <QShortcut>
 #include <QTime>
 #include <QPixmap>
+#include <cameramanager.h>
 
 VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     : QMainWindow(parent)
@@ -26,10 +27,12 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     checar = new Checar(this);
     personal = new Personal(this);
     historial = new Historial(this);
+    opciones = new Opciones(this);
 
     ui->stackedWidget->addWidget(checar);
     ui->stackedWidget->addWidget(personal);
     ui->stackedWidget->addWidget(historial);
+    ui->stackedWidget->addWidget(opciones);
     ui->checarButton->setEnabled(false);
 }
 
@@ -52,6 +55,7 @@ void VentanaPrincipal::on_checarButton_clicked()
     ui->checarButton->setEnabled(false);
     ui->personalButton->setEnabled(true);
     ui->historialButton->setEnabled(true);
+    ui->opcionesButton->setEnabled(true);
 }
 
 void VentanaPrincipal::on_personalButton_clicked()
@@ -60,6 +64,7 @@ void VentanaPrincipal::on_personalButton_clicked()
     ui->checarButton->setEnabled(true);
     ui->personalButton->setEnabled(false);
     ui->historialButton->setEnabled(true);
+    ui->opcionesButton->setEnabled(true);
 }
 
 void VentanaPrincipal::on_historialButton_clicked()
@@ -68,6 +73,17 @@ void VentanaPrincipal::on_historialButton_clicked()
     ui->checarButton->setEnabled(true);
     ui->personalButton->setEnabled(true);
     ui->historialButton->setEnabled(false);
+    ui->opcionesButton->setEnabled(true);
+}
+
+void VentanaPrincipal::on_opcionesButton_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(opciones);
+    ui->checarButton->setEnabled(true);
+    ui->personalButton->setEnabled(true);
+    ui->historialButton->setEnabled(true);
+    ui->opcionesButton->setEnabled(false);
+
 }
 
 void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)

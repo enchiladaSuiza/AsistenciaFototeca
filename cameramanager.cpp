@@ -2,14 +2,6 @@
 #include <QCameraDevice>
 #include <QMediaDevices>
 
-bool CameraManager::verificarCamaras()
-{
-    if (QMediaDevices::videoInputs().count() > 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+bool CameraManager::verificarCamaras() { return QMediaDevices::videoInputs().count() > 0; }
+
+QCamera* CameraManager::getCamara() { return new QCamera(QMediaDevices::defaultVideoInput()); }

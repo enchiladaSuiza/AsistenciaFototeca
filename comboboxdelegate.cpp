@@ -1,6 +1,7 @@
 #include "comboboxdelegate.h"
 
 #include <QComboBox>
+#include <QSettings>
 
 ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
     : QStyledItemDelegate{parent}
@@ -9,13 +10,21 @@ ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
 }
 
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
-                                       const QStyleOptionViewItem &/* option */,
-                                       const QModelIndex &/* index */) const
+                                       const QStyleOptionViewItem & option,
+                                       const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     QComboBox *editor = new QComboBox(parent);
+    QSettings opciones;
+    QStringList contrataciones = opciones.value("contrataciones").toString().split('\n');
+    for (QString& contratacion : contrataciones)
+    {
+        editor->addItem(contratacion);
+    }
+    editor->setEditable(true);
     editor->setFrame(false);
-    editor->addItem("Tiempo Completo");
-    editor->addItem("Medio Tiempo");
+
     return editor;
 }
 
@@ -37,7 +46,8 @@ void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
                                            const QStyleOptionViewItem &option,
-                                           const QModelIndex &/* index */) const
+                                           const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     editor->setGeometry(option.rect);
 }

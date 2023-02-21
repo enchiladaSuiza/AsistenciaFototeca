@@ -1,18 +1,39 @@
 #include "dbmanager.h"
-#include "qdebug.h"
 #include <QDate>
+#include <QFileDialog>
+#include <QSettings>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QSqlQuery>
+#include <QErrorMessage>
 
-bool DbManager::abrirConexion(const QString& nombre)
+bool DbManager::abrirConexion()
 {
+    QSettings configuracion;
+    QString archivoBase = "./fototeca.db";
+    if (!configuracion.contains("archivoBase")) configuracion.setValue("archivoBase", archivoBase);
+    else archivoBase = configuracion.value("archivoBase").toString();
+
+    if (!QFile::exists(archivoBase))
+    {
+        archivoBase = conseguirArchivo();
+        configuracion.setValue("archivoBase", archivoBase);
+    }
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(nombre);
+    db.setDatabaseName(archivoBase);
     if (db.open()) return true;
-    qDebug() << "Conexión con la base de datos fallida.";
-    qDebug() << db.lastError();
+
+    QErrorMessage error;
+    error.showMessage("No es posible abrir la base de datos. Puede descargar el archivo de "
+                      "https://github.com/enchiladaSuiza/AsistenciaFototeca/blob/master/fototeca.db");
     return false;
+}
+
+QString DbManager::conseguirArchivo()
+{
+    QFileDialog dialogo;
+    return dialogo.getOpenFileName(nullptr, "No se encontró el archivo de base de datos. Indique su ubicación.",
+                            "./", "Archivo SQLite (*.db)");
 }
 
 bool DbManager::actualizarQREmpleado(int idEmpleado, QString qr)
