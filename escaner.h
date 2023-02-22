@@ -5,7 +5,7 @@
 #include <QMediaCaptureSession>
 #include <QWidget>
 
-#include "QZXing.h"
+#include "QZXing/QZXing.h"
 
 namespace Ui {
 class Escaner;

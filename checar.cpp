@@ -1,15 +1,13 @@
 #include "checar.h"
 #include "ui_checar.h"
 #include "dbmanager.h"
-#include "qcamera.h"
-#include "QZXing.h"
+#include "cameramanager.h"
 
 #include <QDate>
 #include <QVideoWidget>
 #include <QCamera>
 #include <QMediaDevices>
 #include <QSqlQuery>
-#include <cameramanager.h>
 
 Checar::Checar(QWidget *parent) :
     QWidget(parent),

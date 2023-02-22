@@ -11,7 +11,7 @@
 #include <QTableWidgetItem>
 #include <QStatusBar>
 
-#include "QZXing.h"
+#include "QZXing/QZXing.h"
 
 namespace Ui {
 class Checar;
