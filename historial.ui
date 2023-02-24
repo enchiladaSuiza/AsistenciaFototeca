@@ -6,146 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
-    <height>304</height>
+    <width>870</width>
+    <height>522</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="5">
-    <widget class="QTableWidget" name="tableWidget">
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="columnCount">
-      <number>8</number>
-     </property>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>No. de
-Empleado</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nombre</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Entrada</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Captura
-de entrada</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Diferencia
-de entradas</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Salida</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Captura
-de salida</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Diferencia
-de salidas</string>
-      </property>
-      <property name="font">
-       <font>
-        <family>Montserrat</family>
-        <pointsize>10</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QRadioButton" name="daySelect">
+   <item row="0" column="0">
+    <widget class="QRadioButton" name="yearSelect">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -154,17 +24,14 @@ de salidas</string>
       </font>
      </property>
      <property name="text">
-      <string>Día</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Año</string>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
      </attribute>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="3">
     <widget class="QRadioButton" name="weekSelect">
      <property name="font">
       <font>
@@ -181,8 +48,8 @@ de salidas</string>
      </attribute>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QRadioButton" name="rangeSelect">
+   <item row="0" column="2">
+    <widget class="QRadioButton" name="fortnightSelect">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -191,7 +58,7 @@ de salidas</string>
       </font>
      </property>
      <property name="text">
-      <string>Rango</string>
+      <string>Quincena</string>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
@@ -215,8 +82,8 @@ de salidas</string>
      </attribute>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QRadioButton" name="yearSelect">
+   <item row="0" column="4">
+    <widget class="QRadioButton" name="daySelect">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -225,14 +92,48 @@ de salidas</string>
       </font>
      </property>
      <property name="text">
-      <string>Año</string>
+      <string>Día</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
      </attribute>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4">
+   <item row="0" column="5">
+    <widget class="QRadioButton" name="rangeSelect">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Rango</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <widget class="QPushButton" name="exportarButton">
+     <property name="font">
+      <font>
+       <family>Montserrat</family>
+       <pointsize>10</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Exportar</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="5">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
       <number>0</number>
@@ -371,7 +272,7 @@ de salidas</string>
         <number>1</number>
        </property>
        <property name="maximum">
-        <number>53</number>
+        <number>6</number>
        </property>
       </widget>
      </item>
@@ -441,8 +342,8 @@ de salidas</string>
      </item>
     </layout>
    </item>
-   <item row="1" column="4">
-    <widget class="QPushButton" name="exportarButton">
+   <item row="3" column="0" colspan="6">
+    <widget class="QTableWidget" name="tableWidget">
      <property name="font">
       <font>
        <family>Montserrat</family>
@@ -450,9 +351,125 @@ de salidas</string>
        <bold>true</bold>
       </font>
      </property>
-     <property name="text">
-      <string>Exportar</string>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+     <property name="columnCount">
+      <number>8</number>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>No. de
+Empleado</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Entrada</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Captura
+de entrada</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Diferencia
+de entradas</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Salida</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Captura
+de salida</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Diferencia
+de salidas</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Montserrat</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
@@ -460,9 +477,6 @@ de salidas</string>
  <tabstops>
   <tabstop>yearSelect</tabstop>
   <tabstop>monthSelect</tabstop>
-  <tabstop>weekSelect</tabstop>
-  <tabstop>daySelect</tabstop>
-  <tabstop>rangeSelect</tabstop>
   <tabstop>yearPicker</tabstop>
   <tabstop>monthPicker</tabstop>
   <tabstop>weekPicker</tabstop>

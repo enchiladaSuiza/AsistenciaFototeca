@@ -34,21 +34,20 @@ private slots:
     void on_rangoFin_dateChanged(const QDate &date);
 
     void on_yearPicker_valueChanged(int arg1);
-
     void on_monthPicker_currentIndexChanged(int index);
-
     void on_rangoInicio_dateChanged(const QDate &date);
-
     void on_weekPicker_valueChanged(int arg1);
-
     void on_exportarButton_clicked();
+
+    void on_fortnightSelect_clicked();
 
 private:
     Ui::Historial *ui;
     QTableWidgetItem *crearItemTabla(QString texto);
-    QString rangoInicio = "", rangoFin = "";
+    QString nombreReporte = "";
     void consultarDia(QDate dia);
     void consultarRango(QDate inicio, QDate fin);
+    int numeroDeSemana(QDate dia);
 };
 
 #endif // HISTORIAL_H

@@ -20,7 +20,7 @@ Historial::Historial(QWidget *parent) :
     QDate hoy = QDate::currentDate();
     ui->yearPicker->setValue(hoy.year());
     ui->monthPicker->setCurrentIndex(hoy.month() - 1);
-    ui->weekPicker->setValue(hoy.weekNumber());
+    ui->weekPicker->setValue(numeroDeSemana(hoy));
     ui->rangoInicio->setDate(hoy.addDays(-1));
     ui->rangoFin->setDate(hoy);
 
@@ -52,9 +52,17 @@ void Historial::on_monthSelect_clicked()
     ui->monthPicker->setVisible(true);
 }
 
+void Historial::on_fortnightSelect_clicked()
+{
+    on_monthSelect_clicked();
+    ui->weekPicker->setMaximum(2);
+    ui->weekPicker->setVisible(true);
+}
+
 void Historial::on_weekSelect_clicked()
 {
-    on_yearSelect_clicked();
+    on_monthSelect_clicked();
+    ui->weekPicker->setMaximum(6);
     ui->weekPicker->setVisible(true);
 }
 
@@ -71,6 +79,18 @@ void Historial::on_rangeSelect_clicked()
 {
     on_daySelect_clicked();
     ui->rangoInicio->setVisible(true);
+}
+
+int Historial::numeroDeSemana(QDate dia)
+{
+    int cantidadLunes = 0;
+    while (dia.day() < 1)
+    {
+        if (dia.dayOfWeek() == 1) cantidadLunes++;
+        dia = dia.addDays(-1);
+    }
+    cantidadLunes++;
+    return cantidadLunes;
 }
 
 void Historial::consultarDia(QDate dia)
@@ -132,8 +152,6 @@ void Historial::consultarDia(QDate dia)
 
 void Historial::consultarRango(QDate inicio, QDate fin)
 {
-    rangoInicio = inicio.toString(Qt::ISODate);
-    rangoFin = fin.toString(Qt::ISODate);
     while (inicio <= fin)
     {
         consultarDia(inicio);
@@ -147,37 +165,69 @@ void Historial::actualizarConsulta(QAbstractButton* seleccionado)
     ui->tableWidget->setRowCount(0);
     if (seleccionado == nullptr) seleccionado = ui->buttonGroup->checkedButton();
 
+    nombreReporte = "Reporte";
+    int year = ui->yearPicker->value();
+    int month = ui->monthPicker->currentIndex() + 1;
+    int semana = ui->weekPicker->value();
+    int quincena = semana;
+    QDate inicio, fin;
+
+    if (seleccionado == ui->daySelect)
+    {
+        inicio = ui->rangoFin->date();
+        consultarDia(inicio);
+        nombreReporte += inicio.toString(Qt::ISODate);
+        return;
+    }
     if (seleccionado == ui->yearSelect)
     {
-        int year = ui->yearPicker->value();
-        consultarRango(QDate(year, 1, 1), QDate(year, 12, 31));
+        inicio = QDate(year, 1, 1);
+        fin = QDate(year, 12, 31);
+        nombreReporte += QString::number(year);
     }
     else if (seleccionado == ui->monthSelect)
     {
-        int year = ui->yearPicker->value();
-        int month = ui->monthPicker->currentIndex() + 1;
-        QDate inicio(year, month, 1);
-        consultarRango(inicio, inicio.addMonths(1));
+        inicio = QDate(year, month, 1);
+        fin = inicio.addMonths(1).addDays(-1);
+        nombreReporte += ui->monthPicker->currentText() + QString::number(year);
     }
     else if (seleccionado == ui->weekSelect)
     {
-        int year = ui->yearPicker->value();
-        int semana = ui->weekPicker->value() - 1;
-        QDate inicio(year, 1, 1);
-        while (inicio.dayOfWeek() != 1) // ¿Primer lunes del año?
+        inicio = QDate(year, month, 1);
+        if (semana == 1)
         {
-            inicio = inicio.addDays(1);
+            fin = inicio;
+            while (fin.dayOfWeek() != 7) fin = fin.addDays(1);
         }
-        consultarRango(inicio, inicio.addDays(7 * semana));
+        else
+        {
+            while (inicio.dayOfWeek() != 1) inicio = inicio.addDays(1);
+            inicio = inicio.addDays(7 * (semana - 2));
+            fin = inicio.addDays(6);
+        }
+        nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Semana" + QString::number(semana);
     }
-    else if (seleccionado == ui->daySelect)
+    else if (seleccionado == ui->fortnightSelect)
     {
-        consultarRango(ui->rangoFin->date(), ui->rangoFin->date());
+        if (quincena == 1)
+        {
+            inicio = QDate(year, month, 1);
+            fin = QDate(year, month, 15);
+        }
+        else
+        {
+            inicio = QDate(year, month, 16);
+            fin = QDate(year, month, 1).addMonths(1).addDays(-1);
+        }
+        nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Quincena" + QString::number(semana);
     }
     else
     {
-        consultarRango(ui->rangoInicio->date(), ui->rangoFin->date());
+        inicio = ui->rangoInicio->date();
+        fin = ui->rangoFin->date();
+        nombreReporte += inicio.toString(Qt::ISODate) + "---" + fin.toString(Qt::ISODate);
     }
+    consultarRango(inicio, fin);
 }
 
 void Historial::seleccionCambiada(QAbstractButton *boton) { actualizarConsulta(boton); }
@@ -221,9 +271,7 @@ void Historial::on_weekPicker_valueChanged(int week)
 
 void Historial::on_exportarButton_clicked()
 {
-    QFileDialog dialogo;
-    QString nombreArchivo = "Reporte" + rangoInicio + "---" + rangoFin + ".csv";
-    QString directorio = dialogo.getSaveFileName(this, "Elija un directorio.", "./" + nombreArchivo);
+    QString directorio = QFileDialog::getSaveFileName(this, "Elija un directorio.", "./" + nombreReporte + ".csv", "Comma Separated Values (*.csv)");
     QFile archivo(directorio);
 
     if (archivo.open(QFile::WriteOnly | QIODevice::Append))
@@ -245,4 +293,5 @@ void Historial::on_exportarButton_clicked()
         archivo.close();
     }
 }
+
 
