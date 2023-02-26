@@ -25,6 +25,7 @@ Opciones::~Opciones()
 void Opciones::on_seleccionarArchivoButton_clicked()
 {
     QString archivo = DbManager::conseguirArchivo();
+    if (archivo.isEmpty()) return;
     opciones.setValue("archivoBase", archivo);
     ui->nombreArchivoLabel->setText(archivo);
 }

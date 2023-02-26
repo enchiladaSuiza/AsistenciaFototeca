@@ -19,10 +19,12 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     startTimer(1000);
     actualizarTiempo();
 
+    QPixmap sc(":/imagenes/SC.png");
     QPixmap sinafo(":/imagenes/SINAFO.png");
     QPixmap inah(":/imagenes/INAH.png");
     ui->logoSinafo->setPixmap(sinafo.scaled(120, 120, Qt::KeepAspectRatio));
     ui->logoInah->setPixmap(inah.scaled(120, 120, Qt::KeepAspectRatio));
+    ui->logoSC->setPixmap(sc.scaled(200, 200, Qt::KeepAspectRatio));
 
     checar = new Checar(this);
     personal = new Personal(this);

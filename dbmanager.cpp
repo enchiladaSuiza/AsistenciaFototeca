@@ -32,7 +32,7 @@ bool DbManager::abrirConexion()
 QString DbManager::conseguirArchivo()
 {
     QFileDialog dialogo;
-    return dialogo.getOpenFileName(nullptr, "No se encontró el archivo de base de datos. Indique su ubicación.",
+    return dialogo.getOpenFileName(nullptr, "Indique la ubicación del archivo de base de datos.",
                             "./", "Archivo SQLite (*.db)");
 }
 
