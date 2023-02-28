@@ -1,5 +1,6 @@
 #include "datos.h"
 #include "ui_datos.h"
+#include <QMessageBox>
 #include <QSqlError>
 #include <comboboxdelegate.h>
 #include <spinboxdelegate.h>
@@ -15,13 +16,13 @@ Datos::Datos(QWidget *parent) :
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     model->select();
 
-    model->setHeaderData(0, Qt::Horizontal, tr("No. de\nEmpleado"));
-    model->setHeaderData(1, Qt::Horizontal, tr("Nombre(s)"));
-    model->setHeaderData(2, Qt::Horizontal, tr("Apellido\nPaterno"));
-    model->setHeaderData(3, Qt::Horizontal, tr("Apellido\nMaterno"));
-    model->setHeaderData(4, Qt::Horizontal, tr("CURP"));
-    model->setHeaderData(5, Qt::Horizontal, tr("RFC"));
-    model->setHeaderData(6, Qt::Horizontal, tr("Tipo de\nContratación"));
+    model->setHeaderData(0, Qt::Horizontal, "No. de\nEmpleado");
+    model->setHeaderData(1, Qt::Horizontal, "Nombre(s)");
+    model->setHeaderData(2, Qt::Horizontal, "Apellido\nPaterno");
+    model->setHeaderData(3, Qt::Horizontal, "Apellido\nMaterno");
+    model->setHeaderData(4, Qt::Horizontal, "CURP");
+    model->setHeaderData(5, Qt::Horizontal, "RFC");
+    model->setHeaderData(6, Qt::Horizontal, "Tipo de\nContratación");
 
     connect(model, &QSqlTableModel::dataChanged, this, &Datos::cambiosDetectados);
 
@@ -51,8 +52,12 @@ void Datos::on_guardarButton_clicked()
 {
     if (!model->submitAll())
     {
-        qDebug() << "Error guardando los datos a la DB. Cancelando cambios.";
-        qDebug() << model->lastError();
+        QMessageBox box;
+        box.setIcon(QMessageBox::Critical);
+        box.setWindowTitle("Sistema de Control de Asistencia de la Fototeca Nacional");
+        box.setText("Error guardando a la base de datos. Cancelando cambios.");
+        box.setInformativeText(model->lastError().text());
+        box.exec();
         model->revertAll();
         return;
     }

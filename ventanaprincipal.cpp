@@ -22,9 +22,10 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     QPixmap sc(":/imagenes/SC.png");
     QPixmap sinafo(":/imagenes/SINAFO.png");
     QPixmap inah(":/imagenes/INAH.png");
-    ui->logoSinafo->setPixmap(sinafo.scaled(120, 120, Qt::KeepAspectRatio));
-    ui->logoInah->setPixmap(inah.scaled(120, 120, Qt::KeepAspectRatio));
-    ui->logoSC->setPixmap(sc.scaled(200, 200, Qt::KeepAspectRatio));
+
+    ui->logoSinafo->setPixmap(sinafo.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->logoInah->setPixmap(inah.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->logoSC->setPixmap(sc.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     checar = new Checar(this);
     personal = new Personal(this);

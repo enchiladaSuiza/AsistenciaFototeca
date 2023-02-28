@@ -5,6 +5,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QErrorMessage>
+#include <QMessageBox>
 
 bool DbManager::abrirConexion()
 {
@@ -23,9 +24,13 @@ bool DbManager::abrirConexion()
     db.setDatabaseName(archivoBase);
     if (db.open()) return true;
 
-    QErrorMessage error;
-    error.showMessage("No es posible abrir la base de datos. Puede descargar el archivo de "
-                      "https://github.com/enchiladaSuiza/AsistenciaFototeca/blob/master/fototeca.db");
+    QMessageBox box;
+    box.setIcon(QMessageBox::Critical);
+    box.setWindowTitle("Sistema de Control de Asistencia de la Fototeca Nacional");
+    box.setText("No es posible abrir la base de datos.");
+    box.setInformativeText("Puede descargar el archivo de "
+                           "https://github.com/enchiladaSuiza/AsistenciaFototeca/blob/master/fototeca.db");
+    box.exec();
     return false;
 }
 

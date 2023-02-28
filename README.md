@@ -15,6 +15,14 @@ Programa escrito en C++ con el framework de Qt y la librería QZXing para regist
 ## Instalación
 Este programa usa la fuente Montserrat, por lo que es recomendable instalarla previamente.
 ### Windows
-1. Descargar el archivo comprimido AsistenciaFototeca.zip de los lanzamientos.
+1. Descargar el archivo comprimido AsistenciaFototeca.zip de los lanzamientos y extraer los archivos en una carpeta.
 2. Ejecutar el programa AsistenciaFototeca.exe.
-3. Se puede hacer un acceso directo del .exe y colocarlo donde se desee (el programa no ejecutará si no está dentro de la carpeta original).
+3. Se puede hacer un acceso directo del .exe y colocarlo donde se desee (el programa no se puede mover de su carpeta original, de lo contrario no ejecutará).
+
+## Compilación
+### Windows
+1. Este programa es compilado con la versión 6.2.4 de Qt, por lo que primero se necesita instalar ese kit a través de la Qt Maintenance Tool.
+2. Clonar el repositorio.
+3. Abrir el archivo AsistenciaFototeca.pro dentro de Qt Creator y asignarle el kit de Qt 6.2.4.
+4. Construir y ejecutar.
+
