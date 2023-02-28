@@ -1,0 +1,12 @@
+QWidget {
+    font-family: "Montserrat Medium", "Montserrat";
+    font-size: 10pt;
+}
+
+QLabel#horaLabel {
+    font-size: 12pt;
+}
+
+Checar QWidget {
+    font-size: 12pt;
+}

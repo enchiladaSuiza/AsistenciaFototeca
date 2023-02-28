@@ -1,8 +1,10 @@
 <RCC>
-    <qresource prefix="/imagenes">
-        <file>SINAFO.png</file>
-        <file>INAH.png</file>
-        <file>Calendario.ico</file>
-        <file>SC.png</file>
+    <qresource prefix="/stylesheets">
+        <file>stylesheet.qss</file>
+    </qresource>
+    <qresource prefix="/svg">
+        <file>CULTURA.svg</file>
+        <file>INAH.svg</file>
+        <file>SINAFO.svg</file>
     </qresource>
 </RCC>

@@ -46,15 +46,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="font">
-        <font>
-         <family>Montserrat</family>
-         <pointsize>11</pointsize>
-         <italic>false</italic>
-         <bold>true</bold>
-         <stylestrategy>PreferAntialias</stylestrategy>
-        </font>
-       </property>
        <property name="text">
         <string/>
        </property>
@@ -76,14 +67,6 @@
          <width>0</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Montserrat</family>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <stylestrategy>PreferAntialias</stylestrategy>
-        </font>
        </property>
        <property name="sizeAdjustPolicy">
         <enum>QAbstractScrollArea::AdjustIgnored</enum>
@@ -131,50 +114,20 @@
         <property name="text">
          <string>Entrada</string>
         </property>
-        <property name="font">
-         <font>
-          <family>Montserrat</family>
-          <pointsize>11</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
        </row>
        <row>
         <property name="text">
          <string>Salida</string>
-        </property>
-        <property name="font">
-         <font>
-          <family>Montserrat</family>
-          <pointsize>11</pointsize>
-          <bold>true</bold>
-         </font>
         </property>
        </row>
        <column>
         <property name="text">
          <string>Establecida</string>
         </property>
-        <property name="font">
-         <font>
-          <family>Montserrat</family>
-          <pointsize>11</pointsize>
-          <bold>true</bold>
-          <stylestrategy>PreferAntialias</stylestrategy>
-         </font>
-        </property>
        </column>
        <column>
         <property name="text">
          <string>Capturada</string>
-        </property>
-        <property name="font">
-         <font>
-          <family>Montserrat</family>
-          <pointsize>11</pointsize>
-          <bold>true</bold>
-          <stylestrategy>PreferAntialias</stylestrategy>
-         </font>
         </property>
        </column>
        <item row="0" column="0">
@@ -202,14 +155,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Montserrat</family>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <stylestrategy>PreferAntialias</stylestrategy>
-        </font>
        </property>
        <property name="text">
         <string>- Buscando código QR -</string>

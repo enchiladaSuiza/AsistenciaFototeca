@@ -1,4 +1,4 @@
-QT       += core gui uitools widgets sql multimedia multimediawidgets
+QT       += core gui uitools widgets svgwidgets sql multimedia multimediawidgets
 
 CONFIG += c++17
 

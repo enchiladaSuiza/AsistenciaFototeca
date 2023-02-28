@@ -5,6 +5,8 @@
 #include <QTime>
 #include <QPixmap>
 #include <cameramanager.h>
+#include <QSvgWidget>
+#include <QSvgRenderer>
 
 VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     : QMainWindow(parent)
@@ -19,13 +21,37 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     startTimer(1000);
     actualizarTiempo();
 
-    QPixmap sc(":/imagenes/SC.png");
-    QPixmap sinafo(":/imagenes/SINAFO.png");
-    QPixmap inah(":/imagenes/INAH.png");
+//    QPixmap sc(":/imagenes/SC.png");
+//    QPixmap sinafo(":/imagenes/SINAFO.png");
+//    QPixmap inah(":/imagenes/INAH.png");
 
-    ui->logoSinafo->setPixmap(sinafo.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->logoInah->setPixmap(inah.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->logoSC->setPixmap(sc.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+//    ui->logoSC->setPixmap(sc.scaled(200, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+//    ui->logoInah->setPixmap(inah.scaled(150, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+//    ui->logoSinafo->setPixmap(sinafo.scaled(150, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+//    ui->logoSinafo->setPixmap(sinafo);
+//    ui->logoInah->setPixmap(inah);
+//    ui->logoSC->setPixmap(sc);
+
+    QSvgWidget *cultura = new QSvgWidget(":/svg/CULTURA.svg");
+    QSvgWidget *inah = new QSvgWidget(":/svg/INAH.svg");
+    QSvgWidget *sinafo = new QSvgWidget(":/svg/SINAFO.svg");
+
+    cultura->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
+    inah->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
+    sinafo->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
+
+    cultura->setFixedSize(150, 60);
+    inah->setFixedSize(110, 40);
+    sinafo->setFixedSize(110, 40);
+
+    ui->headerLayout->insertWidget(0, sinafo);
+    ui->headerLayout->insertWidget(0, inah);
+    ui->headerLayout->insertWidget(0, cultura);
+
+    ui->headerLayout->setAlignment(cultura, Qt::AlignLeft);
+    ui->headerLayout->setAlignment(inah, Qt::AlignCenter);
+    ui->headerLayout->setAlignment(sinafo, Qt::AlignCenter);
 
     checar = new Checar(this);
     personal = new Personal(this);

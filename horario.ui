@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>565</width>
-    <height>321</height>
+    <height>334</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,13 +27,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -61,13 +54,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Lunes</string>
      </property>
@@ -83,13 +69,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -114,13 +93,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -143,13 +115,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -174,13 +139,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -203,13 +161,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -234,13 +185,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -264,13 +208,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Entrada</string>
      </property>
@@ -283,13 +220,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Sábado</string>
@@ -307,13 +237,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Salida</string>
      </property>
@@ -326,13 +249,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Miércoles</string>
@@ -352,13 +268,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -383,13 +292,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -413,13 +315,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Viernes</string>
      </property>
@@ -438,13 +333,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -469,13 +357,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -499,13 +380,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Jueves</string>
      </property>
@@ -524,13 +398,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -555,13 +422,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
      </property>
@@ -584,13 +444,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="inputMethodHints">
       <set>Qt::ImhPreferNumbers</set>
@@ -615,13 +468,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Domingo</string>
      </property>
@@ -637,13 +483,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Montserrat</family>
-       <pointsize>10</pointsize>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Martes</string>
@@ -672,13 +511,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="font">
-        <font>
-         <family>Montserrat</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
         <string>Guardar cambios</string>
        </property>
@@ -694,13 +526,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Montserrat</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>Descartar cambios</string>
