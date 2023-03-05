@@ -55,8 +55,10 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DEFINES += DISABLE_LIBRARY_FEATURES
+# DEFINES += DISABLE_LIBRARY_FEATURES
 
 INCLUDEPATH += $$PWD/QZXing/
-unix: LIBS += -lQZXing
-else: LIBS += -L$$PWD/QZXing/ -lQZXing
+#unix: LIBS += -lQZXing
+#else: LIBS += -L$$PWD/QZXing/ -lQZXing
+LIBS += -L$$PWD/QZXing/ -lQZXing
+

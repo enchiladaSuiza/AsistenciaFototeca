@@ -26,13 +26,16 @@ private:
     Historial* historial;
     Opciones *opciones;
 
+    QDateTime ahora;
+
     void actualizarTiempo();
     void timerEvent(QTimerEvent *event);
 
+    void activarTodosLosBotones();
 private slots:
     void on_checarButton_clicked();
     void on_personalButton_clicked();
-    void on_stackedWidget_currentChanged(int arg1);
+    void on_stackedWidget_currentChanged(int index);
     void on_historialButton_clicked();
     void on_opcionesButton_clicked();
 };

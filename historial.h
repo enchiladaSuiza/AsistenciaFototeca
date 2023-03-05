@@ -17,7 +17,7 @@ public:
     explicit Historial(QWidget *parent = nullptr);
     ~Historial();
 
-    void actualizarConsulta(QAbstractButton *seleccionado = nullptr);
+    void actualizarConsulta();
 private slots:
     void on_yearSelect_clicked();
 
@@ -28,8 +28,6 @@ private slots:
     void on_daySelect_clicked();
 
     void on_rangeSelect_clicked();
-
-    void seleccionCambiada(QAbstractButton *boton);
 
     void on_rangoFin_dateChanged(const QDate &date);
 

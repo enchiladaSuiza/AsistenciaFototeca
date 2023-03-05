@@ -4,7 +4,6 @@
 #include <QShortcut>
 #include <QTime>
 #include <QPixmap>
-#include <cameramanager.h>
 #include <QSvgWidget>
 #include <QSvgRenderer>
 
@@ -18,20 +17,9 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
 
     QLocale::setDefault(QLocale(QLocale::Spanish, QLocale::Mexico));
 
+    ahora = QDateTime::currentDateTime();
     startTimer(1000);
     actualizarTiempo();
-
-//    QPixmap sc(":/imagenes/SC.png");
-//    QPixmap sinafo(":/imagenes/SINAFO.png");
-//    QPixmap inah(":/imagenes/INAH.png");
-
-//    ui->logoSC->setPixmap(sc.scaled(200, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-//    ui->logoInah->setPixmap(inah.scaled(150, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-//    ui->logoSinafo->setPixmap(sinafo.scaled(150, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-//    ui->logoSinafo->setPixmap(sinafo);
-//    ui->logoInah->setPixmap(inah);
-//    ui->logoSC->setPixmap(sc);
 
     QSvgWidget *cultura = new QSvgWidget(":/svg/CULTURA.svg");
     QSvgWidget *inah = new QSvgWidget(":/svg/INAH.svg");
@@ -69,7 +57,12 @@ VentanaPrincipal::~VentanaPrincipal() { delete ui; }
 
 void VentanaPrincipal::actualizarTiempo()
 {  
-    ui->horaLabel->setText(QLocale().toString(QDateTime::currentDateTime(), "d/MMM/yyyy (ddd)\nhh:mm:ss"));
+    QDateTime nuevoAhora = QDateTime::currentDateTime();
+    if (ahora.date().day() != nuevoAhora.date().day()) {
+        // Dawn of a new day...
+    }
+    ahora = nuevoAhora;
+    ui->horaLabel->setText(QLocale().toString(ahora, "d/MMM/yyyy (ddd)\nhh:mm:ss"));
 }
 
 void VentanaPrincipal::timerEvent(QTimerEvent *event)
@@ -78,51 +71,63 @@ void VentanaPrincipal::timerEvent(QTimerEvent *event)
     actualizarTiempo();
 }
 
-void VentanaPrincipal::on_checarButton_clicked()
+void VentanaPrincipal::activarTodosLosBotones()
 {
-    ui->stackedWidget->setCurrentWidget(checar);
-    ui->checarButton->setEnabled(false);
+    ui->checarButton->setEnabled(true);
     ui->personalButton->setEnabled(true);
     ui->historialButton->setEnabled(true);
     ui->opcionesButton->setEnabled(true);
+}
+
+void VentanaPrincipal::on_checarButton_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(checar);
+    activarTodosLosBotones();
+    ui->checarButton->setEnabled(false);
 }
 
 void VentanaPrincipal::on_personalButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(personal);
-    ui->checarButton->setEnabled(true);
+    activarTodosLosBotones();
     ui->personalButton->setEnabled(false);
-    ui->historialButton->setEnabled(true);
-    ui->opcionesButton->setEnabled(true);
 }
 
 void VentanaPrincipal::on_historialButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(historial);
-    ui->checarButton->setEnabled(true);
-    ui->personalButton->setEnabled(true);
+    activarTodosLosBotones();
     ui->historialButton->setEnabled(false);
-    ui->opcionesButton->setEnabled(true);
 }
 
 void VentanaPrincipal::on_opcionesButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(opciones);
-    ui->checarButton->setEnabled(true);
-    ui->personalButton->setEnabled(true);
-    ui->historialButton->setEnabled(true);
+    activarTodosLosBotones();
     ui->opcionesButton->setEnabled(false);
-
 }
 
 void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
 {
-    if (actual >= 1)
+    switch (actual)
     {
-        if (actual == 2) historial->actualizarConsulta();
+    case 0:
+        checar->activarCamara();
+        personal->desactivarCamaraQR();
+        break;
+    case 1:
         checar->desactivarCamara();
-        return;
+        personal->activarCamaraQR();
+        break;
+    case 2:
+        historial->actualizarConsulta();
+        checar->desactivarCamara();
+        personal->desactivarCamaraQR();
+        break;
+    case 3:
+        checar->desactivarCamara();
+        personal->desactivarCamaraQR();
+        break;
     }
-    checar->activarCamara();
 }
 

@@ -12,7 +12,7 @@ Personal::Personal(QWidget *parent) :
 
     ui->tabWidget->addTab(&datos, "Datos");
     connect(&datos, &Datos::registroSeleccionado, &escaner, &Escaner::setId);
-    connect(&datos, &Datos::filaSeleccionada, &horario, &Horario::setFila);
+    connect(&datos, &Datos::registroSeleccionado, &horario, &Horario::setFila);
     connect(&datos, &Datos::dbActualizada, &horario, &Horario::actualizarRegistros);
     connect(&datos, &Datos::nombreCompletoSeleccion, this, &Personal::actualizarRegistroSeleccionado);
 }
@@ -43,6 +43,22 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
     ui->seleccionLabel->setText(*nombre);
     ui->tabWidget->addTab(&horario, "Horario");
     ui->tabWidget->addTab(&escaner, "Código QR");
+}
+
+void Personal::activarCamaraQR()
+{
+    if (ui->tabWidget->currentIndex() == 2)
+    {
+        escaner.activarCamara();
+    }
+}
+
+void Personal::desactivarCamaraQR()
+{
+    if (ui->tabWidget->currentIndex() == 2)
+    {
+        escaner.desactivarCamara();
+    }
 }
 
 void Personal::on_tabWidget_currentChanged(int index)

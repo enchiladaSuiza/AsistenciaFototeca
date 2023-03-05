@@ -159,11 +159,11 @@ void Historial::consultarRango(QDate inicio, QDate fin)
     }
 }
 
-void Historial::actualizarConsulta(QAbstractButton* seleccionado)
+void Historial::actualizarConsulta()
 {
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
-    if (seleccionado == nullptr) seleccionado = ui->buttonGroup->checkedButton();
+    QAbstractButton *seleccionado = ui->buttonGroup->checkedButton();
 
     nombreReporte = "Reporte";
     int year = ui->yearPicker->value();
@@ -194,17 +194,9 @@ void Historial::actualizarConsulta(QAbstractButton* seleccionado)
     else if (seleccionado == ui->weekSelect)
     {
         inicio = QDate(year, month, 1);
-        if (semana == 1)
-        {
-            fin = inicio;
-            while (fin.dayOfWeek() != 7) fin = fin.addDays(1);
-        }
-        else
-        {
-            while (inicio.dayOfWeek() != 1) inicio = inicio.addDays(1);
-            inicio = inicio.addDays(7 * (semana - 2));
-            fin = inicio.addDays(6);
-        }
+        while (inicio.dayOfWeek() != 1) inicio = inicio.addDays(-1);
+        inicio = inicio.addDays(7 * (semana - 1));
+        fin = inicio.addDays(6);
         nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Semana" + QString::number(semana);
     }
     else if (seleccionado == ui->fortnightSelect)
@@ -229,8 +221,6 @@ void Historial::actualizarConsulta(QAbstractButton* seleccionado)
     }
     consultarRango(inicio, fin);
 }
-
-void Historial::seleccionCambiada(QAbstractButton *boton) { actualizarConsulta(boton); }
 
 QTableWidgetItem* Historial::crearItemTabla(QString texto)
 {
@@ -271,7 +261,8 @@ void Historial::on_weekPicker_valueChanged(int week)
 
 void Historial::on_exportarButton_clicked()
 {
-    QString directorio = QFileDialog::getSaveFileName(this, "Elija un directorio.", "./" + nombreReporte + ".csv", "Comma Separated Values (*.csv)");
+    QString directorio = QFileDialog::getSaveFileName(this, "Elija un directorio.", "./" +
+                                                      nombreReporte + ".csv", "Comma Separated Values (*.csv)");
     QFile archivo(directorio);
 
     if (archivo.open(QFile::WriteOnly | QIODevice::Append))

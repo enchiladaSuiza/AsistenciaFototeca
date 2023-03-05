@@ -7,7 +7,8 @@
 #include <QVideoWidget>
 #include <QCamera>
 #include <QMediaDevices>
-#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlField>
 
 Checar::Checar(QWidget *parent) :
     QWidget(parent),
@@ -33,6 +34,9 @@ Checar::Checar(QWidget *parent) :
 
     timerInfo = new QTimer;
     connect(timerInfo, &QTimer::timeout, this, &Checar::restablecerPantalla);
+
+    timerEscaneo = new QTimer;
+    connect(timerEscaneo, &QTimer::timeout, this, &Checar::habilitarEscaneo);
 
     decoder = new QZXing;
     decoder->setDecoder(QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13);
@@ -75,27 +79,31 @@ void Checar::llenarInformacion(QString info, QString nombre,
 
 void Checar::procesarFrame(const QVideoFrame &frame)
 {
-    QString codigo = decoder->decodeImage(frame.toImage());
+    if (!escaneando) return;
 
+    QString codigo = decoder->decodeImage(frame.toImage());
     if (codigo.isEmpty()) return;
 
-    QSqlQuery empleado = DbManager::nombreCompletoPorQR(codigo);
-    if (!empleado.isValid())
+    QSqlRecord empleado = DbManager::empleadoPorQR(codigo);
+    if (empleado.field(0).typeID() != 1)
     {
         ui->labelEstado->setText("- Código desconocido -");
         timerInfo->start(tiempoInformacion);
         return;
     }
 
+    escaneando = false;
+    timerEscaneo->start(tiempoNoEscaneo);
+
+    int idEmpleado = empleado.value("id").toInt();
+    QString nombre = empleado.value("nombre").toString();
+
     QDate hoy = QDate::currentDate();
     QString hoyISO = hoy.toString(Qt::ISODate);
     QString ahora = QTime::currentTime().toString("hh:mm");
     int diaSemana = hoy.dayOfWeek();
 
-    int idEmpleado = empleado.value("id").toInt();
-    QString nombre = empleado.value("nombre").toString();
-
-    QSqlQuery horarios = DbManager::horariosPorEmpleado(idEmpleado);
+    QSqlRecord horarios = DbManager::horariosPorEmpleado(idEmpleado);
     QPair<QString, QString> tiempos = DbManager::diasSemanaColumnas.at(diaSemana);
     QString entradaNormal = horarios.value(tiempos.first).toString();
     QString salidaNormal = horarios.value(tiempos.second).toString();
@@ -107,13 +115,11 @@ void Checar::procesarFrame(const QVideoFrame &frame)
         return;
     }
 
-    QSqlQuery capturas = DbManager::capturasPorEmpleadoFecha(idEmpleado, hoyISO);
-    if (capturas.isValid()) // ¿Ya escaneó hoy?
+    QSqlRecord capturas = DbManager::capturasDeEmpleadoEnFecha(idEmpleado, hoyISO);
+    QString entrada = capturas.value("hora_entrada").toString();
+    QString salida = capturas.value("hora_salida").toString();
+    if (!entrada.isEmpty()) // ¿Ya escaneó hoy?
     {
-        QString entrada = capturas.value("hora_entrada").toString();
-        if (entrada == ahora) return; // ¿Apenas escaneó su entrada?
-
-        QString salida = capturas.value("hora_salida").toString();
         if (salida.isEmpty())
         {
             int idRegistro = capturas.value("id").toInt();
@@ -124,11 +130,8 @@ void Checar::procesarFrame(const QVideoFrame &frame)
             }
             return;
         }
-        if (salida != ahora)
-        {
-            llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
-            timerInfo->start(tiempoInformacion);
-        }
+        llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
+        timerInfo->start(tiempoInformacion);
         return;
     }
 
@@ -143,7 +146,7 @@ void Checar::activarCamara()
 {
     if (camara == nullptr)
     {
-        camara = CameraManager::getCamara();
+        camara = CameraManager::nuevaCamara();
         sesion.setCamera(camara);
         camara->start();
     }
@@ -164,4 +167,8 @@ void Checar::restablecerPantalla()
     ui->labelEstado->setText("- Buscando código QR -");
     ui->labelEmpleado->setText("");
     limpiarInformacion();
+}
+
+void Checar::habilitarEscaneo() {
+    escaneando = true;
 }

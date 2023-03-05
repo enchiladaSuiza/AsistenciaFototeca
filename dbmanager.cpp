@@ -1,4 +1,4 @@
-#include "dbmanager.h"
+    #include "dbmanager.h"
 #include <QDate>
 #include <QFileDialog>
 #include <QSettings>
@@ -50,7 +50,7 @@ bool DbManager::actualizarQREmpleado(int idEmpleado, QString qr)
     return query.exec();
 }
 
-QSqlQuery DbManager::nombreCompletoPorQR(QString qr)
+QSqlRecord DbManager::empleadoPorQR(QString qr)
 {
     QSqlQuery query;
     query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre "
@@ -58,10 +58,10 @@ QSqlQuery DbManager::nombreCompletoPorQR(QString qr)
     query.addBindValue(qr);
     query.exec();
     query.next();
-    return query;
+    return query.record();
 }
 
-QSqlQuery DbManager::capturasPorEmpleadoFecha(int idEmpleado, QString fecha)
+QSqlRecord DbManager::capturasDeEmpleadoEnFecha(int idEmpleado, QString fecha)
 {
     QSqlQuery query;
     if (fecha.isEmpty()) fecha = QDate::currentDate().toString(Qt::ISODate);
@@ -70,30 +70,27 @@ QSqlQuery DbManager::capturasPorEmpleadoFecha(int idEmpleado, QString fecha)
     query.addBindValue(fecha);
     query.exec();
     query.next();
-    return query;
+    return query.record();
 }
 
 bool DbManager::updateCapturaHoraSalida(int idRegistro, QString horaSalida)
 {
     QSqlQuery query;
-    if (horaSalida.isEmpty())
-    {
-        horaSalida = QTime::currentTime().toString("hh:mm");
-    }
+    if (horaSalida.isEmpty()) horaSalida = QTime::currentTime().toString("hh:mm");
     query.prepare("UPDATE registro SET hora_salida = ? WHERE id = ?");
     query.addBindValue(horaSalida);
     query.addBindValue(idRegistro);
     return query.exec();
 }
 
-QSqlQuery DbManager::horariosPorEmpleado(int idEmpleado)
+QSqlRecord DbManager::horariosPorEmpleado(int idEmpleado)
 {
     QSqlQuery query;
     query.prepare("SELECT * FROM horario WHERE id = ?");
     query.addBindValue(idEmpleado);
     query.exec();
     query.next();
-    return query;
+    return query.record();
 }
 
 bool DbManager::insertarRegistro(int idEmpleado, QString entrada, QString salida, QString fecha)

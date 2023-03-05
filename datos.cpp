@@ -89,16 +89,14 @@ void Datos::actualizarSeleccion(const QModelIndex &index)
     QString *nombre = nullptr;
     int id = -1;
 
-    if (!filasAgregadas.contains(filaActual))
-    {
-        id = model->index(filaActual, 0).data().toInt();
-        nombre = new QString(model->index(filaActual, 1).data().toString()
-                + " " + model->index(filaActual, 2).data().toString()
-                + " " + model->index(filaActual, 3).data().toString());
-    }
+    if (filasAgregadas.contains(filaActual)) return;
+
+    id = model->index(filaActual, 0).data().toInt();
+    nombre = new QString(model->index(filaActual, 1).data().toString()
+            + " " + model->index(filaActual, 2).data().toString()
+            + " " + model->index(filaActual, 3).data().toString());
 
     emit registroSeleccionado(id);
-    emit filaSeleccionada(filaActual);
     emit nombreCompletoSeleccion(nombre);
 }
 

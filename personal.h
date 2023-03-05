@@ -20,6 +20,9 @@ public:
     explicit Personal(QWidget *parent = nullptr);
     ~Personal();
 
+    void activarCamaraQR();
+    void desactivarCamaraQR();
+
 private slots:
     void actualizarRegistroSeleccionado(QString *nombre);
 

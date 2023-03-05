@@ -31,6 +31,8 @@ private slots:
     void on_guardarButton_clicked();
     void on_codigoEdit_textChanged(const QString &arg1);
 
+    void on_exportarButton_clicked();
+
 private:
     Ui::Escaner *ui;
 

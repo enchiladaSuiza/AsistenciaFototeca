@@ -8,10 +8,7 @@ class CameraManager
 {
 public:
     static bool verificarCamaras();
-    static QCamera* getCamara();
-
-private:
-    inline static QCamera* camara = new QCamera(QMediaDevices::defaultVideoInput());
+    static QCamera* nuevaCamara();
 };
 
 #endif // CAMERAMANAGER_H

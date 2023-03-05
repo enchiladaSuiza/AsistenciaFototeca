@@ -33,6 +33,8 @@ public:
                            QString entradaNormal = "", QString salidaNormal = "",
                            QString entradaCaptura = "", QString salidaCaptura = "");
 
+    void habilitarEscaneo();
+
 private slots:
     void procesarFrame(const QVideoFrame &frame);
     void restablecerPantalla();
@@ -44,6 +46,7 @@ private:
     QMediaCaptureSession sesion;
     QZXing *decoder;
     QTimer *timerInfo;
+    QTimer *timerEscaneo;
 
     QTableWidgetItem* entradaEstablecida;
     QTableWidgetItem* entradaCapturada;
@@ -51,6 +54,8 @@ private:
     QTableWidgetItem* salidaCapturada;
 
     const int tiempoInformacion = 5000;
+    const int tiempoNoEscaneo = 1000;
+    bool escaneando = true;
 };
 
 #endif // CHECAR_H

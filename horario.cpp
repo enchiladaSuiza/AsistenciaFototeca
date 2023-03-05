@@ -50,21 +50,28 @@ Horario::~Horario()
     delete ui;
 }
 
-QDataWidgetMapper* Horario::getMapper() const
-{
-    return mapper;
-}
-
 void Horario::actualizarRegistros()
 {
     model->select();
 }
 
-void Horario::setFila(int fila)
+void Horario::setFila(int id)
 {
+    int fila = encontrarFila(id);
     mapper->setCurrentIndex(fila);
-    // qDebug() << "En fila " << fila;
     actualizarCheckBoxes();
+}
+
+int Horario::encontrarFila(int id)
+{
+    for (int i = 0; i < model->rowCount(); i++)
+    {
+        if (model->index(i, 0).data().toInt() == id)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void Horario::toggleTimeEdits(QCheckBox* dia)

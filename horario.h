@@ -18,10 +18,9 @@ class Horario : public QWidget
 public:
     explicit Horario(QWidget *parent = nullptr);
     ~Horario();
-    QDataWidgetMapper *getMapper() const;
 
     void seleccionarRegistro(int id);
-    void setFila(int fila);
+    void setFila(int id);
 
 public slots:
     void actualizarRegistros();
@@ -55,6 +54,7 @@ private:
     void toggleTimeEdits(QCheckBox *dia);
     void actualizarCheckBoxes();
     void activarBotonesDeCambios(bool activos);
+    int encontrarFila(int id);
 };
 
 #endif // HORARIO_H

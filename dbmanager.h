@@ -2,21 +2,23 @@
 #define DBMANAGER_H
 
 #include <QDate>
-#include <qsqldatabase.h>
-#include <qstring.h>
+#include <QSqlDatabase>
+#include <QSqlRecord>
 
 class DbManager
 {
 public:
     static bool abrirConexion();
     static bool actualizarQREmpleado(int idEmpleado, QString qr);
-    static QSqlQuery nombreCompletoPorQR(QString qr);
-    static QSqlQuery capturasPorEmpleadoFecha(int idEmpleado, QString fecha = "");
     static bool updateCapturaHoraSalida(int idRegistro, QString horaSalida = "");
-    static QSqlQuery horariosPorEmpleado(int idEmpleado);
     static bool insertarRegistro(int idEmpleado, QString entrada, QString salida = "", QString fecha = "");
+    static QString conseguirArchivo();
     static QString qrPorId(int idEmpleado);
+    static QSqlRecord empleadoPorQR(QString qr);
+    static QSqlRecord capturasDeEmpleadoEnFecha(int idEmpleado, QString fecha = "");
+    static QSqlRecord horariosPorEmpleado(int idEmpleado);
     static QSqlQuery capturasDeUnDia(QDate dia);
+
     inline static const QList<QPair<QString, QString>> diasSemanaColumnas = {
         qMakePair("", ""),
         qMakePair("lunes_e", "lunes_s"),
@@ -27,7 +29,6 @@ public:
         qMakePair("sabado_e", "sabado_s"),
         qMakePair("domingo_e", "domingo_s"),
     };
-    static QString conseguirArchivo();
 };
 
 #endif // DBMANAGER_H

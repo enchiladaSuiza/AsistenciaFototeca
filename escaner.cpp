@@ -2,6 +2,7 @@
 #include "escaner.h"
 #include "ui_escaner.h"
 
+#include <QFileDialog>
 #include <QMediaDevices>
 #include <QSqlQuery>
 #include <QTimer>
@@ -42,7 +43,7 @@ void Escaner::activarCamara()
 {
     if (camara == nullptr)
     {
-        camara = CameraManager::getCamara();
+        camara = CameraManager::nuevaCamara();
         sesion.setCamera(camara);
         camara->start();
     }
@@ -78,5 +79,14 @@ void Escaner::on_codigoEdit_textChanged(const QString &texto)
     ui->guardarButton->setEnabled(true);
 }
 
-
+void Escaner::on_exportarButton_clicked()
+{
+    QString texto = ui->codigoEdit->text();
+    QString nombreArchivo = QFileDialog::getSaveFileName(
+                nullptr, "Elija la ubicación donde exportar el ćodigo QR.",
+                texto + "-QR.png", "Imagen (*.png)");
+    QImage imagen = QZXing::encodeData(
+                texto, QZXing::EncoderFormat_QR_CODE,
+                QSize(240, 240), QZXing::EncodeErrorCorrectionLevel_H, true);
+}
 
