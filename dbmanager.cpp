@@ -1,4 +1,4 @@
-    #include "dbmanager.h"
+#include "dbmanager.h"
 #include <QDate>
 #include <QFileDialog>
 #include <QSettings>
@@ -34,6 +34,15 @@ bool DbManager::abrirConexion()
     return false;
 }
 
+QSqlQuery DbManager::idNombresCompletoEmpleados()
+{
+    QSqlQuery query;
+    query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || "
+                  "apellido_materno AS nombre_completo FROM empleado ORDER BY nombre_completo");
+    query.exec();
+    return query;
+}
+
 QString DbManager::conseguirArchivo()
 {
     QFileDialog dialogo;
@@ -53,21 +62,19 @@ bool DbManager::actualizarQREmpleado(int idEmpleado, QString qr)
 QSqlRecord DbManager::empleadoPorQR(QString qr)
 {
     QSqlQuery query;
-    query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre "
-                  "FROM empleado WHERE qr = ?");
+    query.prepare(sqlEmpleado);
     query.addBindValue(qr);
     query.exec();
     query.next();
     return query.record();
 }
 
-QSqlRecord DbManager::capturasDeEmpleadoEnFecha(int idEmpleado, QString fecha)
+QSqlRecord DbManager::capturasDeEmpleadoEnFecha(int idEmpleado, QDate fecha)
 {
     QSqlQuery query;
-    if (fecha.isEmpty()) fecha = QDate::currentDate().toString(Qt::ISODate);
     query.prepare("SELECT id, hora_entrada, hora_salida FROM registro WHERE empleado = ? AND fecha = ?");
     query.addBindValue(idEmpleado);
-    query.addBindValue(fecha);
+    query.addBindValue(fecha.toString(Qt::ISODate));
     query.exec();
     query.next();
     return query.record();
@@ -83,6 +90,16 @@ bool DbManager::updateCapturaHoraSalida(int idRegistro, QString horaSalida)
     return query.exec();
 }
 
+bool DbManager::updateCapturaHoraEntrada(int idRegistro, QString horaEntrada)
+{
+    QSqlQuery query;
+    if (horaEntrada.isEmpty()) horaEntrada = QTime::currentTime().toString("hh:mm");
+    query.prepare("UPDATE registro SET hora_entrada = ? WHERE id = ?");
+    query.addBindValue(horaEntrada);
+    query.addBindValue(idRegistro);
+    return query.exec();
+}
+
 QSqlRecord DbManager::horariosPorEmpleado(int idEmpleado)
 {
     QSqlQuery query;
@@ -93,22 +110,22 @@ QSqlRecord DbManager::horariosPorEmpleado(int idEmpleado)
     return query.record();
 }
 
-bool DbManager::insertarRegistro(int idEmpleado, QString entrada, QString salida, QString fecha)
+bool DbManager::insertarRegistro(int idEmpleado, QDate fecha, QString entrada, QString salida)
 {
     QSqlQuery query;
-    if (fecha.isEmpty()) fecha = QDate::currentDate().toString(Qt::ISODate);
+    QString fechaString = fecha.toString(Qt::ISODate);
     if (salida.isEmpty())
     {
         query.prepare("INSERT INTO registro VALUES (NULL, ?, ?, ?, NULL)");
         query.addBindValue(idEmpleado);
-        query.addBindValue(fecha);
+        query.addBindValue(fechaString);
         query.addBindValue(entrada);
     }
     else
     {
         query.prepare("INSERT INTO registro VALUES (NULL, ?, ?, ?, ?)");
         query.addBindValue(idEmpleado);
-        query.addBindValue(fecha);
+        query.addBindValue(fechaString);
         query.addBindValue(entrada);
         query.addBindValue(salida);
     }
@@ -127,10 +144,8 @@ QString DbManager::qrPorId(int idEmpleado)
 
 QSqlQuery DbManager::capturasDeUnDia(QDate dia)
 {
-    int diaSemana = dia.dayOfWeek();
-    QPair<QString, QString> tiempos = diasSemanaColumnas.at(diaSemana);
-
     QSqlQuery query;
+    QPair<QString, QString> tiempos = diasSemanaColumnas.at(dia.dayOfWeek());
     query.prepare("SELECT empleado.id, nombre || ' ' || apellido_paterno || ' ' || apellido_materno AS nombre, " +
                 tiempos.first + ", hora_entrada, "
                 "((strftime('%H', hora_entrada) - strftime('%H', " + tiempos.first + ")) * 60) +"
@@ -143,4 +158,60 @@ QSqlQuery DbManager::capturasDeUnDia(QDate dia)
     query.addBindValue(dia.toString(Qt::ISODate));
     query.exec();
     return query;
+}
+
+bool DbManager::insertarRegistrosVacios(QDate dia)
+{
+    QSqlQuery query;
+    QPair<QString, QString> tiempos = diasSemanaColumnas.at(dia.dayOfWeek());
+    QString diaString = dia.toString(Qt::ISODate);
+    query.prepare("INSERT INTO registro SELECT NULL, empleado.id, '" + diaString + "', NULL, NULL FROM empleado, horario "
+                  "ON empleado.id = horario.id WHERE " + tiempos.first + " <> '' AND " + tiempos.second + " <> ''");
+    return query.exec();
+}
+
+bool DbManager::hayRegistros(QDate dia)
+{
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(id) FROM registro WHERE fecha = ?");
+    query.addBindValue(dia.toString(Qt::ISODate));
+    query.exec();
+    query.next();
+    int registros = query.value(0).toInt();
+    return registros > 0;
+}
+
+QSqlQuery DbManager::historialCompletoEmpleado(int idEmpleado, QDate inicio, QDate fin)
+{
+    QSqlQuery query;
+    query.prepare(sqlDiferenciasEmpleado);
+    query.addBindValue(idEmpleado);
+    query.addBindValue(inicio.toString(Qt::ISODate));
+    query.addBindValue(fin.toString(Qt::ISODate));
+    query.exec();
+    return query;
+}
+
+QSqlQuery DbManager::historialCompletoTodos(QDate inicio, QDate fin)
+{
+    QSqlQuery query;
+    query.prepare(sqlDiferenciasTodos);
+    query.addBindValue(inicio.toString(Qt::ISODate));
+    query.addBindValue(fin.toString(Qt::ISODate));
+    query.exec();
+    return query;
+}
+
+QString DbManager::horarioEntradaDia(int empleado, QDate dia)
+{
+    QSqlQuery query;
+    QString diaString = dia.toString(Qt::ISODate);
+    query.prepare("SELECT CASE strftime('%w', '" + diaString + "') WHEN '0' THEN domingo_e "
+                "WHEN '1' THEN lunes_e WHEN '2' THEN martes_e WHEN '3' THEN miercoles_e "
+                "WHEN '4' THEN jueves_e WHEN '5' THEN viernes_e WHEN '6' THEN sabado_e END "
+                "AS e_normal FROM horario WHERE horario.id = ?");
+    query.addBindValue(empleado);
+    query.exec();
+    query.next();
+    return query.value("e_normal").toString();
 }

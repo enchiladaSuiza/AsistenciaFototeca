@@ -14,7 +14,10 @@ Opciones::Opciones(QWidget *parent) :
     ui->nombreArchivoLabel->setText(archivoBase);
 
     QString contrataciones = opciones.value("contrataciones").toString();
-    ui->contratacionesPlainTextEdit->setPlainText(contrataciones);
+    ui->contratacionesEdit->setPlainText(contrataciones);
+
+    int minutosTolerancia = opciones.value("tolerancia").toInt();
+    ui->toleranciaSbox->setValue(minutosTolerancia);
 }
 
 Opciones::~Opciones()
@@ -30,15 +33,25 @@ void Opciones::on_seleccionarArchivoButton_clicked()
     ui->nombreArchivoLabel->setText(archivo);
 }
 
-void Opciones::on_contratacionesPlainTextEdit_textChanged()
+void Opciones::on_contratacionesEdit_textChanged()
 {
-    ui->guardarContratacionesButton->setEnabled(true);
+    ui->guardarButton->setEnabled(true);
 }
 
-void Opciones::on_guardarContratacionesButton_clicked()
+void Opciones::on_guardarButton_clicked()
 {
-    QString contrataciones = ui->contratacionesPlainTextEdit->toPlainText();
+    QString contrataciones = ui->contratacionesEdit->toPlainText();
     opciones.setValue("contrataciones", contrataciones);
-    ui->guardarContratacionesButton->setEnabled(false);
+
+    int minutosTolerancia = ui->toleranciaSbox->value();
+    opciones.setValue("tolerancia", minutosTolerancia);
+    ui->guardarButton->setEnabled(false);
+}
+
+
+void Opciones::on_toleranciaSbox_valueChanged(int valor)
+{
+    Q_UNUSED(valor);
+    ui->guardarButton->setEnabled(true);
 }
 

@@ -99,9 +99,8 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     QString nombre = empleado.value("nombre").toString();
 
     QDate hoy = QDate::currentDate();
-    QString hoyISO = hoy.toString(Qt::ISODate);
-    QString ahora = QTime::currentTime().toString("hh:mm");
     int diaSemana = hoy.dayOfWeek();
+    QString ahora = QTime::currentTime().toString("hh:mm");
 
     QSqlRecord horarios = DbManager::horariosPorEmpleado(idEmpleado);
     QPair<QString, QString> tiempos = DbManager::diasSemanaColumnas.at(diaSemana);
@@ -115,31 +114,30 @@ void Checar::procesarFrame(const QVideoFrame &frame)
         return;
     }
 
-    QSqlRecord capturas = DbManager::capturasDeEmpleadoEnFecha(idEmpleado, hoyISO);
+    QSqlRecord capturas = DbManager::capturasDeEmpleadoEnFecha(idEmpleado, hoy);
+    int idRegistro = capturas.value("id").toInt();
     QString entrada = capturas.value("hora_entrada").toString();
     QString salida = capturas.value("hora_salida").toString();
-    if (!entrada.isEmpty()) // ¿Ya escaneó hoy?
+
+    if (entrada.isEmpty())
     {
-        if (salida.isEmpty())
-        {
-            int idRegistro = capturas.value("id").toInt();
-            if (DbManager::updateCapturaHoraSalida(idRegistro, ahora))
-            {
-                llenarInformacion("- Salida caputrada -", nombre, entradaNormal, salidaNormal, entrada, ahora);
-                timerInfo->start(tiempoInformacion);
-            }
-            return;
-        }
-        llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
+        // DbManager::updateCapturaHoraEntrada(idRegistro, ahora);
+        DbManager::insertarRegistro(idEmpleado, hoy, ahora);
+        llenarInformacion("- Entrada caputrada -", nombre, entradaNormal, salidaNormal, ahora);
         timerInfo->start(tiempoInformacion);
         return;
     }
 
-    if (DbManager::insertarRegistro(idEmpleado, ahora, "", hoyISO))
+    if (salida.isEmpty())
     {
-        llenarInformacion("- Entrada caputrada -", nombre, entradaNormal, salidaNormal, ahora);
+        DbManager::updateCapturaHoraSalida(idRegistro, ahora);
+        llenarInformacion("- Salida caputrada -", nombre, entradaNormal, salidaNormal, entrada, ahora);
         timerInfo->start(tiempoInformacion);
+        return;
     }
+
+    llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
+    timerInfo->start(tiempoInformacion);
 }
 
 void Checar::activarCamara()

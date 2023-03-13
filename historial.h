@@ -2,6 +2,7 @@
 #define HISTORIAL_H
 
 #include <QAbstractButton>
+#include <QSqlRecord>
 #include <QTableWidgetItem>
 #include <QWidget>
 
@@ -18,34 +19,36 @@ public:
     ~Historial();
 
     void actualizarConsulta();
+    void actualizarComboBox();
 private slots:
     void on_yearSelect_clicked();
-
     void on_monthSelect_clicked();
-
     void on_weekSelect_clicked();
-
     void on_daySelect_clicked();
-
     void on_rangeSelect_clicked();
 
-    void on_rangoFin_dateChanged(const QDate &date);
-
-    void on_yearPicker_valueChanged(int arg1);
-    void on_monthPicker_currentIndexChanged(int index);
-    void on_rangoInicio_dateChanged(const QDate &date);
-    void on_weekPicker_valueChanged(int arg1);
     void on_exportarButton_clicked();
 
     void on_fortnightSelect_clicked();
+    void on_cboxAtrasButton_clicked();
+    void on_cboxAdelanteButton_clicked();
 
+    void actualizarConsultaSlotDate(const QDate &dia);
+    void actualizarConsultaSlotInt(int slotInt);
 private:
     Ui::Historial *ui;
     QTableWidgetItem *crearItemTabla(QString texto);
     QString nombreReporte = "";
-    void consultarDia(QDate dia);
+    QList<int> indicesIds;
+
     void consultarRango(QDate inicio, QDate fin);
     int numeroDeSemana(QDate dia);
+    void insertarItemTabla(QString texto, int fila, int columna, int filaSpan = 1, int columnaSpan = 1);
+    void consultaTodos(QDate inicio, QDate fin);
+    QPair<int, int> colocarStringsCaptura(QSqlRecord registro, int fila, int columna);
+    void colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales = false);
+    void colocarTotales(int demora, int anticipacion, int faltas);
+    QStringList conseguirTotales(int demora, int anticipacion, int faltas);
 };
 
 #endif // HISTORIAL_H

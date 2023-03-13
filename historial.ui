@@ -6,18 +6,72 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>522</height>
+    <width>468</width>
+    <height>407</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QRadioButton" name="yearSelect">
+   <item row="0" column="1">
+    <widget class="QRadioButton" name="monthSelect">
      <property name="text">
-      <string>Año</string>
+      <string>Mes</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="6">
+    <widget class="QTableWidget" name="tablaTotales">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+     </property>
+     <property name="columnCount">
+      <number>1</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>Demora de entrada total</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Anticipación de salida total</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Faltas</string>
+      </property>
+     </row>
+     <column/>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QRadioButton" name="daySelect">
+     <property name="text">
+      <string>Día</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
@@ -34,33 +88,10 @@
      </attribute>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QRadioButton" name="fortnightSelect">
+   <item row="0" column="0">
+    <widget class="QRadioButton" name="yearSelect">
      <property name="text">
-      <string>Quincena</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QRadioButton" name="monthSelect">
-     <property name="text">
-      <string>Mes</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QRadioButton" name="daySelect">
-     <property name="text">
-      <string>Día</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Año</string>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
@@ -77,14 +108,66 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="4" column="0" colspan="6">
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+     <property name="columnCount">
+      <number>0</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QRadioButton" name="fortnightSelect">
+     <property name="text">
+      <string>Quincena</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QPushButton" name="cboxAtrasButton">
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QPushButton" name="cboxAdelanteButton">
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="5">
     <widget class="QPushButton" name="exportarButton">
      <property name="text">
       <string>Exportar</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="5">
+   <item row="3" column="0" colspan="3">
+    <widget class="QComboBox" name="empleadosCbox"/>
+   </item>
+   <item row="2" column="0" colspan="6">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
       <number>0</number>
@@ -257,73 +340,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="3" column="0" colspan="6">
-    <widget class="QTableWidget" name="tableWidget">
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="columnCount">
-      <number>8</number>
-     </property>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>No. de
-Empleado</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Nombre</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Entrada</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Captura
-de entrada</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Diferencia
-de entradas</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Salida</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Captura
-de salida</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Diferencia
-de salidas</string>
-      </property>
-     </column>
-    </widget>
    </item>
   </layout>
  </widget>

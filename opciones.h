@@ -18,9 +18,11 @@ public:
 
 private slots:
     void on_seleccionarArchivoButton_clicked();
-    void on_contratacionesPlainTextEdit_textChanged();
+    void on_contratacionesEdit_textChanged();
 
-    void on_guardarContratacionesButton_clicked();
+    void on_guardarButton_clicked();
+
+    void on_toleranciaSbox_valueChanged(int arg1);
 
 private:
     Ui::Opciones *ui;

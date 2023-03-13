@@ -1,5 +1,6 @@
 #include "ventanaprincipal.h"
 #include "ui_ventanaprincipal.h"
+#include "dbmanager.h"
 
 #include <QShortcut>
 #include <QTime>
@@ -20,6 +21,10 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     ahora = QDateTime::currentDateTime();
     startTimer(1000);
     actualizarTiempo();
+//    if (!DbManager::hayRegistros(ahora.date()))
+//    {
+//        DbManager::insertarRegistrosVacios(ahora.date());
+//    }
 
     QSvgWidget *cultura = new QSvgWidget(":/svg/CULTURA.svg");
     QSvgWidget *inah = new QSvgWidget(":/svg/INAH.svg");
@@ -58,9 +63,10 @@ VentanaPrincipal::~VentanaPrincipal() { delete ui; }
 void VentanaPrincipal::actualizarTiempo()
 {  
     QDateTime nuevoAhora = QDateTime::currentDateTime();
-    if (ahora.date().day() != nuevoAhora.date().day()) {
-        // Dawn of a new day...
-    }
+//    if (ahora.date().day() != nuevoAhora.date().day() && !DbManager::hayRegistros(nuevoAhora.date()))
+//    {
+//        DbManager::insertarRegistrosVacios(nuevoAhora.date());
+//    }
     ahora = nuevoAhora;
     ui->horaLabel->setText(QLocale().toString(ahora, "d/MMM/yyyy (ddd)\nhh:mm:ss"));
 }
