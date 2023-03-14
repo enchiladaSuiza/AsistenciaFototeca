@@ -25,22 +25,21 @@ Historial::Historial(QWidget *parent) :
     ui->yearPicker->setValue(hoy.year());
     ui->monthPicker->setCurrentIndex(hoy.month() - 1);
     ui->weekPicker->setValue(numeroDeSemana(hoy));
+    ui->fortnightPicker->setValue(numeroDeQuincena(hoy));
     ui->rangoInicio->setDate(hoy.addDays(-1));
     ui->rangoFin->setDate(hoy);
 
-    ui->yearPicker->setVisible(false);
-    ui->monthPicker->setVisible(false);
-    ui->weekPicker->setVisible(false);
-    ui->rangoInicio->setVisible(false);
-
+    on_monthSelect_clicked();
     actualizarComboBox();
+
     connect(ui->buttonGroup, &QButtonGroup::buttonClicked, this, &Historial::actualizarConsulta);
     connect(ui->yearPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->monthPicker, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->weekPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
+    connect(ui->fortnightPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->rangoInicio, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
-    connect(ui->rangoInicio, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
+    connect(ui->rangoFin, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
 }
 
 Historial::~Historial() { delete ui; }
@@ -274,7 +273,7 @@ void Historial::actualizarConsulta()
     int year = ui->yearPicker->value();
     int month = ui->monthPicker->currentIndex() + 1;
     int semana = ui->weekPicker->value();
-    int quincena = semana;
+    int quincena = ui->fortnightPicker->value();
     QDate inicio, fin;
 
     if (seleccionado == ui->daySelect)
@@ -342,6 +341,13 @@ int Historial::numeroDeSemana(QDate dia)
     return cantidadLunes;
 }
 
+int Historial::numeroDeQuincena(QDate fecha)
+{
+    int dia = fecha.day();
+    if (dia <= 15) return 1;
+    else return 2;
+}
+
 QTableWidgetItem* Historial::crearItemTabla(QString texto)
 {
     QTableWidgetItem* item = new QTableWidgetItem(texto);
@@ -360,34 +366,69 @@ void Historial::insertarItemTabla(QString texto, int fila, int columna, int fila
 
 void Historial::on_exportarButton_clicked()
 {
+    int indiceCbox = ui->empleadosCbox->currentIndex();
+    if (indiceCbox != 0)
+    {
+        QString nombreEmpleado = ui->empleadosCbox->itemText(indiceCbox);
+        nombreReporte += "-" + nombreEmpleado;
+    }
     QString directorio = QFileDialog::getSaveFileName(this, "Elija un directorio.", "./" +
                                                       nombreReporte + ".csv", "Comma Separated Values (*.csv)");
     QFile archivo(directorio);
 
-    if (archivo.open(QFile::WriteOnly | QIODevice::Append))
+    if (!archivo.open(QFile::WriteOnly | QIODevice::NewOnly)) return;
+
+    QTextStream salida(&archivo);
+    int columnas = ui->tableWidget->columnCount();
+    int filas = ui->tableWidget->rowCount();
+
+    for (int i = 0; i < columnas; i++)
     {
-        QTextStream salida(&archivo);
-        salida << "No. Empleado,Nombre,Entrada,Captura de Entrada,Diferencia de Entrada,"
-               << "Salida,Captura de Salida, Diferencia de Salida\n";
-        int filas = ui->tableWidget->rowCount();
-        for (int i = 0; i < filas; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                QTableWidgetItem *item = ui->tableWidget->item(i, j);
-                if (item == nullptr) continue;
-                salida << item->text() << ",";
-            }
-            salida << '\n';
-        }
-        archivo.close();
+        QString texto = ui->tableWidget->horizontalHeaderItem(i)->text();
+        salida << reemplazarCaracteresEspeciales(texto) << ",";
     }
+    salida << '\n';
+
+    for (int i = 0; i < filas; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            QTableWidgetItem *item = ui->tableWidget->item(i, j);
+            if (item == nullptr)
+            {
+                salida << " ,";
+                continue;
+            }
+            salida << reemplazarCaracteresEspeciales(item->text()) << ",";
+        }
+        salida << '\n';
+    }
+
+    if (indiceCbox != 0)
+    {
+        QString demora = ui->tablaTotales->item(0, 0)->text();
+        QString anticipacion = ui->tablaTotales->item(1, 0)->text();
+        QString faltas = ui->tablaTotales->item(2, 0)->text();
+        salida << "\nDemora," << demora << "\nAnticipacion," << anticipacion << "\nFaltas," << faltas;
+    }
+    archivo.close();
+}
+
+QString Historial::reemplazarCaracteresEspeciales(QString texto)
+{
+    QString nuevoTexto = texto;
+    for (QPair<QString, QString> reemplazo : reemplazos)
+    {
+        nuevoTexto = nuevoTexto.replace(reemplazo.first, reemplazo.second);
+    }
+    return nuevoTexto;
 }
 
 void Historial::on_yearSelect_clicked()
 {
     ui->yearPicker->setVisible(true);
     ui->monthPicker->setVisible(false);
+    ui->fortnightPicker->setVisible(false);
     ui->weekPicker->setVisible(false);
     ui->rangoInicio->setVisible(false);
     ui->rangoFin->setVisible(false);
@@ -402,14 +443,12 @@ void Historial::on_monthSelect_clicked()
 void Historial::on_fortnightSelect_clicked()
 {
     on_monthSelect_clicked();
-    ui->weekPicker->setMaximum(2);
-    ui->weekPicker->setVisible(true);
+    ui->fortnightPicker->setVisible(true);
 }
 
 void Historial::on_weekSelect_clicked()
 {
     on_monthSelect_clicked();
-    ui->weekPicker->setMaximum(6);
     ui->weekPicker->setVisible(true);
 }
 
@@ -419,6 +458,7 @@ void Historial::on_daySelect_clicked()
     ui->yearPicker->setVisible(false);
     ui->monthPicker->setVisible(false);
     ui->weekPicker->setVisible(false);
+    ui->fortnightPicker->setVisible(false);
     ui->rangoInicio->setVisible(false);
 }
 

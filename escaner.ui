@@ -15,16 +15,13 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="3">
-    <widget class="QPushButton" name="guardarButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
+    <widget class="QPushButton" name="exportarButton">
      <property name="text">
-      <string>Guardar</string>
+      <string>Generar</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="3">
+   <item row="0" column="1" colspan="4">
     <layout class="QHBoxLayout" name="layoutVideo">
      <property name="rightMargin">
       <number>0</number>
@@ -92,9 +89,12 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QPushButton" name="exportarButton">
+    <widget class="QPushButton" name="guardarButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
-      <string>Exportar</string>
+      <string>Guardar</string>
      </property>
     </widget>
    </item>

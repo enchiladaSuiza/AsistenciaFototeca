@@ -88,5 +88,6 @@ void Escaner::on_exportarButton_clicked()
     QImage imagen = QZXing::encodeData(
                 texto, QZXing::EncoderFormat_QR_CODE,
                 QSize(240, 240), QZXing::EncodeErrorCorrectionLevel_H, true);
+    imagen.save(nombreArchivo);
 }
 

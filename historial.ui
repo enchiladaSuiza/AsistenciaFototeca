@@ -19,6 +19,9 @@
      <property name="text">
       <string>Mes</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
      </attribute>
@@ -71,7 +74,7 @@
       <string>Día</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <attribute name="buttonGroup">
       <string notr="true">buttonGroup</string>
@@ -286,6 +289,25 @@
        </property>
        <property name="maximum">
         <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="fortnightPicker">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>2</number>
        </property>
       </widget>
      </item>

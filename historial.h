@@ -49,6 +49,14 @@ private:
     void colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales = false);
     void colocarTotales(int demora, int anticipacion, int faltas);
     QStringList conseguirTotales(int demora, int anticipacion, int faltas);
+    QString reemplazarCaracteresEspeciales(QString texto);
+
+    QList<QPair<QString, QString>> reemplazos = {
+        {",", " "}, {"\n", "   "}, {"Á", "A"}, {"É", "E"}, {"Í", "I"}, {"Ó", "O"},
+        {"Ú", "U"}, {"Ñ", "N"}, {"á", "a"}, {"é", "e"}, {"í", "i"}, {"ó", "o"},
+        {"ú", "u"}, {"ñ", "n"}
+    };
+    int numeroDeQuincena(QDate dia);
 };
 
 #endif // HISTORIAL_H
