@@ -1,0 +1,86 @@
+QWidget {
+    background-color: #202020;
+    color: white;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background-color: #272727;
+    height: 15px;
+    margin: 0px 16px 0px 16px;
+}
+
+QScrollBar::handle:horizontal {
+    border: 1px solid #434343;
+    background: #202020;
+    min-width: 15px;
+}
+
+QScrollBar::add-line:horizontal {
+    border: 1px solid #434343;
+    background-color: #202020;
+    width: 15px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 1px solid #434343;
+    background-color: #202020;
+    width: 15px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    border: 1px solid #434343;
+    border-radius: 5px;
+    width: 3px;
+    height: 3px;
+    background-color: #434343;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background-color: #272727;
+    width: 15px;
+    margin: 16px 0px 16px 0px;
+}
+
+QScrollBar::handle:vertical {
+    border: 1px solid #434343;
+    background: #202020;
+    min-height: 15px;
+}
+
+QScrollBar::add-line:vertical {
+    border: 1px solid #434343;
+    background-color: #202020;
+    height: 15px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 1px solid #434343;
+    background-color: #202020;
+    height: 15px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid #434343;
+    border-radius: 5px;
+    width: 3px;
+    height: 3px;
+    background-color: #434343;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}

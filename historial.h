@@ -43,6 +43,7 @@ private:
 
     void consultarRango(QDate inicio, QDate fin);
     int numeroDeSemana(QDate dia);
+    int numeroDeQuincena(QDate dia);
     void insertarItemTabla(QString texto, int fila, int columna, int filaSpan = 1, int columnaSpan = 1);
     void consultaTodos(QDate inicio, QDate fin);
     QPair<int, int> colocarStringsCaptura(QSqlRecord registro, int fila, int columna);
@@ -56,7 +57,6 @@ private:
         {"Ú", "U"}, {"Ñ", "N"}, {"á", "a"}, {"é", "e"}, {"í", "i"}, {"ó", "o"},
         {"ú", "u"}, {"ñ", "n"}
     };
-    int numeroDeQuincena(QDate dia);
 };
 
 #endif // HISTORIAL_H

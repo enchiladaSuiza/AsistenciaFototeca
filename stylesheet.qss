@@ -1,6 +1,8 @@
 QWidget {
     font-family: "Montserrat Medium", "Montserrat";
     font-size: 10pt;
+    selection-background-color: #d59c4f;
+    selection-color: black;
 }
 
 QLabel#horaLabel {
@@ -10,3 +12,60 @@ QLabel#horaLabel {
 Checar QWidget {
     font-size: 12pt;
 }
+
+QPushButton {
+    /*background-color: #d59c4f;*/
+    /*border: 1px solid black;*/
+    /*border-radius: 8px;*/
+}
+
+QPushButton:default {
+    /*border: 1px solid black;*/
+    /*border-radius: 8px;*/
+}
+
+QPushButton:pressed {
+    /*background-color: #886a40;*/
+}
+
+QWidget#footerWidget QPushButton:disabled {
+    background-color: #d59c4f;
+    color: black;
+}
+
+QComboBox {
+    /*background-color: #d59c4f;*/
+}
+
+QComboBox:on {
+    background-color: #d59c4f;
+}
+
+QComboBox QAbstractItemView {
+    selection-background-color: #d59c4f;
+}
+
+QTableView {
+    selection-background-color: #d59c4f;
+}
+
+QTableView QTableCornerButton::section {
+    /*background-color: white;*/
+}
+
+QHeaderView {
+    /*background-color: #d59c4f;*/
+}
+
+QRadioButton::indicator:checked {
+    /*color: #d59c4f;*/
+}
+
+QCheckBox::indicator:checked {
+    /*color: #d59c4f;*/
+}
+
+QTabWidget::tab-bar {
+    alignment: center;
+}
+

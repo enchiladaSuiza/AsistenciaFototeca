@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/stylesheets">
         <file>stylesheet.qss</file>
+        <file>dark.qss</file>
     </qresource>
     <qresource prefix="/svg">
         <file>CULTURA.svg</file>

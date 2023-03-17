@@ -12,10 +12,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("SINAFO");
     QCoreApplication::setApplicationName("Sistema de Registro");
     if (!DbManager::abrirConexion()) return 1;
-    QFile qss(":/stylesheets/stylesheet.qss");
-    qss.open(QFile::ReadOnly);
-    a.setStyleSheet(qss.readAll());
     CameraManager::verificarCamaras();
+    Opciones::actualizarTema();
     VentanaPrincipal w;
     w.show();
     return a.exec();

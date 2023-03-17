@@ -16,6 +16,7 @@ public:
     explicit Opciones(QWidget *parent = nullptr);
     ~Opciones();
 
+    static void actualizarTema();
 private slots:
     void on_seleccionarArchivoButton_clicked();
     void on_contratacionesEdit_textChanged();
@@ -28,6 +29,8 @@ private:
     Ui::Opciones *ui;
 
     QSettings opciones;
+    void establecerTemaClaro();
+    void establecerTemaOscuro();
 };
 
 #endif // OPCIONES_H

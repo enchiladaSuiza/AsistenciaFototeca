@@ -17,22 +17,6 @@
    <property name="horizontalSpacing">
     <number>10</number>
    </property>
-   <item row="3" column="3">
-    <widget class="QPushButton" name="guardarButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Guardar Configuraciones</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
     <widget class="QLabel" name="contratacionLabel">
      <property name="sizePolicy">
@@ -59,10 +43,42 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="3">
+    <widget class="QPushButton" name="guardarButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Guardar Configuraciones</string>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="toleranciaLabel">
      <property name="text">
-      <string>Minutos de tolerancia por semana</string>
+      <string>Minutos de tolerancia por día</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="nombreArchivoLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Archivo</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -102,24 +118,38 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="nombreArchivoLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+   <item row="3" column="0">
+    <widget class="QLabel" name="temaLabel">
      <property name="text">
-      <string>Archivo</string>
+      <string>Tema</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QRadioButton" name="oscuroButton">
+     <property name="text">
+      <string>Oscuro</string>
      </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QRadioButton" name="claroButton">
+     <property name="text">
+      <string>Claro</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

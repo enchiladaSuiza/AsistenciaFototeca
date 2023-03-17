@@ -197,7 +197,20 @@ QPair<int, int> Historial::colocarStringsCaptura(QSqlRecord registro, int fila, 
     int diferenciaSalida = registro.value("dif_s").toInt();
     QString difSalidaString = QString::number(diferenciaSalida);
 
-    if (diferenciaEntrada < 1) difEntradaString = ":)";
+    QSettings configuracion;
+    int tolerancia = configuracion.value("tolerancia").toInt();
+
+    if (diferenciaEntrada < 1)
+    {
+        difEntradaString = ":)";
+    }
+    else if (tolerancia > 0)
+    {
+        diferenciaEntrada -= tolerancia;
+        difEntradaString += " - " + QString::number(tolerancia) + " = ";
+        if (diferenciaEntrada < 1) difEntradaString += ":)";
+        else difEntradaString += QString::number(diferenciaEntrada);
+    }
 
     if (horaSalida.isEmpty())
     {
@@ -220,21 +233,8 @@ QStringList Historial::conseguirTotales(int demora, int anticipacion, int faltas
     QStringList totales;
     QString demoraString, anticipacionString, faltasString;
 
-    if (ui->buttonGroup->checkedButton() == ui->weekSelect)
-    {
-        QSettings configuracion;
-        int tolerancia = configuracion.value("tolerancia").toInt();
-        demoraString = QString::number(demora) + " - " + QString::number(tolerancia) + " = ";
-
-        int diferencia = demora - tolerancia;
-        if (diferencia > 0) demoraString += QString::number(diferencia);
-        else demoraString += ":)";
-    }
-    else
-    {
-        if (demora > 0) demoraString = QString::number(demora);
-        else demoraString = ":)";
-    }
+    if (demora > 0) demoraString = QString::number(demora);
+    else demoraString = ":)";
 
     if (anticipacion > 0) anticipacionString = QString::number(anticipacion);
     else anticipacionString = ":)";

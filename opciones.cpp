@@ -2,6 +2,7 @@
 #include "ui_opciones.h"
 #include "QDebug"
 
+#include <QFile>
 #include <dbmanager.h>
 
 Opciones::Opciones(QWidget *parent) :
@@ -18,6 +19,13 @@ Opciones::Opciones(QWidget *parent) :
 
     int minutosTolerancia = opciones.value("tolerancia").toInt();
     ui->toleranciaSbox->setValue(minutosTolerancia);
+
+    int tema = opciones.value("tema").toInt();
+    if (tema == 0) ui->claroButton->setChecked(true);
+    else ui->oscuroButton->setChecked(true);
+
+    connect(ui->claroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaClaro);
+    connect(ui->oscuroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaOscuro);
 }
 
 Opciones::~Opciones()
@@ -55,3 +63,30 @@ void Opciones::on_toleranciaSbox_valueChanged(int valor)
     ui->guardarButton->setEnabled(true);
 }
 
+void Opciones::establecerTemaClaro()
+{
+    opciones.setValue("tema", 0);
+    actualizarTema();
+}
+
+void Opciones::establecerTemaOscuro()
+{
+    opciones.setValue("tema", 1);
+    actualizarTema();
+}
+
+void Opciones::actualizarTema()
+{
+    QSettings opciones;
+    int tema = opciones.value("tema").toInt();
+    QFile qss(":/stylesheets/stylesheet.qss");
+    qss.open(QFile::ReadOnly);
+    if (tema == 0)
+    {
+        qApp->setStyleSheet(qss.readAll());
+        return;
+    }
+    QFile dark(":/stylesheets/dark.qss");
+    dark.open(QFile::ReadOnly);
+    qApp->setStyleSheet(dark.readAll() + qss.readAll());
+}
