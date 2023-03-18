@@ -33,9 +33,12 @@ public:
     static bool insertarRegistrosVacios(QDate dia);
     static bool hayRegistros(QDate dia);
     static QSqlQuery historialCompletoEmpleado(int idEmpleado, QDate inicio, QDate fin);
-    static QSqlQuery idNombresCompletoEmpleados();
+    static QSqlQuery idNombresCompletosEmpleados();
     static QString horarioEntradaDia(int empleado, QDate dia);
     static QSqlQuery historialCompletoTodos(QDate inicio, QDate fin);
+    static QString nombreCompleto(int idEmpleado);
+    static bool actualizarImagenEmpleado(int idEmpleado, QString rutaImagen);
+    static QString conseguirImagenEmpleado(int idEmpleado);
 private:
     inline static QString sqlEmpleado =
             "SELECT id, nombre || ' ' || apellido_paterno || ' ' ||"

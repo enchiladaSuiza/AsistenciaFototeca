@@ -19,6 +19,9 @@ Checar::Checar(QWidget *parent) :
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
 
+    ui->imagenLabel->setVisible(false);
+    ui->labelEmpleado->setVisible(false);
+
     entradaEstablecida = new QTableWidgetItem;
     entradaCapturada = new QTableWidgetItem;
     salidaEstablecida = new QTableWidgetItem;
@@ -58,18 +61,29 @@ Checar::~Checar()
 
 void Checar::limpiarInformacion()
 {
-    ui->labelEmpleado->setText("");
+    ui->imagenLabel->clear();
+    ui->imagenLabel->setVisible(false);
+    ui->labelEmpleado->clear();
+    ui->labelEmpleado->setVisible(false);
     entradaEstablecida->setText("");
     entradaCapturada->setText("");
     salidaEstablecida->setText("");
     salidaCapturada->setText("");
 }
 
-void Checar::llenarInformacion(QString info, QString nombre,
+void Checar::llenarInformacion(QString info, QString nombre, QString rutaImagen,
                                QString entradaNormal, QString salidaNormal,
                                QString entradaCaptura, QString salidaCaptura)
 {
     ui->labelEstado->setText(info);
+    ui->labelEmpleado->setVisible(true);
+    if (!rutaImagen.isEmpty())
+    {
+        QPixmap imagen(rutaImagen);
+        ui->imagenLabel->setVisible(true);
+        ui->imagenLabel->setPixmap(imagen.scaled(ui->viewfinder->width(), ui->viewfinder->height() * 0.7,
+                                                 Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
     ui->labelEmpleado->setText(nombre);
     entradaEstablecida->setText(entradaNormal);
     entradaCapturada->setText(entradaCaptura);
@@ -83,6 +97,8 @@ void Checar::procesarFrame(const QVideoFrame &frame)
 
     QString codigo = decoder->decodeImage(frame.toImage());
     if (codigo.isEmpty()) return;
+
+
 
     QSqlRecord empleado = DbManager::empleadoPorQR(codigo);
     if (empleado.field(0).typeID() != 1)
@@ -107,9 +123,11 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     QString entradaNormal = horarios.value(tiempos.first).toString();
     QString salidaNormal = horarios.value(tiempos.second).toString();
 
+    QString archivoImagen = DbManager::conseguirImagenEmpleado(idEmpleado);
+
     if (entradaNormal.isEmpty() || salidaNormal.isEmpty()) // ¿Hoy trabaja?
     {
-        llenarInformacion("- Usted no trabaja el día de hoy -", nombre);
+        llenarInformacion("- Usted no trabaja el día de hoy -", nombre, archivoImagen);
         timerInfo->start(tiempoInformacion);
         return;
     }
@@ -121,9 +139,8 @@ void Checar::procesarFrame(const QVideoFrame &frame)
 
     if (entrada.isEmpty())
     {
-        // DbManager::updateCapturaHoraEntrada(idRegistro, ahora);
         DbManager::insertarRegistro(idEmpleado, hoy, ahora);
-        llenarInformacion("- Entrada caputrada -", nombre, entradaNormal, salidaNormal, ahora);
+        llenarInformacion("- Entrada caputrada -", nombre, archivoImagen, entradaNormal, salidaNormal, ahora);
         timerInfo->start(tiempoInformacion);
         return;
     }
@@ -131,12 +148,12 @@ void Checar::procesarFrame(const QVideoFrame &frame)
     if (salida.isEmpty())
     {
         DbManager::updateCapturaHoraSalida(idRegistro, ahora);
-        llenarInformacion("- Salida caputrada -", nombre, entradaNormal, salidaNormal, entrada, ahora);
+        llenarInformacion("- Salida caputrada -", nombre, archivoImagen, entradaNormal, salidaNormal, entrada, ahora);
         timerInfo->start(tiempoInformacion);
         return;
     }
 
-    llenarInformacion("- Su salida ya fue capturada antes -", nombre, entradaNormal, salidaNormal, entrada, salida);
+    llenarInformacion("- Su salida ya fue capturada antes -", nombre, archivoImagen, entradaNormal, salidaNormal, entrada, salida);
     timerInfo->start(tiempoInformacion);
 }
 

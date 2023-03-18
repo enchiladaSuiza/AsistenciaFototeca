@@ -7,6 +7,7 @@
 #include <datos.h>
 #include <horario.h>
 #include <escaner.h>
+#include <foto.h>
 
 namespace Ui {
 class Personal;
@@ -20,8 +21,8 @@ public:
     explicit Personal(QWidget *parent = nullptr);
     ~Personal();
 
-    void activarCamaraQR();
-    void desactivarCamaraQR();
+    void activarCamaras();
+    void desactivarCamaras();
 
 private slots:
     void actualizarRegistroSeleccionado(QString *nombre);
@@ -33,6 +34,7 @@ private:
     Datos datos;
     Horario horario;
     Escaner escaner;
+    Foto foto;
 };
 
 #endif // PERSONAL_H

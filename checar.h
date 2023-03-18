@@ -29,7 +29,7 @@ public:
     void desactivarCamara();
 
     void limpiarInformacion();
-    void llenarInformacion(QString info = "", QString nombre = "",
+    void llenarInformacion(QString info = "", QString rutaImagen = "", QString nombre = "",
                            QString entradaNormal = "", QString salidaNormal = "",
                            QString entradaCaptura = "", QString salidaCaptura = "");
 

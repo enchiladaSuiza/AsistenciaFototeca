@@ -1,6 +1,5 @@
 #include "ventanaprincipal.h"
 #include "ui_ventanaprincipal.h"
-#include "dbmanager.h"
 
 #include <QShortcut>
 #include <QTime>
@@ -21,14 +20,24 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     ahora = QDateTime::currentDateTime();
     startTimer(1000);
     actualizarTiempo();
-//    if (!DbManager::hayRegistros(ahora.date()))
-//    {
-//        DbManager::insertarRegistrosVacios(ahora.date());
-//    }
 
-    QSvgWidget *cultura = new QSvgWidget(":/svg/CULTURA.svg");
-    QSvgWidget *inah = new QSvgWidget(":/svg/INAH.svg");
-    QSvgWidget *sinafo = new QSvgWidget(":/svg/SINAFO.svg");
+    QSettings configuracion;
+    int tema = configuracion.value("tema").toInt();
+
+    cultura = new QSvgWidget(":/svg/CULTURA.svg");
+    inah = new QSvgWidget(":/svg/INAH.svg");
+    sinafo = new QSvgWidget(":/svg/SINAFO.svg");
+
+    if (tema == 0)
+    {
+        inah = new QSvgWidget(":/svg/INAH.svg");
+        sinafo = new QSvgWidget(":/svg/SINAFO.svg");
+    }
+    else
+    {
+        inah = new QSvgWidget(":/svg/INAH_b.svg");
+        sinafo = new QSvgWidget(":/svg/SINAFO_b.svg");
+    }
 
     cultura->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
     inah->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
@@ -56,6 +65,8 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     ui->stackedWidget->addWidget(historial);
     ui->stackedWidget->addWidget(opciones);
     ui->checarButton->setEnabled(false);
+
+    connect(opciones, &Opciones::temaActualizado, this, &VentanaPrincipal::cambiarLogos);
 }
 
 VentanaPrincipal::~VentanaPrincipal() { delete ui; }
@@ -63,10 +74,6 @@ VentanaPrincipal::~VentanaPrincipal() { delete ui; }
 void VentanaPrincipal::actualizarTiempo()
 {  
     QDateTime nuevoAhora = QDateTime::currentDateTime();
-//    if (ahora.date().day() != nuevoAhora.date().day() && !DbManager::hayRegistros(nuevoAhora.date()))
-//    {
-//        DbManager::insertarRegistrosVacios(nuevoAhora.date());
-//    }
     ahora = nuevoAhora;
     ui->horaLabel->setText(QLocale().toString(ahora, "d/MMM/yyyy (ddd)\nhh:mm:ss"));
 }
@@ -75,6 +82,26 @@ void VentanaPrincipal::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
     actualizarTiempo();
+}
+
+void VentanaPrincipal::cambiarLogos(int tema)
+{
+    QString svgInah;
+    QString svgSinafo;
+    if (tema == 0)
+    {
+        svgInah = ":/svg/INAH.svg";
+        svgSinafo = ":/svg/SINAFO.svg";
+    }
+    else
+    {
+        svgInah = ":/svg/INAH_b.svg";
+        svgSinafo = ":/svg/SINAFO_b.svg";
+    }
+    inah->load(svgInah);
+    sinafo->load(svgSinafo);
+    inah->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
+    sinafo->renderer()->setAspectRatioMode(Qt::KeepAspectRatio);
 }
 
 void VentanaPrincipal::activarTodosLosBotones()
@@ -101,6 +128,7 @@ void VentanaPrincipal::on_personalButton_clicked()
 
 void VentanaPrincipal::on_historialButton_clicked()
 {
+    historial->actualizarConsulta();
     ui->stackedWidget->setCurrentWidget(historial);
     activarTodosLosBotones();
     ui->historialButton->setEnabled(false);
@@ -119,20 +147,15 @@ void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
     {
     case 0:
         checar->activarCamara();
-        personal->desactivarCamaraQR();
+        personal->desactivarCamaras();
         break;
     case 1:
         checar->desactivarCamara();
-        personal->activarCamaraQR();
+        personal->activarCamaras();
         break;
-    case 2:
-        historial->actualizarConsulta();
+    default:
         checar->desactivarCamara();
-        personal->desactivarCamaraQR();
-        break;
-    case 3:
-        checar->desactivarCamara();
-        personal->desactivarCamaraQR();
+        personal->desactivarCamaras();
         break;
     }
 }

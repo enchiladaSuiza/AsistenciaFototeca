@@ -25,11 +25,11 @@ QPushButton:default {
 }
 
 QPushButton:pressed {
-    /*background-color: #886a40;*/
+    /*background-color: #d59c4f;*/
 }
 
 QWidget#footerWidget QPushButton:disabled {
-    background-color: #d59c4f;
+    background-color: #b8833a;
     color: black;
 }
 

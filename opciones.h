@@ -16,7 +16,11 @@ public:
     explicit Opciones(QWidget *parent = nullptr);
     ~Opciones();
 
-    static void actualizarTema();
+    void actualizarTema();
+
+signals:
+    void temaActualizado(int tema);
+
 private slots:
     void on_seleccionarArchivoButton_clicked();
     void on_contratacionesEdit_textChanged();

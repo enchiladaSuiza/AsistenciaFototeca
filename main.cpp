@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Sistema de Registro");
     if (!DbManager::abrirConexion()) return 1;
     CameraManager::verificarCamaras();
-    Opciones::actualizarTema();
     VentanaPrincipal w;
     w.show();
     return a.exec();

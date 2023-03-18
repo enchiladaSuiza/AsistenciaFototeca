@@ -46,7 +46,7 @@ Historial::~Historial() { delete ui; }
 
 void Historial::actualizarComboBox()
 {
-    QSqlQuery nombres = DbManager::idNombresCompletoEmpleados();
+    QSqlQuery nombres = DbManager::idNombresCompletosEmpleados();
     indicesIds.clear();
     indicesIds.append(-1);
     ui->empleadosCbox->clear();

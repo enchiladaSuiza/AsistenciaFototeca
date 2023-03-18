@@ -24,6 +24,7 @@ Opciones::Opciones(QWidget *parent) :
     if (tema == 0) ui->claroButton->setChecked(true);
     else ui->oscuroButton->setChecked(true);
 
+    actualizarTema();
     connect(ui->claroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaClaro);
     connect(ui->oscuroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaOscuro);
 }
@@ -77,16 +78,20 @@ void Opciones::establecerTemaOscuro()
 
 void Opciones::actualizarTema()
 {
-    QSettings opciones;
     int tema = opciones.value("tema").toInt();
-    QFile qss(":/stylesheets/stylesheet.qss");
-    qss.open(QFile::ReadOnly);
+    QByteArray qss;
+    QFile base(":/stylesheets/stylesheet.qss");
+    base.open(QFile::ReadOnly);
     if (tema == 0)
     {
-        qApp->setStyleSheet(qss.readAll());
-        return;
+        qss += base.readAll();
     }
-    QFile dark(":/stylesheets/dark.qss");
-    dark.open(QFile::ReadOnly);
-    qApp->setStyleSheet(dark.readAll() + qss.readAll());
+    else
+    {
+        QFile dark(":/stylesheets/dark.qss");
+        dark.open(QFile::ReadOnly);
+        qss += dark.readAll() + base.readAll();
+    }
+    qApp->setStyleSheet(qss);
+    emit temaActualizado(tema);
 }

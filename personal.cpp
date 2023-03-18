@@ -12,6 +12,7 @@ Personal::Personal(QWidget *parent) :
 
     ui->tabWidget->addTab(&datos, "Datos");
     connect(&datos, &Datos::registroSeleccionado, &escaner, &Escaner::setId);
+    connect(&datos, &Datos::registroSeleccionado, &foto, &Foto::setId);
     connect(&datos, &Datos::registroSeleccionado, &horario, &Horario::setFila);
     connect(&datos, &Datos::dbActualizada, &horario, &Horario::actualizarRegistros);
     connect(&datos, &Datos::nombreCompletoSeleccion, this, &Personal::actualizarRegistroSeleccionado);
@@ -25,6 +26,7 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
     {
         ui->seleccionLabel->setStyleSheet("font-style: italic;");
         ui->seleccionLabel->setText("Registro válido después de guardar los cambios.");
+        ui->tabWidget->removeTab(3);
         ui->tabWidget->removeTab(2);
         ui->tabWidget->removeTab(1);
         return;
@@ -34,6 +36,7 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
     {
         ui->seleccionLabel->setStyleSheet("font-style: normal");
         ui->seleccionLabel->setText("Seleccione un registro.");
+        ui->tabWidget->removeTab(3);
         ui->tabWidget->removeTab(2);
         ui->tabWidget->removeTab(1);
         return;
@@ -43,27 +46,40 @@ void Personal::actualizarRegistroSeleccionado(QString* nombre)
     ui->seleccionLabel->setText(*nombre);
     ui->tabWidget->addTab(&horario, "Horario");
     ui->tabWidget->addTab(&escaner, "Código QR");
+    ui->tabWidget->addTab(&foto, "Imagen");
 }
 
-void Personal::activarCamaraQR()
+void Personal::activarCamaras()
 {
-    if (ui->tabWidget->currentIndex() == 2)
-    {
-        escaner.activarCamara();
-    }
+    int indice = ui->tabWidget->currentIndex();
+    if (indice == 2) escaner.activarCamara();
+    else if (indice == 3) foto.activarCamara();
 }
 
-void Personal::desactivarCamaraQR()
+void Personal::desactivarCamaras()
 {
-    if (ui->tabWidget->currentIndex() == 2)
-    {
-        escaner.desactivarCamara();
-    }
+    int indice = ui->tabWidget->currentIndex();
+    if (indice == 2) escaner.desactivarCamara();
+    else if (indice == 3) foto.desactivarCamara();
 }
 
 void Personal::on_tabWidget_currentChanged(int index)
 {
-    if (index == 2) escaner.activarCamara();
-    else escaner.desactivarCamara();
+    switch (index)
+    {
+    case 2:
+        escaner.activarCamara();
+        foto.desactivarCamara();
+        break;
+    case 3:
+        foto.actualizarImagen();
+        foto.activarCamara();
+        escaner.desactivarCamara();
+        break;
+    default:
+        foto.desactivarCamara();
+        escaner.desactivarCamara();
+        break;
+    }
 }
 

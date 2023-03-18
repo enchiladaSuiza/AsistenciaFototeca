@@ -2,6 +2,7 @@
 #define VENTANAPRINCIPAL_H
 
 #include <QMainWindow>
+#include <QSvgWidget>
 #include <checar.h>
 #include <historial.h>
 #include <opciones.h>
@@ -31,6 +32,8 @@ private:
     void actualizarTiempo();
     void timerEvent(QTimerEvent *event);
 
+    QSvgWidget *cultura, *inah, *sinafo;
+
     void activarTodosLosBotones();
 private slots:
     void on_checarButton_clicked();
@@ -38,5 +41,6 @@ private slots:
     void on_stackedWidget_currentChanged(int index);
     void on_historialButton_clicked();
     void on_opcionesButton_clicked();
+    void cambiarLogos(int tema);
 };
 #endif // VENTANAPRINCIPAL_H

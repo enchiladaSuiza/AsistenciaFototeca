@@ -11,6 +11,7 @@ SOURCES += \
     datos.cpp \
     dbmanager.cpp \
     escaner.cpp \
+    foto.cpp \
     historial.cpp \
     horario.cpp \
     main.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     datos.h \
     dbmanager.h \
     escaner.h \
+    foto.h \
     historial.h \
     horario.h \
     opciones.h \
@@ -39,6 +41,7 @@ FORMS += \
     checar.ui \
     datos.ui \
     escaner.ui \
+    foto.ui \
     historial.ui \
     horario.ui \
     opciones.ui \

@@ -34,7 +34,7 @@ bool DbManager::abrirConexion()
     return false;
 }
 
-QSqlQuery DbManager::idNombresCompletoEmpleados()
+QSqlQuery DbManager::idNombresCompletosEmpleados()
 {
     QSqlQuery query;
     query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || "
@@ -57,6 +57,25 @@ bool DbManager::actualizarQREmpleado(int idEmpleado, QString qr)
     query.addBindValue(qr);
     query.addBindValue(idEmpleado);
     return query.exec();
+}
+
+bool DbManager::actualizarImagenEmpleado(int idEmpleado, QString rutaImagen)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE empleado SET imagen = ? WHERE id = ?");
+    query.addBindValue(rutaImagen);
+    query.addBindValue(idEmpleado);
+    return query.exec();
+}
+
+QString DbManager::conseguirImagenEmpleado(int idEmpleado)
+{
+    QSqlQuery query;
+    query.prepare("SELECT imagen FROM empleado WHERE id = ?");
+    query.addBindValue(idEmpleado);
+    query.exec();
+    query.next();
+    return query.value("imagen").toString();
 }
 
 QSqlRecord DbManager::empleadoPorQR(QString qr)
@@ -108,6 +127,17 @@ QSqlRecord DbManager::horariosPorEmpleado(int idEmpleado)
     query.exec();
     query.next();
     return query.record();
+}
+
+QString DbManager::nombreCompleto(int idEmpleado)
+{
+    QSqlQuery query;
+    query.prepare("SELECT id, nombre || ' ' || apellido_paterno || ' ' || "
+                  "apellido_materno AS nombre_completo FROM empleado WHERE id = ?");
+    query.addBindValue(idEmpleado);
+    query.exec();
+    query.next();
+    return query.value("nombre_completo").toString();
 }
 
 bool DbManager::insertarRegistro(int idEmpleado, QDate fecha, QString entrada, QString salida)
