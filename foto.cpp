@@ -85,8 +85,11 @@ bool Foto::colocarImagen(QString ruta)
     }
     ui->rutaLabel->setText(ruta);
     QImage imagen(ruta);
-    QImage escalada = imagen.scaled(ui->imagenLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->imagenLabel->setPixmap(QPixmap::fromImage(escalada));
+    if (!imagen.isNull())
+    {
+        QImage escalada = imagen.scaled(ui->imagenLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        ui->imagenLabel->setPixmap(QPixmap::fromImage(escalada));
+    }
     return true;
 }
 

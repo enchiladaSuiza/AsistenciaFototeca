@@ -88,3 +88,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 QPushButton:disabled {
     color: grey;
 }
+
+QLineEdit[text=\"\"] {
+    color: grey;
+}

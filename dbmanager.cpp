@@ -3,7 +3,6 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QSqlError>
-#include <QSqlQuery>
 #include <QErrorMessage>
 #include <QMessageBox>
 
@@ -245,3 +244,79 @@ QString DbManager::horarioEntradaDia(int empleado, QDate dia)
     query.next();
     return query.value("e_normal").toString();
 }
+
+bool DbManager::hayAdministradores()
+{
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(id) FROM usuario WHERE privilegios = 0");
+    query.exec();
+    query.next();
+    int admins = query.value(0).toInt();
+    return admins > 0;
+}
+
+bool DbManager::agregarUsuario(QString nombre, QString pass, int privs)
+{
+    QSqlQuery query;
+    query.prepare("INSERT INTO usuario VALUES (NULL, ?, ?, ?)");
+    query.addBindValue(nombre);
+    query.addBindValue(pass);
+    query.addBindValue(privs);
+    bool funciono = query.exec();
+    if (funciono) ultimoIdInsertado = query.lastInsertId().toInt();
+    return funciono;
+}
+
+int DbManager::ultimoId()
+{
+    return ultimoIdInsertado;
+}
+
+int DbManager::verificarCredenciales(QString usuario, QString pass)
+{
+    QSqlQuery query;
+    query.prepare("SELECT id FROM usuario WHERE nombre = ? AND password = ?");
+    query.addBindValue(usuario);
+    query.addBindValue(pass);
+    query.exec();
+    query.next();
+    if (!query.isValid()) return -1;
+    return query.value(0).toInt();
+}
+
+int DbManager::conseguirPrivilegios(int idUsuario)
+{
+    QSqlQuery query;
+    query.prepare("SELECT privilegios FROM usuario WHERE id = ?");
+    query.addBindValue(idUsuario);
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+}
+
+QSqlQueryModel* DbManager::conseguirUsuarios()
+{
+    QSqlQueryModel *modelo = new QSqlQueryModel;
+    modelo->setQuery("SELECT nombre, id, privilegios FROM usuario");
+    return modelo;
+}
+
+bool DbManager::actualizarUsuario(int id, QString nombreNuevo, QString pass, int privs)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE usuario SET nombre = ?, password = ?, privilegios = ? WHERE id = ?");
+    query.addBindValue(nombreNuevo);
+    query.addBindValue(pass);
+    query.addBindValue(privs);
+    query.addBindValue(id);
+    return query.exec();
+}
+
+bool DbManager::eliminarUsuario(int id)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM usuario WHERE id = ?");
+    query.addBindValue(id);
+    return query.exec();
+}
+

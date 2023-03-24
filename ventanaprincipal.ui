@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>375</width>
-    <height>76</height>
+    <width>537</width>
+    <height>285</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -153,6 +153,35 @@
         <widget class="QPushButton" name="opcionesButton">
          <property name="text">
           <string>Opciones</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="vline">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="usuarioLabel">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="logoutButton">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Cerrar Sesión</string>
          </property>
         </widget>
        </item>

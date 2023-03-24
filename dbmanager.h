@@ -3,7 +3,9 @@
 
 #include <QDate>
 #include <QSqlDatabase>
+#include <QSqlQueryModel>
 #include <QSqlRecord>
+#include <QSqlQuery>
 
 class DbManager
 {
@@ -39,7 +41,16 @@ public:
     static QString nombreCompleto(int idEmpleado);
     static bool actualizarImagenEmpleado(int idEmpleado, QString rutaImagen);
     static QString conseguirImagenEmpleado(int idEmpleado);
+    static bool hayAdministradores();
+    static bool agregarUsuario(QString nombre, QString pass, int privs);
+    static int ultimoId();
+    static int verificarCredenciales(QString usuario, QString pass);
+    static int conseguirPrivilegios(int idUsuario);
+    static QSqlQueryModel* conseguirUsuarios();
+    static bool actualizarUsuario(int id, QString nombre, QString pass, int privs);
+    static bool eliminarUsuario(int id);
 private:
+    inline static int ultimoIdInsertado;
     inline static QString sqlEmpleado =
             "SELECT id, nombre || ' ' || apellido_paterno || ' ' ||"
             " apellido_materno AS nombre FROM empleado WHERE qr = ?";

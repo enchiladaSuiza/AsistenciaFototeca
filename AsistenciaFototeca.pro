@@ -14,6 +14,7 @@ SOURCES += \
     foto.cpp \
     historial.cpp \
     horario.cpp \
+    login.cpp \
     main.cpp \
     opciones.cpp \
     personal.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     foto.h \
     historial.h \
     horario.h \
+    login.h \
     opciones.h \
     personal.h \
     spinboxdelegate.h \
@@ -44,6 +46,7 @@ FORMS += \
     foto.ui \
     historial.ui \
     horario.ui \
+    login.ui \
     opciones.ui \
     personal.ui \
     ventanaprincipal.ui

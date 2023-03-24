@@ -29,10 +29,24 @@ private slots:
 
     void on_toleranciaSbox_valueChanged(int arg1);
 
+    void on_pantallaButton_clicked();
+
+    void on_listView_clicked(const QModelIndex &index);
+
+    void on_editarUsuarioButton_clicked();
+
+    void cambiosUsuarios();
+    void on_eliminarUsuarioButton_clicked();
+
+    void on_nuevoUsuarioButton_clicked();
+
 private:
     Ui::Opciones *ui;
 
     QSettings opciones;
+
+    int idUsuario = -1;
+    int privilegiosUsuario = 0;
     void establecerTemaClaro();
     void establecerTemaOscuro();
 };

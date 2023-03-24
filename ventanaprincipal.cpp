@@ -1,11 +1,13 @@
 #include "ventanaprincipal.h"
 #include "ui_ventanaprincipal.h"
+#include "login.h"
 
 #include <QShortcut>
 #include <QTime>
 #include <QPixmap>
 #include <QSvgWidget>
 #include <QSvgRenderer>
+#include <QMessageBox>
 
 VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     : QMainWindow(parent)
@@ -14,12 +16,14 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     ui->setupUi(this);
 
     new QShortcut(Qt::CTRL | Qt::Key_Q, this, SLOT(close()));
-
     QLocale::setDefault(QLocale(QLocale::Spanish, QLocale::Mexico));
 
-    ahora = QDateTime::currentDateTime();
-    startTimer(1000);
-    actualizarTiempo();
+    instancia = this;
+
+    opciones = new Opciones(this);
+    checar = new Checar(this);
+    personal = new Personal(this);
+    historial = new Historial(this);
 
     QSettings configuracion;
     int tema = configuracion.value("tema").toInt();
@@ -55,16 +59,18 @@ VentanaPrincipal::VentanaPrincipal(QWidget *parent)
     ui->headerLayout->setAlignment(inah, Qt::AlignCenter);
     ui->headerLayout->setAlignment(sinafo, Qt::AlignCenter);
 
-    checar = new Checar(this);
-    personal = new Personal(this);
-    historial = new Historial(this);
-    opciones = new Opciones(this);
-
     ui->stackedWidget->addWidget(checar);
     ui->stackedWidget->addWidget(personal);
     ui->stackedWidget->addWidget(historial);
     ui->stackedWidget->addWidget(opciones);
     ui->checarButton->setEnabled(false);
+    ui->usuarioLabel->setVisible(false);
+    ui->logoutButton->setVisible(false);
+    ui->vline->setVisible(false);
+
+    ahora = QDateTime::currentDateTime();
+    startTimer(1000);
+    actualizarTiempo();
 
     connect(opciones, &Opciones::temaActualizado, this, &VentanaPrincipal::cambiarLogos);
 }
@@ -82,6 +88,19 @@ void VentanaPrincipal::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
     actualizarTiempo();
+}
+
+const VentanaPrincipal* VentanaPrincipal::conseguirInstancia()
+{
+    return instancia;
+}
+
+void VentanaPrincipal::colocarNombre(QString usuario)
+{
+    ui->usuarioLabel->setVisible(true);
+    ui->usuarioLabel->setText(usuario);
+    ui->logoutButton->setVisible(true);
+    ui->vline->setVisible(true);
 }
 
 void VentanaPrincipal::cambiarLogos(int tema)
@@ -121,24 +140,45 @@ void VentanaPrincipal::on_checarButton_clicked()
 
 void VentanaPrincipal::on_personalButton_clicked()
 {
-    ui->stackedWidget->setCurrentWidget(personal);
-    activarTodosLosBotones();
-    ui->personalButton->setEnabled(false);
+    Login login;
+    if (login.registrarAdmin() == QDialog::Rejected ||
+            login.iniciarSesion() == QDialog::Rejected) return;
+    if (Login::accesoPersonal())
+    {
+        ui->stackedWidget->setCurrentWidget(personal);
+        activarTodosLosBotones();
+        ui->personalButton->setEnabled(false);
+    }
+    else mostrarMensajeSinPermiso();
 }
 
 void VentanaPrincipal::on_historialButton_clicked()
 {
-    historial->actualizarConsulta();
-    ui->stackedWidget->setCurrentWidget(historial);
-    activarTodosLosBotones();
-    ui->historialButton->setEnabled(false);
+    Login login;
+    if (login.registrarAdmin() == QDialog::Rejected ||
+            login.iniciarSesion() == QDialog::Rejected) return;
+    if (Login::accesoHistorial())
+    {
+        historial->actualizarConsulta();
+        ui->stackedWidget->setCurrentWidget(historial);
+        activarTodosLosBotones();
+        ui->historialButton->setEnabled(false);
+    }
+    else mostrarMensajeSinPermiso();
 }
 
 void VentanaPrincipal::on_opcionesButton_clicked()
 {
-    ui->stackedWidget->setCurrentWidget(opciones);
-    activarTodosLosBotones();
-    ui->opcionesButton->setEnabled(false);
+    Login login;
+    if (login.registrarAdmin() == QDialog::Rejected ||
+            login.iniciarSesion() == QDialog::Rejected) return;
+    if (Login::accesoOpciones())
+    {
+        ui->stackedWidget->setCurrentWidget(opciones);
+        activarTodosLosBotones();
+        ui->opcionesButton->setEnabled(false);
+    }
+    else mostrarMensajeSinPermiso();
 }
 
 void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
@@ -158,5 +198,20 @@ void VentanaPrincipal::on_stackedWidget_currentChanged(int actual)
         personal->desactivarCamaras();
         break;
     }
+}
+
+void VentanaPrincipal::mostrarMensajeSinPermiso()
+{
+    QMessageBox::information(nullptr, titulo, "Su usuario no tiene permiso para acceder a esta pantalla.");
+}
+
+
+void VentanaPrincipal::on_logoutButton_clicked()
+{
+    Login::cerrarSesion();
+    ui->usuarioLabel->setVisible(false);
+    ui->logoutButton->setVisible(false);
+    ui->vline->setVisible(false);
+    on_checarButton_clicked();
 }
 

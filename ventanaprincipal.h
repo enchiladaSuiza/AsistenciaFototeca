@@ -20,6 +20,12 @@ public:
     VentanaPrincipal(QWidget *parent = nullptr);
     ~VentanaPrincipal();
 
+    static inline const QString titulo = "Sistema de Control de Asistencia de la Fototeca Nacional";
+    static const VentanaPrincipal* conseguirInstancia();
+
+public slots:
+    void colocarNombre(QString usuario);
+
 private:
     Ui::VentanaPrincipal *ui;
     Checar* checar;
@@ -28,13 +34,14 @@ private:
     Opciones *opciones;
 
     QDateTime ahora;
-
-    void actualizarTiempo();
-    void timerEvent(QTimerEvent *event);
-
     QSvgWidget *cultura, *inah, *sinafo;
 
     void activarTodosLosBotones();
+    void actualizarTiempo();
+    void timerEvent(QTimerEvent *event);
+
+    static inline VentanaPrincipal *instancia;
+    void mostrarMensajeSinPermiso();
 private slots:
     void on_checarButton_clicked();
     void on_personalButton_clicked();
@@ -42,5 +49,6 @@ private slots:
     void on_historialButton_clicked();
     void on_opcionesButton_clicked();
     void cambiarLogos(int tema);
+    void on_logoutButton_clicked();
 };
 #endif // VENTANAPRINCIPAL_H

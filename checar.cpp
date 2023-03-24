@@ -80,9 +80,14 @@ void Checar::llenarInformacion(QString info, QString nombre, QString rutaImagen,
     if (!rutaImagen.isEmpty())
     {
         QPixmap imagen(rutaImagen);
-        ui->imagenLabel->setVisible(true);
-        ui->imagenLabel->setPixmap(imagen.scaled(ui->viewfinder->width(), ui->viewfinder->height() * 0.7,
-                                                 Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        if (!imagen.isNull())
+        {
+            QPixmap escalada = imagen.scaled(
+                        ui->viewfinder->width(), ui->viewfinder->height() * 0.7,
+                        Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            ui->imagenLabel->setVisible(true);
+            ui->imagenLabel->setPixmap(escalada);
+        }
     }
     ui->labelEmpleado->setText(nombre);
     entradaEstablecida->setText(entradaNormal);

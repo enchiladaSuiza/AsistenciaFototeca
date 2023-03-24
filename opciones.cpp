@@ -1,8 +1,11 @@
 #include "opciones.h"
 #include "ui_opciones.h"
 #include "QDebug"
+#include "login.h"
+#include "ventanaprincipal.h"
 
 #include <QFile>
+#include <QMessageBox>
 #include <dbmanager.h>
 
 Opciones::Opciones(QWidget *parent) :
@@ -95,3 +98,71 @@ void Opciones::actualizarTema()
     qApp->setStyleSheet(qss);
     emit temaActualizado(tema);
 }
+
+void Opciones::on_pantallaButton_clicked()
+{
+    int indice = ui->stackedWidget->currentIndex();
+    if (indice == 0)
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+        ui->pantallaButton->setText("Regresar");
+        ui->guardarButton->setVisible(false);
+        ui->listView->setModel(DbManager::conseguirUsuarios());
+    }
+    else
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+        ui->pantallaButton->setText("Administrar Usuarios");
+        ui->guardarButton->setVisible(true);
+    }
+}
+
+void Opciones::on_listView_clicked(const QModelIndex &index)
+{
+    idUsuario = ui->listView->model()->index(index.row(), 1).data().toInt();
+    privilegiosUsuario = ui->listView->model()->index(index.row(), 2).data().toInt();
+    QString nombre = index.data().toString();
+    ui->usuarioLabel->setText(nombre);
+    ui->editarUsuarioButton->setEnabled(true);
+    ui->eliminarUsuarioButton->setEnabled(true);
+}
+
+void Opciones::on_editarUsuarioButton_clicked()
+{
+    QString nombre = ui->usuarioLabel->text();
+    Login login;
+    connect(&login, &Login::usuarioActualizado, this, &Opciones::cambiosUsuarios);
+    int resultado = login.editarUsuario(idUsuario, nombre, privilegiosUsuario);
+    if (resultado == Login::Accepted)
+    {
+        cambiosUsuarios();
+    }
+}
+
+void Opciones::cambiosUsuarios()
+{
+    ui->listView->setModel(DbManager::conseguirUsuarios());
+    ui->usuarioLabel->setText("");
+}
+
+void Opciones::on_eliminarUsuarioButton_clicked()
+{
+    int eliminar = QMessageBox::question(nullptr, VentanaPrincipal::titulo,
+                                         "¿Eliminar permanentemente a este usuario?");
+    if (eliminar == QMessageBox::Yes)
+    {
+        DbManager::eliminarUsuario(idUsuario);
+        cambiosUsuarios();
+    }
+}
+
+void Opciones::on_nuevoUsuarioButton_clicked()
+{
+    Login login;
+    int resultado = login.registrarUsuario();
+    if (resultado == Login::Accepted)
+    {
+        cambiosUsuarios();
+    }
+}
+
