@@ -37,9 +37,9 @@ Historial::Historial(QWidget *parent) :
     connect(ui->monthPicker, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->weekPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->fortnightPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
-    connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->rangoInicio, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
     connect(ui->rangoFin, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
+    connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
 }
 
 Historial::~Historial() { delete ui; }
@@ -47,17 +47,24 @@ Historial::~Historial() { delete ui; }
 void Historial::actualizarComboBox()
 {
     QSqlQuery nombres = DbManager::idNombresCompletosEmpleados();
+    // int seleccion = ui->empleadosCbox->currentIndex();
     indicesIds.clear();
     indicesIds.append(-1);
+
+    disconnect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     ui->empleadosCbox->clear();
     ui->empleadosCbox->addItem("- Todos -");
+    QStringList listaNombres;
     while (nombres.next())
     {
         int id = nombres.value("id").toInt();
         indicesIds.append(id);
         QString nombre = nombres.value("nombre_completo").toString();
-        ui->empleadosCbox->addItem(nombre);
+        listaNombres << nombre;
     }
+    ui->empleadosCbox->addItems(listaNombres);
+    // ui->empleadosCbox->setCurrentIndex(seleccion);
+    connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
 }
 
 void Historial::colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales)

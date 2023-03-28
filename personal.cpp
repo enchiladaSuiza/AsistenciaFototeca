@@ -53,14 +53,12 @@ void Personal::activarCamaras()
 {
     int indice = ui->tabWidget->currentIndex();
     if (indice == 2) escaner.activarCamara();
-    else if (indice == 3) foto.activarCamara();
 }
 
 void Personal::desactivarCamaras()
 {
     int indice = ui->tabWidget->currentIndex();
     if (indice == 2) escaner.desactivarCamara();
-    else if (indice == 3) foto.desactivarCamara();
 }
 
 void Personal::on_tabWidget_currentChanged(int index)
@@ -69,15 +67,12 @@ void Personal::on_tabWidget_currentChanged(int index)
     {
     case 2:
         escaner.activarCamara();
-        foto.desactivarCamara();
         break;
     case 3:
         foto.actualizarImagen();
-        foto.activarCamara();
         escaner.desactivarCamara();
         break;
     default:
-        foto.desactivarCamara();
         escaner.desactivarCamara();
         break;
     }

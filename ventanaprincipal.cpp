@@ -159,6 +159,7 @@ void VentanaPrincipal::on_historialButton_clicked()
             login.iniciarSesion() == QDialog::Rejected) return;
     if (Login::accesoHistorial())
     {
+        historial->actualizarComboBox();
         historial->actualizarConsulta();
         ui->stackedWidget->setCurrentWidget(historial);
         activarTodosLosBotones();
@@ -204,7 +205,6 @@ void VentanaPrincipal::mostrarMensajeSinPermiso()
 {
     QMessageBox::information(nullptr, titulo, "Su usuario no tiene permiso para acceder a esta pantalla.");
 }
-
 
 void VentanaPrincipal::on_logoutButton_clicked()
 {

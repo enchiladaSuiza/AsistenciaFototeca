@@ -31,6 +31,9 @@ QPushButton:pressed {
 QWidget#footerWidget QPushButton:disabled {
     background-color: #b8833a;
     color: black;
+    border: 1px solid #b8833a;
+    border-radius: 6px;
+    min-height: 18px;
 }
 
 QComboBox {

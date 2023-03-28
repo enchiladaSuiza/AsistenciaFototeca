@@ -92,3 +92,7 @@ QPushButton:disabled {
 QLineEdit[text=\"\"] {
     color: grey;
 }
+
+QHeaderView {
+    background-color: #434343;
+}
