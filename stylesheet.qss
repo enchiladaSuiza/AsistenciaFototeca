@@ -1,8 +1,8 @@
 QWidget {
     font-family: "Montserrat Medium", "Montserrat";
     font-size: 10pt;
-    selection-background-color: #d59c4f;
-    selection-color: black;
+    /*selection-background-color: #d59c4f;*/
+    /*selection-color: black;*/
 }
 
 QLabel#horaLabel {
@@ -29,11 +29,8 @@ QPushButton:pressed {
 }
 
 QWidget#footerWidget QPushButton:disabled {
-    background-color: #b8833a;
-    color: black;
-    border: 1px solid #b8833a;
-    border-radius: 6px;
-    min-height: 18px;
+    /*background-color: #b8833a;*/
+    color: gray;
 }
 
 QComboBox {
@@ -45,11 +42,11 @@ QComboBox:on {
 }
 
 QComboBox QAbstractItemView {
-    selection-background-color: #d59c4f;
+    /*selection-background-color: #d59c4f;*/
 }
 
 QTableView {
-    selection-background-color: #d59c4f;
+    /*selection-background-color: #d59c4f;*/
 }
 
 QTableView QTableCornerButton::section {
