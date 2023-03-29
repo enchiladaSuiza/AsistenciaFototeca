@@ -64,7 +64,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # DEFINES += DISABLE_LIBRARY_FEATURES
 
 INCLUDEPATH += $$PWD/QZXing/
-#unix: LIBS += -lQZXing
-#else: LIBS += -L$$PWD/QZXing/ -lQZXing
-LIBS += -L$$PWD/QZXing/ -lQZXing
+unix: LIBS += -lQZXing
+else: LIBS += -L$$PWD/QZXing/ -lQZXing3
+#LIBS += -L$$PWD/QZXing/ -lQZXing
 
