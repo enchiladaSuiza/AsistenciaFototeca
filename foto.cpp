@@ -65,7 +65,7 @@ void Foto::setId(int id)
 
 void Foto::on_seleccionarButton_clicked()
 {
-    QString ruta = QFileDialog::getOpenFileName(nullptr, "Seleccione una imagen", "./", "Imágenes (*.jpg *.png)");
+    QString ruta = QFileDialog::getOpenFileName(nullptr, "Seleccione una imagen", "./", "Imágenes (*.jpg *.jpeg *.png)");
     if (colocarImagen(ruta)) DbManager::actualizarImagenEmpleado(idEmpleado, ruta);
 }
 

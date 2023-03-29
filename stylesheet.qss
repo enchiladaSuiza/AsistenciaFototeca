@@ -13,6 +13,15 @@ Checar QWidget {
     font-size: 12pt;
 }
 
+QTabWidget::tab-bar {
+    alignment: center;
+}
+
+QWidget#footerWidget QPushButton:disabled {
+    /*background-color: #b8833a;*/
+    color: gray;
+}
+
 QPushButton {
     /*background-color: #d59c4f;*/
     /*border: 1px solid black;*/
@@ -28,17 +37,12 @@ QPushButton:pressed {
     /*background-color: #d59c4f;*/
 }
 
-QWidget#footerWidget QPushButton:disabled {
-    /*background-color: #b8833a;*/
-    color: gray;
-}
-
 QComboBox {
     /*background-color: #d59c4f;*/
 }
 
 QComboBox:on {
-    background-color: #d59c4f;
+    /*background-color: #d59c4f;*/
 }
 
 QComboBox QAbstractItemView {
@@ -63,9 +67,5 @@ QRadioButton::indicator:checked {
 
 QCheckBox::indicator:checked {
     /*color: #d59c4f;*/
-}
-
-QTabWidget::tab-bar {
-    alignment: center;
 }
 

@@ -29,8 +29,8 @@ Historial::Historial(QWidget *parent) :
     ui->rangoInicio->setDate(hoy.addDays(-1));
     ui->rangoFin->setDate(hoy);
 
-    on_monthSelect_clicked();
-    actualizarComboBox();
+//    on_monthSelect_clicked();
+//    actualizarComboBox();
 
     connect(ui->buttonGroup, &QButtonGroup::buttonClicked, this, &Historial::actualizarConsulta);
     connect(ui->yearPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
