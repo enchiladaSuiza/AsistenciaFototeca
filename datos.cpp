@@ -29,6 +29,7 @@ Datos::Datos(QWidget *parent) :
     ui->tableView->setModel(model);
     ui->tableView->hideColumn(7);
     ui->tableView->hideColumn(8);
+    ui->tableView->hideColumn(9);
     ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter | (Qt::Alignment)Qt::TextWordWrap);
     ui->tableView->horizontalHeader()->setMinimumHeight(36);
     ui->tableView->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);

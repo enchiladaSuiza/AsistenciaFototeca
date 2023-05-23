@@ -1,5 +1,5 @@
 QWidget {
-    font-family: "Montserrat Medium", "Montserrat";
+    font-family: "Montserrat Medium", "Montserrat Thin";
     font-size: 10pt;
     /*selection-background-color: #d59c4f;*/
     /*selection-color: black;*/

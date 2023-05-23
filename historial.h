@@ -21,20 +21,22 @@ public:
     void actualizarConsulta();
     void actualizarComboBox();
 private slots:
-    void on_yearSelect_clicked();
-    void on_monthSelect_clicked();
-    void on_weekSelect_clicked();
-    void on_daySelect_clicked();
-    void on_rangeSelect_clicked();
+    void yearSeleccion();
+    void monthSeleccion();
+    void weekSeleccion();
+    void fortnightSeleccion();
+    void daySeleccion();
+    void rangeSeleccion();
 
     void on_exportarButton_clicked();
 
-    void on_fortnightSelect_clicked();
     void on_cboxAtrasButton_clicked();
     void on_cboxAdelanteButton_clicked();
 
     void actualizarConsultaSlotDate(const QDate &dia);
     void actualizarConsultaSlotInt(int slotInt);
+    void on_cboxPeriodo_currentIndexChanged(int index);
+
 private:
     Ui::Historial *ui;
     QTableWidgetItem *crearItemTabla(QString texto);
@@ -47,7 +49,8 @@ private:
     void insertarItemTabla(QString texto, int fila, int columna, int filaSpan = 1, int columnaSpan = 1);
     void consultaTodos(QDate inicio, QDate fin);
     QPair<int, int> colocarStringsCaptura(QSqlRecord registro, int fila, int columna);
-    void colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales = false);
+    void colocarHeadersDias(QDate inicio, QDate fin,
+                            bool colocarDemora = false, bool colocarAntelacion = false, bool colcarFaltas = false);
     void colocarTotales(int demora, int anticipacion, int faltas);
     QStringList conseguirTotales(int demora, int anticipacion, int faltas);
     QString reemplazarCaracteresEspeciales(QString texto);

@@ -4,6 +4,7 @@
 #include "login.h"
 #include "ventanaprincipal.h"
 
+#include <bitset>
 #include <QFile>
 #include <QMessageBox>
 #include <dbmanager.h>
@@ -23,6 +24,12 @@ Opciones::Opciones(QWidget *parent) :
     int minutosTolerancia = opciones.value("tolerancia").toInt();
     ui->toleranciaSbox->setValue(minutosTolerancia);
 
+    int columnas = opciones.value("columnasHistorial", 1).toInt();
+    std::bitset<3> bsColumnas(columnas);
+    if (bsColumnas.test(0)) ui->demoraChbox->setChecked(true);
+    if (bsColumnas.test(1)) ui->antelacionChbox->setChecked(true);
+    if (bsColumnas.test(2)) ui->faltasChbox->setChecked(true);
+
     int tema = opciones.value("tema").toInt();
     if (tema == 0) ui->claroButton->setChecked(true);
     else ui->oscuroButton->setChecked(true);
@@ -30,6 +37,9 @@ Opciones::Opciones(QWidget *parent) :
     actualizarTema();
     connect(ui->claroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaClaro);
     connect(ui->oscuroButton, &QRadioButton::clicked, this, &Opciones::establecerTemaOscuro);
+    connect(ui->demoraChbox, &QCheckBox::clicked, this, &Opciones::activarBotonGuardar);
+    connect(ui->antelacionChbox, &QCheckBox::clicked, this, &Opciones::activarBotonGuardar);
+    connect(ui->faltasChbox, &QCheckBox::clicked, this, &Opciones::activarBotonGuardar);
 }
 
 Opciones::~Opciones()
@@ -50,6 +60,11 @@ void Opciones::on_contratacionesEdit_textChanged()
     ui->guardarButton->setEnabled(true);
 }
 
+void Opciones::activarBotonGuardar()
+{
+    ui->guardarButton->setEnabled(true);
+}
+
 void Opciones::on_guardarButton_clicked()
 {
     QString contrataciones = ui->contratacionesEdit->toPlainText();
@@ -58,8 +73,13 @@ void Opciones::on_guardarButton_clicked()
     int minutosTolerancia = ui->toleranciaSbox->value();
     opciones.setValue("tolerancia", minutosTolerancia);
     ui->guardarButton->setEnabled(false);
-}
 
+    std::bitset<3> columnas;
+    columnas.set(0, ui->demoraChbox->isChecked());
+    columnas.set(1, ui->antelacionChbox->isChecked());
+    columnas.set(2, ui->faltasChbox->isChecked());
+    opciones.setValue("columnasHistorial", (int)columnas.to_ulong());
+}
 
 void Opciones::on_toleranciaSbox_valueChanged(int valor)
 {

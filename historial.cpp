@@ -1,6 +1,7 @@
 #include "historial.h"
 #include "ui_historial.h"
 
+#include <bitset>
 #include <dbmanager.h>
 #include <QSqlQuery>
 #include <QFileDialog>
@@ -14,12 +15,7 @@ Historial::Historial(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tableWidget->horizontalHeader()->setMinimumWidth(80);
-    ui->tablaTotales->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableWidget->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
-
-    ui->tablaTotales->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tablaTotales->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tablaTotales->verticalHeader()->setDefaultAlignment(Qt::AlignCenter);
 
     QDate hoy = QDate::currentDate();
     ui->yearPicker->setValue(hoy.year());
@@ -29,10 +25,7 @@ Historial::Historial(QWidget *parent) :
     ui->rangoInicio->setDate(hoy.addDays(-1));
     ui->rangoFin->setDate(hoy);
 
-//    on_monthSelect_clicked();
-//    actualizarComboBox();
-
-    connect(ui->buttonGroup, &QButtonGroup::buttonClicked, this, &Historial::actualizarConsulta);
+    connect(ui->cboxPeriodo, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->yearPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->monthPicker, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
     connect(ui->weekPicker, &QSpinBox::valueChanged, this, &Historial::actualizarConsultaSlotInt);
@@ -40,6 +33,7 @@ Historial::Historial(QWidget *parent) :
     connect(ui->rangoInicio, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
     connect(ui->rangoFin, &QDateEdit::dateChanged, this, &Historial::actualizarConsultaSlotDate);
     connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
+    weekSeleccion();
 }
 
 Historial::~Historial() { delete ui; }
@@ -67,7 +61,7 @@ void Historial::actualizarComboBox()
     connect(ui->empleadosCbox, &QComboBox::currentIndexChanged, this, &Historial::actualizarConsultaSlotInt);
 }
 
-void Historial::colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales)
+void Historial::colocarHeadersDias(QDate inicio, QDate fin, bool colocarDemora, bool colocarAntelacion, bool colocarFaltas)
 {
     int columnas = 0;
     QStringList labels;
@@ -79,10 +73,17 @@ void Historial::colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales)
         columnas++;
     }
 
-    if (colocarTotales)
-    {
-        columnas += 3;
-        labels << "Demora" << "Anticipación" << "Faltas";
+    if (colocarDemora) {
+        columnas++;
+        labels << "Demora";
+    }
+    if (colocarAntelacion) {
+        columnas++;
+        labels << "Antelación";
+    }
+    if (colocarFaltas) {
+        columnas++;
+        labels << "Faltas";
     }
     ui->tableWidget->setColumnCount(columnas);
     ui->tableWidget->setHorizontalHeaderLabels(labels);
@@ -92,11 +93,19 @@ void Historial::colocarHeadersDias(QDate inicio, QDate fin, bool colocarTotales)
 void Historial::consultaTodos(QDate inicio, QDate fin)
 {
     ui->tableWidget->clear();
-    colocarHeadersDias(inicio, fin, true);
+    QSettings config;
+    int colocarColumnas = config.value("columnasHistorial", 1).toInt();
+    std::bitset<3> bsColumnas(colocarColumnas);
+    bool colocarDemora = bsColumnas.test(0);
+    bool colocarAntelacion = bsColumnas.test(1);
+    bool colocarFaltas = bsColumnas.test(2);
+    colocarHeadersDias(inicio, fin, colocarDemora, colocarAntelacion, colocarFaltas);
 
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->tablaTotales->setVisible(false);
+    ui->demoraLabel->setVisible(false);
+    ui->antelacionLabel->setVisible(false);
+    ui->faltasLabel->setVisible(false);
 
     QDate d;
     int demora, anticipacion, faltas, columna, fila = 0;
@@ -118,12 +127,14 @@ void Historial::consultaTodos(QDate inicio, QDate fin)
             {
                 if (DbManager::horarioEntradaDia(indicesIds[i], d).isEmpty())
                 {
-                    insertarItemTabla("N/A", fila + 1, columna, 2, 1);
+                    insertarItemTabla("", fila + 1, columna, 2, 1);
                 }
                 else
                 {
-                    faltas++;
-                    insertarItemTabla(":(", fila + 1, columna, 2, 1);
+                    if (DbManager::fechaRegistroEmpleado(indicesIds[i]) < d) {
+                        faltas++;
+                    }
+                    insertarItemTabla("", fila + 1, columna, 2, 1);
                 }
             }
             else
@@ -138,9 +149,12 @@ void Historial::consultaTodos(QDate inicio, QDate fin)
             d = d.addDays(1);
         }
         QStringList totales = conseguirTotales(demora, anticipacion, faltas);
-        insertarItemTabla(totales.at(0), fila + 1, columna, 2, 1);
-        insertarItemTabla(totales.at(1), fila + 1, columna + 1, 2, 1);
-        insertarItemTabla(totales.at(2), fila + 1, columna + 2, 2, 1);
+        for (int i = 0; i < 3; i++) {
+            if (bsColumnas.test(i)) {
+                insertarItemTabla(totales.at(i), fila + 1, columna, 2, 1);
+                columna++;
+            }
+        }
         fila += 3;
     }
 }
@@ -151,7 +165,6 @@ void Historial::consultarRango(QDate inicio, QDate fin)
     colocarHeadersDias(inicio, fin);
 
     ui->tableWidget->setRowCount(2);
-    ui->tablaTotales->setVisible(true);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     int indice = ui->empleadosCbox->currentIndex();
@@ -171,12 +184,14 @@ void Historial::consultarRango(QDate inicio, QDate fin)
         {
             if (DbManager::horarioEntradaDia(idEmpleado, inicio).isEmpty())
             {
-                insertarItemTabla("N/A", 0, indiceColumna, 2);
+                insertarItemTabla("", 0, indiceColumna, 2);
             }
             else
             {
-                faltas++;
-                insertarItemTabla(":(", 0, indiceColumna, 2);
+                if (DbManager::fechaRegistroEmpleado(idEmpleado) < inicio) {
+                    faltas++;
+                }
+                insertarItemTabla("", 0, indiceColumna, 2);
             }
         }
         else
@@ -256,9 +271,20 @@ QStringList Historial::conseguirTotales(int demora, int anticipacion, int faltas
 void Historial::colocarTotales(int demora, int anticipacion, int faltas)
 {
     QStringList totales = conseguirTotales(demora, anticipacion, faltas);
-    ui->tablaTotales->setItem(0, 0, crearItemTabla(totales.at(0)));
-    ui->tablaTotales->setItem(0, 1, crearItemTabla(totales.at(1)));
-    ui->tablaTotales->setItem(0, 2, crearItemTabla(totales.at(2)));
+    QSettings config;
+    std::bitset<3> columnas(config.value("columnasHistorial", 1).toInt());
+    QVector<QLabel*> labels = {ui->demoraLabel, ui->antelacionLabel, ui->faltasLabel};
+    QStringList textoLabels;
+    textoLabels << "Minutos de demora totales:\t" << "Minutos de antelación totales:\t" << "Faltas:\t";
+    for (int i = 0; i < 3; i++) {
+        if (columnas.test(i)) {
+            labels[i]->setVisible(true);
+            labels[i]->setText(textoLabels[i] + totales.at(i));
+        }
+        else {
+            labels[i]->setVisible(false);
+        }
+    }
 }
 
 void Historial::actualizarConsultaSlotDate(const QDate &dia)
@@ -275,42 +301,27 @@ void Historial::actualizarConsultaSlotInt(int slotInt)
 
 void Historial::actualizarConsulta()
 {
-    QAbstractButton *seleccionado = ui->buttonGroup->checkedButton();
-    nombreReporte = "Reporte";
+    int periodo = ui->cboxPeriodo->currentIndex();
     int year = ui->yearPicker->value();
     int month = ui->monthPicker->currentIndex() + 1;
     int semana = ui->weekPicker->value();
     int quincena = ui->fortnightPicker->value();
+    nombreReporte = "Reporte";
     QDate inicio, fin;
 
-    if (seleccionado == ui->daySelect)
+    switch (periodo)
     {
-        inicio = ui->rangoFin->date();
-        fin = inicio;
-        nombreReporte += inicio.toString(Qt::ISODate);
-    }
-    else if (seleccionado == ui->yearSelect)
-    {
+    case 0:
         inicio = QDate(year, 1, 1);
         fin = QDate(year, 12, 31);
         nombreReporte += QString::number(year);
-    }
-    else if (seleccionado == ui->monthSelect)
-    {
+        break;
+    case 1:
         inicio = QDate(year, month, 1);
         fin = inicio.addMonths(1).addDays(-1);
         nombreReporte += ui->monthPicker->currentText() + QString::number(year);
-    }
-    else if (seleccionado == ui->weekSelect)
-    {
-        inicio = QDate(year, month, 1);
-        while (inicio.dayOfWeek() != 1) inicio = inicio.addDays(-1);
-        inicio = inicio.addDays(7 * (semana - 1));
-        fin = inicio.addDays(6);
-        nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Semana" + QString::number(semana);
-    }
-    else if (seleccionado == ui->fortnightSelect)
-    {
+        break;
+    case 2:
         if (quincena == 1)
         {
             inicio = QDate(year, month, 1);
@@ -322,16 +333,27 @@ void Historial::actualizarConsulta()
             fin = QDate(year, month, 1).addMonths(1).addDays(-1);
         }
         nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Quincena" + QString::number(semana);
-    }
-    else
-    {
+        break;
+    case 3:
+        inicio = QDate(year, month, 1);
+        while (inicio.dayOfWeek() != 1) inicio = inicio.addDays(-1);
+        inicio = inicio.addDays(7 * (semana - 1));
+        fin = inicio.addDays(6);
+        nombreReporte += ui->monthPicker->currentText() + QString::number(year) + "-Semana" + QString::number(semana);
+        break;
+    case 4:
+        inicio = ui->rangoFin->date();
+        fin = inicio;
+        nombreReporte += inicio.toString(Qt::ISODate);
+        break;
+    default:
         inicio = ui->rangoInicio->date();
         fin = ui->rangoFin->date();
         nombreReporte += inicio.toString(Qt::ISODate) + "---" + fin.toString(Qt::ISODate);
+        break;
     }
 
     if (fin > QDate::currentDate()) fin = QDate::currentDate();
-
     if (ui->empleadosCbox->currentIndex() == 0) consultaTodos(inicio, fin);
     else consultarRango(inicio, fin);
 }
@@ -413,10 +435,22 @@ void Historial::on_exportarButton_clicked()
 
     if (indiceCbox != 0)
     {
-        QString demora = ui->tablaTotales->item(0, 0)->text();
-        QString anticipacion = ui->tablaTotales->item(1, 0)->text();
-        QString faltas = ui->tablaTotales->item(2, 0)->text();
-        salida << "\nDemora," << demora << "\nAnticipacion," << anticipacion << "\nFaltas," << faltas;
+        QSettings config;
+        int mostrar = config.value("columnasHistorial").toInt();
+        std::bitset<3> cols(mostrar);
+        qDebug() << mostrar;
+        if (cols.test(0)) {
+            QStringList demora = ui->demoraLabel->text().split('\t');
+            salida << '\n' << demora[0] << ',' << demora[1];
+        }
+        if (cols.test(1)) {
+            QStringList antelacion = ui->antelacionLabel->text().split('\t');
+            salida << '\n' << antelacion[0] << ',' << antelacion[1];
+        }
+        if (cols.test(2)) {
+            QStringList faltas = ui->faltasLabel->text().split('\t');
+            salida << '\n' << faltas[0] << ',' << faltas[1];
+        }
     }
     archivo.close();
 }
@@ -431,7 +465,7 @@ QString Historial::reemplazarCaracteresEspeciales(QString texto)
     return nuevoTexto;
 }
 
-void Historial::on_yearSelect_clicked()
+void Historial::yearSeleccion()
 {
     ui->yearPicker->setVisible(true);
     ui->monthPicker->setVisible(false);
@@ -441,25 +475,25 @@ void Historial::on_yearSelect_clicked()
     ui->rangoFin->setVisible(false);
 }
 
-void Historial::on_monthSelect_clicked()
+void Historial::monthSeleccion()
 {
-    on_yearSelect_clicked();
+    yearSeleccion();
     ui->monthPicker->setVisible(true);
 }
 
-void Historial::on_fortnightSelect_clicked()
+void Historial::fortnightSeleccion()
 {
-    on_monthSelect_clicked();
+    monthSeleccion();
     ui->fortnightPicker->setVisible(true);
 }
 
-void Historial::on_weekSelect_clicked()
+void Historial::weekSeleccion()
 {
-    on_monthSelect_clicked();
+    monthSeleccion();
     ui->weekPicker->setVisible(true);
 }
 
-void Historial::on_daySelect_clicked()
+void Historial::daySeleccion()
 {
     ui->rangoFin->setVisible(true);
     ui->yearPicker->setVisible(false);
@@ -469,9 +503,9 @@ void Historial::on_daySelect_clicked()
     ui->rangoInicio->setVisible(false);
 }
 
-void Historial::on_rangeSelect_clicked()
+void Historial::rangeSeleccion()
 {
-    on_daySelect_clicked();
+    daySeleccion();
     ui->rangoInicio->setVisible(true);
 }
 
@@ -486,3 +520,28 @@ void Historial::on_cboxAdelanteButton_clicked()
     int indice = ui->empleadosCbox->currentIndex();
     if (indice < ui->empleadosCbox->count() - 1) ui->empleadosCbox->setCurrentIndex(indice + 1);
 }
+
+void Historial::on_cboxPeriodo_currentIndexChanged(int index)
+{
+    switch (index)
+    {
+    case 0:
+        yearSeleccion();
+        break;
+    case 1:
+        monthSeleccion();
+        break;
+    case 2:
+        fortnightSeleccion();
+        break;
+    case 3:
+        weekSeleccion();
+        break;
+    case 4:
+        daySeleccion();
+        break;
+    case 5:
+        rangeSeleccion();
+    }
+}
+

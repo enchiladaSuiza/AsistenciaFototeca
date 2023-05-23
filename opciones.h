@@ -39,6 +39,7 @@ private slots:
     void on_eliminarUsuarioButton_clicked();
 
     void on_nuevoUsuarioButton_clicked();
+    void activarBotonGuardar();
 
 private:
     Ui::Opciones *ui;

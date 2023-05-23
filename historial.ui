@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>493</width>
+    <width>566</width>
     <height>407</height>
    </rect>
   </property>
@@ -14,107 +14,14 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QRadioButton" name="monthSelect">
+   <item row="2" column="4">
+    <widget class="QPushButton" name="cboxAdelanteButton">
      <property name="text">
-      <string>Mes</string>
+      <string>&gt;</string>
      </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
     </widget>
    </item>
-   <item row="5" column="0" colspan="6">
-    <widget class="QTableWidget" name="tablaTotales">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-     </property>
-     <property name="columnCount">
-      <number>1</number>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <row>
-      <property name="text">
-       <string>Demora de entrada total</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Anticipación de salida total</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Faltas</string>
-      </property>
-     </row>
-     <column/>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QRadioButton" name="daySelect">
-     <property name="text">
-      <string>Día</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QRadioButton" name="weekSelect">
-     <property name="text">
-      <string>Semana</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QRadioButton" name="yearSelect">
-     <property name="text">
-      <string>Año</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="5">
-    <widget class="QRadioButton" name="rangeSelect">
-     <property name="text">
-      <string>Rango</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="6">
+   <item row="3" column="0" colspan="6">
     <widget class="QTableWidget" name="tableWidget">
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustIgnored</enum>
@@ -139,41 +46,7 @@
      </attribute>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QRadioButton" name="fortnightSelect">
-     <property name="text">
-      <string>Quincena</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QPushButton" name="cboxAtrasButton">
-     <property name="text">
-      <string>&lt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="4">
-    <widget class="QPushButton" name="cboxAdelanteButton">
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="5">
-    <widget class="QPushButton" name="exportarButton">
-     <property name="text">
-      <string>Exportar</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QComboBox" name="empleadosCbox"/>
-   </item>
-   <item row="2" column="0" colspan="6">
+   <item row="1" column="1" colspan="5">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
       <number>0</number>
@@ -366,11 +239,100 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QComboBox" name="empleadosCbox"/>
+   </item>
+   <item row="2" column="5">
+    <widget class="QPushButton" name="exportarButton">
+     <property name="text">
+      <string>Exportar</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QComboBox" name="cboxPeriodo">
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Año</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Mes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Quincena</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Semana</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Día</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rango</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="cboxAtrasButton">
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="6">
+    <layout class="QHBoxLayout" name="totalesLayout">
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="demoraLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="antelacionLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="faltasLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>yearSelect</tabstop>
-  <tabstop>monthSelect</tabstop>
   <tabstop>yearPicker</tabstop>
   <tabstop>monthPicker</tabstop>
   <tabstop>weekPicker</tabstop>
@@ -379,7 +341,4 @@
  </tabstops>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

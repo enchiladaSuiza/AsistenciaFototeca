@@ -231,6 +231,16 @@ QSqlQuery DbManager::historialCompletoTodos(QDate inicio, QDate fin)
     return query;
 }
 
+QDate DbManager::fechaRegistroEmpleado(int empleado) {
+    QSqlQuery query;
+    query.prepare("SELECT fecha_registro FROM empleado WHERE id = ?");
+    query.addBindValue(empleado);
+    query.exec();
+    query.next();
+    QString iso = query.value("fecha_registro").toString();
+    return QDate::fromString(iso, Qt::ISODate);
+}
+
 QString DbManager::horarioEntradaDia(int empleado, QDate dia)
 {
     QSqlQuery query;

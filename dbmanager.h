@@ -49,6 +49,7 @@ public:
     static QSqlQueryModel* conseguirUsuarios();
     static bool actualizarUsuario(int id, QString nombre, QString pass, int privs);
     static bool eliminarUsuario(int id);
+    static QDate fechaRegistroEmpleado(int empleado);
 private:
     inline static int ultimoIdInsertado;
     inline static QString sqlEmpleado =
